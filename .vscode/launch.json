@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cortex-debug",
+            "request": "attach",
+            "name": "OpenOCD debug",
+            "servertype": "openocd",
+            "cwd": "${workspaceRoot}",
+            //"preLaunchTask": "cargo build",
+            //"runToEntryPoint": "true",
+            "executable": "./build/stm32_example.elf",
+            "device": "STM32F429ZI",
+            "configFiles": [
+                "/usr/share/openocd/scripts/board/stm32f429discovery.cfg"
+            ],
+        },
+    {
+        "name": "Unix debug",
+        "type": "cppdbg",
+        "request": "launch",
+        //"program": "${workspaceFolder}/tests/integration/build/integration_tests",
+        "program": "${workspaceFolder}/build/test/out/test_ts_l1.out",
+        "args": [],
+        "stopAtEntry": true,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ]
+    }
+
+    ]
+}
