@@ -31,6 +31,8 @@ set(USE_TREZOR_CRYPTO ON)
 #option(USE_UART "Use UART as a transport layer" ON)
 # When spi slave to uart hw converter is used, enable this option or pass -DEXPERIMENTAL_SPI_UART=1 to compilation
 #option(EXPERIMENTAL_SPI_UART ON)
+# When rpi based model is used, enable this option or pass -DEXPERIMENTAL_SPI_RASPBERRYPI=1 to compilation
+#option(EXPERIMENTAL_SPI_RASPBERRYPI ON)
 
 
 ###########################################################################
