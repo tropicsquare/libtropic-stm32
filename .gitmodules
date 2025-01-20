@@ -3,4 +3,4 @@
 	url = https://github.com/STMicroelectronics/STM32CubeF4
 [submodule "vendor/libtropic"]
 	path = vendor/libtropic
-	url = git@github.com:tropicsquare/libtropic.git
+	url = https://github.com/tropicsquare/libtropic-stm32.git
