@@ -20,34 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "main.h"
-#include "libtropic_example_1.h"
-
-
-//#include "lt_sha256.h"
-
-// Default initial Tropic handshake keys
-#define PKEY_INDEX_BYTE   PAIRING_KEY_SLOT_INDEX_0
-#define SHiPRIV_BYTES    {0xf0,0xc4,0xaa,0x04,0x8f,0x00,0x13,0xa0,0x96,0x84,0xdf,0x05,0xe8,0xa2,0x2e,0xf7,0x21,0x38,0x98,0x28,0x2b,0xa9,0x43,0x12,0xf3,0x13,0xdf,0x2d,0xce,0x8d,0x41,0x64};
-#define SHiPUB_BYTES     {0x84,0x2f,0xe3,0x21,0xa8,0x24,0x74,0x08,0x37,0x37,0xff,0x2b,0x9b,0x88,0xa2,0xaf,0x42,0x44,0x2d,0xb0,0xd8,0xaa,0xcc,0x6d,0xc6,0x9e,0x99,0x53,0x33,0x44,0xb2,0x46};
-
-
-#define LOG_OUT(f_, ...) printf(f_, ##__VA_ARGS__)
-#define LOG_OUT_INFO(f_, ...) printf("\t[INFO] "f_, ##__VA_ARGS__)
-#define LOG_OUT_VALUE(f_, ...) printf("\t\t\t\t\t"f_, ##__VA_ARGS__)
-#define LOG_OUT_LINE(f_, ...) printf("\t-------------------------------------------------------------------------------------------------------------\r\n"f_, ##__VA_ARGS__)
-
-void bytes_to_chars(uint8_t const *key, char *buffer, uint16_t len)
-{
-    uint16_t offset = 0;
-    memset(buffer, 0, len);
-
-    for (size_t i = 0; i < len; i++)
-    {
-        offset += sprintf(buffer + offset, "%02X", key[i]);
-    }
-    sprintf(buffer + offset, "%c", '\0');
-}
-
+#include "libtropic_examples.h"
 
 
 /** @addtogroup STM32F4xx_HAL_Examples
@@ -157,7 +130,24 @@ int main(void)
     Error_Handler();
   }
 
-  /*int */libtropic_example_1();
+   // Test routines
+#ifdef LT_EX_TEST_REVERSIBLE
+    lt_ex_test_reversible();
+#endif
+#ifdef LT_EX_TEST_IREVERSIBLE
+    lt_ex_test_ireversible();
+#endif
+
+    // Full examples
+#ifdef LT_FEATURES_FWUPDATE
+    lt_ex_fwupdate();
+#endif
+#ifdef LT_EX_HELLO_WORLD
+    /*int*/ lt_ex_hello_world();
+#endif
+#ifdef LT_EX_HW_WALLET
+    /*int*/ lt_ex_hardware_wallet();
+#endif
 
   return 0;
 }
