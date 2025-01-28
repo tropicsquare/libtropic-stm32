@@ -18,13 +18,10 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/toolchain.cmake)
 # Paths to stm32 drivers
 set(PATH_TO_STM32CUBEF4 "vendor/STM32CubeF4" )
 # Path to libtropic
-set(PATH_TO_LIBTROPIC "vendor/libtropic")
-# Path to trezor_crypto
-#set(PATH_TREZOR_CRYPTO "../vendor/trezor_crypto/")
+set(PATH_TO_LIBTROPIC "../../../")
 
-# Libtropic related setup, use trezor crypto library for host side cryptography
-set(USE_TREZOR_CRYPTO ON)
 
+# TODO remove support for esoteric transport layers
 # By default SPI is set as a transport layer.
 # If your environment doesn't allow you to pass -D arguments during compilation,
 # it is possible to define UART transport layer here:
@@ -53,7 +50,6 @@ project(stm32_example LANGUAGES C ASM)
 # Specify other source files
 set(SOURCES ${SOURCES}
     Src/main.c
-    ${PATH_TO_LIBTROPIC}/examples/libtropic_example_1.c
     Src/stm32f4xx_it.c
     Src/stm32f4xx_hal_msp.c
     Src/system_stm32f4xx.c
@@ -79,7 +75,6 @@ file(GLOB_RECURSE HAL_HEADERS ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Drive
 
 set(HEADERS
     Inc/main.h
-    ${PATH_TO_LIBTROPIC}/examples/libtropic_example_1.h
     Inc/stm32f4xx_hal_conf.h
     Inc/stm32f4xx_it.h
     # BSP header file
@@ -91,7 +86,6 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
-    ${PATH_TO_LIBTROPIC}/examples/
     ${PATH_TO_STM32CUBEF4}/Drivers/BSP/STM32F4xx_Nucleo_144/
     ${PATH_TO_STM32CUBEF4}/Drivers/CMSIS/Device/ST/STM32F4xx/Include/
     ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Inc/
@@ -123,16 +117,56 @@ endif()
 
 ###########################################################################
 #                                                                         #
+#   Define what examples will be compiled into main().                    #
+#   If any of examples is enabled, libtropic will be compiled with        #
+#   examples exposed.                                                     #
+#                                                                         #
+###########################################################################
+
+# -DLT_EX_HW_WALLET=1
+if(LT_EX_HW_WALLET)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_ex_hw_wallet() example in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
+endif()
+# -DLT_EX_HELLO_WORLD=1
+if(LT_EX_HELLO_WORLD)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_ex_hello_world() example in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
+endif()
+# -DLT_EX_TEST_REVERSIBLE=1
+if(LT_EX_TEST_REVERSIBLE)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_test_reversible() test routine in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_TEST_REVERSIBLE)
+endif()
+# --DLT_EX_TEST_IREVERSIBLE=1
+if(LT_EX_TEST_IREVERSIBLE)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_test_ireversible() test routine in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_TEST_IREVERSIBLE)
+endif()
+
+
+###########################################################################
+#                                                                         #
 #   Add libtropic                                                         #
 #                                                                         #
 ###########################################################################
+
+# Libtropic related setup, use trezor crypto library for host side cryptography
+set(USE_TREZOR_CRYPTO ON)
 
 # Provide path to a root of libtropic repository
 add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 
 #target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
 target_link_libraries(stm32_example.elf PRIVATE tropic)
-
 
 ###########################################################################
 #                                                                         #
