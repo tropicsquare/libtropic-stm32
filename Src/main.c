@@ -139,8 +139,8 @@ int main(void)
 #endif
 
     // Full examples
-#ifdef LT_FEATURES_FWUPDATE
-    lt_ex_fwupdate();
+#ifdef LT_EX_FW_UPDATE
+    lt_ex_fw_update();
 #endif
 #ifdef LT_EX_HELLO_WORLD
     /*int*/ lt_ex_hello_world();

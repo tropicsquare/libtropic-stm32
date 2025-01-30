@@ -117,26 +117,15 @@ endif()
 
 ###########################################################################
 #                                                                         #
-#   Define what examples will be compiled into main().                    #
-#   If any of examples is enabled, libtropic will be compiled with        #
-#   examples exposed.                                                     #
+#   Define which examples will be compiled into main().                   #
+#   If any of examples or test routines is enabled, libtropic will be     #
+#   compiled with all examples exposed (controlled by libtropic's         #
+#   LT_ADD_EXAMPLES), then a concrete example or test routine will be     #
+#   enabled in main() int this project.                                   #
 #                                                                         #
 ###########################################################################
 
-# -DLT_EX_HW_WALLET=1
-if(LT_EX_HW_WALLET)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_ex_hw_wallet() example in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
-endif()
-# -DLT_EX_HELLO_WORLD=1
-if(LT_EX_HELLO_WORLD)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_ex_hello_world() example in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
-endif()
+## Compile test routines:
 # -DLT_EX_TEST_REVERSIBLE=1
 if(LT_EX_TEST_REVERSIBLE)
     # This line makes libtropic to be compiled with exposed example functions
@@ -150,6 +139,28 @@ if(LT_EX_TEST_IREVERSIBLE)
     set(LT_ADD_EXAMPLES ON)
     # This line will enable lt_test_ireversible() test routine in final executable
     target_compile_definitions(stm32_example.elf PRIVATE LT_EX_TEST_IREVERSIBLE)
+endif()
+# Compile examples:
+# -DLT_EX_FW_UPDATE=1
+if(LT_EX_FW_UPDATE)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_ex_fw_update() example in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
+endif()
+# -DLT_EX_HELLO_WORLD=1
+if(LT_EX_HELLO_WORLD)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_ex_hello_world() example in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
+endif()
+# -DLT_EX_HW_WALLET=1
+if(LT_EX_HW_WALLET)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_ex_hw_wallet() example in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
 endif()
 
 
