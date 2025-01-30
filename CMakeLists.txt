@@ -145,6 +145,7 @@ endif()
 if(LT_EX_FW_UPDATE)
     # This line makes libtropic to be compiled with exposed example functions
     set(LT_ADD_EXAMPLES ON)
+    set(LT_ENABLE_FW_UPDATE ON)
     # This line will enable lt_ex_fw_update() example in final executable
     target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
 endif()

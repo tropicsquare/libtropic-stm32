@@ -130,6 +130,12 @@ int main(void)
     Error_Handler();
   }
 
+  // libtropic related code BEGIN
+  // libtropic related code BEGIN
+  // libtropic related code BEGIN
+  // libtropic related code BEGIN
+  // libtropic related code BEGIN
+
    // Test routines
 #ifdef LT_EX_TEST_REVERSIBLE
     lt_ex_test_reversible();
@@ -148,6 +154,12 @@ int main(void)
 #ifdef LT_EX_HW_WALLET
     /*int*/ lt_ex_hardware_wallet();
 #endif
+
+  // libtropic related code END
+  // libtropic related code END
+  // libtropic related code END
+  // libtropic related code END
+  // libtropic related code END
 
   return 0;
 }
