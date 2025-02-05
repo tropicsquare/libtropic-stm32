@@ -26,10 +26,8 @@ set(PATH_TO_LIBTROPIC "../../../")
 # If your environment doesn't allow you to pass -D arguments during compilation,
 # it is possible to define UART transport layer here:
 #option(USE_UART "Use UART as a transport layer" ON)
-# When spi slave to uart hw converter is used, enable this option or pass -DEXPERIMENTAL_SPI_UART=1 to compilation
-#option(EXPERIMENTAL_SPI_UART ON)
-# When rpi based model is used, enable this option or pass -DEXPERIMENTAL_SPI_RASPBERRYPI=1 to compilation
-#option(EXPERIMENTAL_SPI_RASPBERRYPI ON)
+# When spi slave to uart hw converter is used, enable this option or pass -DLT_EXPERIMENTAL_SPI_UART=1 to compilation
+#option(LT_EXPERIMENTAL_SPI_UART ON)
 
 
 ###########################################################################
@@ -110,8 +108,8 @@ else()
     target_compile_definitions(stm32_example.elf PRIVATE USE_SPI)
 endif()
 
-if(USE_TREZOR_CRYPTO)
-    target_compile_definitions(stm32_example.elf PRIVATE USE_TREZOR_CRYPTO)
+if(LT_USE_TREZOR_CRYPTO)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_USE_TREZOR_CRYPTO)
 endif()
 
 
@@ -172,7 +170,7 @@ endif()
 ###########################################################################
 
 # Libtropic related setup, use trezor crypto library for host side cryptography
-set(USE_TREZOR_CRYPTO ON)
+set(LT_USE_TREZOR_CRYPTO ON)
 
 # Provide path to a root of libtropic repository
 add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
