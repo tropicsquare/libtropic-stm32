@@ -45,7 +45,7 @@ set(SOURCES ${SOURCES}
     Src/startup_stm32f429zitx.s
     Src/syscalls.c
     Src/sysmem.c
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32.c
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_f439zi.c
     ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
