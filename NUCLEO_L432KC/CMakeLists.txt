@@ -14,9 +14,9 @@ set(OPENOCD_CFG "/usr/share/openocd/scripts/board/st_nucleo_l4.cfg")
 # Path to linker script file
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/Src/STM32L432KCUX_FLASH.ld)
 # Path to toolchain file
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/toolchain.cmake)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 # Paths to stm32 drivers
-set(PATH_TO_STM32CUBEL4 "STM32CubeL4/Drivers" )
+set(PATH_TO_STM32CUBEL4 "Vendor/STM32CubeL4/Drivers" )
 # Path to libtropic
 set(PATH_TO_LIBTROPIC "../../../../")
 
@@ -83,10 +83,10 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
-    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/
-    ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include/
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/
     ${PATH_TO_STM32CUBEL4}/CMSIS/Core/Include/
+    ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include/
+    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/
 )
 
 

@@ -14,7 +14,7 @@ set(OBJCOPY             arm-none-eabi-objcopy)
 set(OBJDUMP             arm-none-eabi-objdump)
 set(SIZE                arm-none-eabi-size)
 
-set(CMAKE_C_FLAGS   "${MCPU_FLAGS} ${VFP_FLAGS} -Wall -fno-builtin -g -std=gnu11 -fdata-sections -ffunction-sections" CACHE INTERNAL "c compiler flags")
+set(CMAKE_C_FLAGS   "-O2 ${MCPU_FLAGS} ${VFP_FLAGS} -Wall -fno-builtin -g -std=gnu11 -fdata-sections -ffunction-sections" CACHE INTERNAL "c compiler flags")
 set(CMAKE_CXX_FLAGS "${MCPU_FLAGS} ${VFP_FLAGS} -Wall -fno-builtin -fdata-sections -ffunction-sections" CACHE INTERNAL "cxx compiler flags")
 set(CMAKE_ASM_FLAGS "${MCPU_FLAGS} -x assembler-with-cpp" CACHE INTERNAL "asm compiler flags")
 

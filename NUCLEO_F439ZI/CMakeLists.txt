@@ -14,20 +14,11 @@ set(OPENOCD_CFG "/usr/share/openocd/scripts/board/stm32f429discovery.cfg")
 # Path to linker script file
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32F429ZITX_FLASH.ld)
 # Path to toolchain file
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/toolchain.cmake)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 # Paths to stm32 drivers
-set(PATH_TO_STM32CUBEF4 "vendor/STM32CubeF4" )
+set(PATH_TO_STM32CUBEF4 "Vendor/STM32CubeF4/Drivers" )
 # Path to libtropic
-set(PATH_TO_LIBTROPIC "../../../")
-
-
-# TODO remove support for esoteric transport layers
-# By default SPI is set as a transport layer.
-# If your environment doesn't allow you to pass -D arguments during compilation,
-# it is possible to define UART transport layer here:
-#option(USE_UART "Use UART as a transport layer" ON)
-# When spi slave to uart hw converter is used, enable this option or pass -DLT_EXPERIMENTAL_SPI_UART=1 to compilation
-#option(LT_EXPERIMENTAL_SPI_UART ON)
+set(PATH_TO_LIBTROPIC "../../../../")
 
 
 ###########################################################################
@@ -51,43 +42,50 @@ set(SOURCES ${SOURCES}
     Src/stm32f4xx_it.c
     Src/stm32f4xx_hal_msp.c
     Src/system_stm32f4xx.c
-    System/Startup/startup_stm32f429zitx.s
-    System/User/syscalls.c
-    System/User/sysmem.c
+    Src/startup_stm32f429zitx.s
+    Src/syscalls.c
+    Src/sysmem.c
     ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32.c
-    # Sources related to STM32f439ZInucleo board
-    ${PATH_TO_STM32CUBEF4}/Drivers/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
-    # Sources for HAL functionalities used in this example
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
+    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
 )
 
-# Find all HAL header files
-file(GLOB_RECURSE HAL_HEADERS ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Inc/*.h)
+set(HEADERS
+    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.h
+    ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
+)
 
 set(HEADERS
     Inc/main.h
     Inc/stm32f4xx_hal_conf.h
     Inc/stm32f4xx_it.h
-    # BSP header file
-    ${PATH_TO_STM32CUBEF4}/Drivers/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.h
-    # HAL headers
-    ${HAL_HEADERS}
+    ${HEADERS}
 )
 
 # Include path for directories containing header files
 include_directories(
     Inc/
-    ${PATH_TO_STM32CUBEF4}/Drivers/BSP/STM32F4xx_Nucleo_144/
-    ${PATH_TO_STM32CUBEF4}/Drivers/CMSIS/Device/ST/STM32F4xx/Include/
-    ${PATH_TO_STM32CUBEF4}/Drivers/STM32F4xx_HAL_Driver/Inc/
-    ${PATH_TO_STM32CUBEF4}/Drivers/CMSIS/Core/Include/
+    ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
+    ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
+    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/
 )
 
 
