@@ -30,22 +30,49 @@
 /* User can use this section to tailor USART_DBG/UARTx instance used and associated
    resources */
 
+/** This define controls over which pins will board drive UART.
+ * if == 1, debug UART can be read when board is plugged over USB (together with stlink)
+ * if == 0, debug uart can be read over pins connected to FT2232h, used on automatized testing rig
+*/
+#define DBG_UART_OVER_USB 1
+
 /* Definition for USART_DBG clock resources */
 #define USART_DBG                           USART3
 #define USART_DBG_CLK_ENABLE()              __HAL_RCC_USART3_CLK_ENABLE();
-#define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
-#define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
+
+#if DBG_UART_OVER_USB
+  #define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
+  #define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
+#else
+  #define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
+  #define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
+#endif
 
 #define USART_DBG_FORCE_RESET()             __HAL_RCC_USART3_FORCE_RESET()
 #define USART_DBG_RELEASE_RESET()           __HAL_RCC_USART3_RELEASE_RESET()
 
 
-#define USART_DBG_TX_PIN                    GPIO_PIN_8
-#define USART_DBG_TX_GPIO_PORT              GPIOD
+
+
+
+
+#if DBG_UART_OVER_USB
+  #define USART_DBG_TX_PIN                    GPIO_PIN_8
+  #define USART_DBG_TX_GPIO_PORT              GPIOD
+  #define USART_DBG_RX_PIN                    GPIO_PIN_9
+  #define USART_DBG_RX_GPIO_PORT              GPIOD
+#else
+  #define USART_DBG_TX_PIN                    GPIO_PIN_10
+  #define USART_DBG_TX_GPIO_PORT              GPIOB
+  #define USART_DBG_RX_PIN                    GPIO_PIN_11
+  #define USART_DBG_RX_GPIO_PORT              GPIOB
+#endif
 #define USART_DBG_TX_AF                     GPIO_AF7_USART3
-#define USART_DBG_RX_PIN                    GPIO_PIN_9
-#define USART_DBG_RX_GPIO_PORT              GPIOD
 #define USART_DBG_RX_AF                     GPIO_AF7_USART3
+
+
+
+
 
 /* Definition for USART_DBG Pins */
 #ifdef USE_UART

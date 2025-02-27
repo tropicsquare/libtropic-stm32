@@ -161,6 +161,14 @@ int main(void)
   // libtropic related code END
   // libtropic related code END
 
+
+  while (1)
+  {
+    BSP_LED_On(LED2);
+    HAL_Delay(100);
+    BSP_LED_Off(LED2);
+    HAL_Delay(500);
+  }
   return 0;
 }
 
