@@ -34,10 +34,10 @@
  * if == 1, debug UART can be read when board is plugged over USB (together with stlink)
  * if == 0, debug uart can be read over pins connected to FT2232h, used on automatized testing rig
 */
-#define DBG_UART_OVER_USB 0
+#define DBG_UART_OVER_USB 1
 
 // If 0, SPI is wired on arduino shield pins
-#define LIBTROPIC_TESTS 1
+#define LIBTROPIC_TESTS 0
 
 /* Definition for USART_DBG clock resources */
 #define USART_DBG                           USART3
