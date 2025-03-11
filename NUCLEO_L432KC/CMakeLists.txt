@@ -18,7 +18,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 # Paths to stm32 drivers
 set(PATH_TO_STM32CUBEL4 "Vendor/STM32CubeL4/Drivers" )
 # Path to libtropic
-set(PATH_TO_LIBTROPIC "../../../../")
+set(PATH_TO_LIBTROPIC "../../libtropic")
 
 
 ###########################################################################
