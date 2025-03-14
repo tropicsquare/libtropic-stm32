@@ -23,6 +23,7 @@ This repository must be cloned recursively, because it contains submodules with 
 
 ```bash
 git clone https://github.com/tropicsquare/libtropic-stm32.git
+cd libtropic-stm32
 git submodule update --init --recursive
 ```
 Also this repository is designed to work together with main libtropic repository. Make sure that examples' CMakeLists file contains correctly defined `PATH_TO_LIBTROPIC` which points to libtropic repository.
