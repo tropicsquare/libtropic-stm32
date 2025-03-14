@@ -113,3 +113,7 @@ Debugging should be enabled after restarting your VS Code.
 * Click on finish
 * Define transport layer by uncommenting an option in CMakeLists.txt
 * Click on Build, then on the left side click on `binaries`, right click on `stm32_example.elf` and choose 'run as a stm32 Application'
+
+# License
+
+See the [LICENSE.md](LICENSE.md) file in the root of this repository or consult license information at [Tropic Square website](https://tropicsquare.com/license).
