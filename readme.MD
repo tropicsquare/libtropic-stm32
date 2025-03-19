@@ -19,15 +19,13 @@ More info about wiring is in each project's own README.md file.
 
 ## Cloning
 
-This repository must be cloned recursively, because it contains submodules with drivers:
+This repository must be cloned recursively, because it contains submodules - libtropic and target drivers:
 
 ```bash
 git clone https://github.com/tropicsquare/libtropic-stm32.git
 cd libtropic-stm32
 git submodule update --init --recursive
 ```
-Also this repository is designed to work together with main libtropic repository. Make sure that examples' CMakeLists file contains correctly defined `PATH_TO_LIBTROPIC` which points to libtropic repository.
-
 
 ## Compiling
 
@@ -59,7 +57,7 @@ Similar output should be visible over serialport:
 58	;INFO;	 Session with H0 keys:
 33	;INFO;Establish session with H0
 35	;SYSTEM;ASSERT_OK
-40	;INFO;lt_ping() 
+40	;INFO;lt_ping()
 41	;SYSTEM;ASSERT_OK
 42	;INFO;		Message: This is Hello World message from TROPIC01!!
 63	;INFO;	-------------------------------------------------------------------------------------------------------------

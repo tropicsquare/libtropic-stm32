@@ -15,10 +15,10 @@ set(OPENOCD_CFG "/usr/share/openocd/scripts/board/stm32f429discovery.cfg")
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32F429ZITX_FLASH.ld)
 # Path to toolchain file
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
-# Paths to stm32 drivers
+# Paths to stm32 drivers (added as a submodule)
 set(PATH_TO_STM32CUBEF4 "Vendor/STM32CubeF4/Drivers" )
-# Path to libtropic
-set(PATH_TO_LIBTROPIC "../../../../")
+# Path to libtropic (added as a submodule)
+set(PATH_TO_LIBTROPIC "../libtropic")
 
 
 ###########################################################################
