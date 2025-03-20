@@ -31,6 +31,8 @@ git submodule update --init --recursive
 
 Based on compilation switches passed to cmake, particular example will be compiled in. For example when `-DLT_EX_HELLO_WORLD=1` is used, function `lt_ex_hello_world()` will be executed in main. All available examples are [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
 
+For a quick check of correct setup, the Hello World example is already compiled for all supported boards [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/hello_world_artifact.yml) (click on latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
+
 ```bash
 cd NUCLEO_L432KC/
 mkdir build
