@@ -131,9 +131,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
 void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
 {
   // RNG Peripheral clock enable
-  __HAL_RCC_HSI48_ENABLE();
   __HAL_RCC_RNG_CLK_ENABLE();
-  __HAL_RCC_RNG_CONFIG(RCC_RNGCLKSOURCE_HSI48);
 }
 
 /**
