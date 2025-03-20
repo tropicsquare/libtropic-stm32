@@ -20,4 +20,4 @@ Use TROPIC01 shield, or wire chip according to following diagram:
 |------------|-----------------|-----------------|
 ```
 
-![NUCLEO L432KC wiring](src/nucleo_L432KC_connection_to_tropic.jpg)
+![NUCLEO L432KC wiring](img/nucleo_L432KC_connection_to_tropic.jpg)
