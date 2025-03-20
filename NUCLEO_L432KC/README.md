@@ -8,14 +8,14 @@ Devboard's web: https://os.mbed.com/platforms/ST-Nucleo-L432KC/
 Use TROPIC01 shield, or wire chip according to following diagram:
 
 ```
-|------------|-----------|
-|  TROPIC01  |   NUCLEO  |
-|------------|-----------|
-|  GND       |  GND      |
-|  3V3       |  3V3      |
-|  MISO      |  GPIOA_6  |
-|  MOSI      |  GPIOA_7  |
-|  SCK       |  GPIOA_5  |
-|  CS        |  GPIOA_4  |
-|------------|-----------|
+|------------|-----------------|-----------------|
+|  TROPIC01  |  STM32L432KCU6  |  NUCLEO L432KC  |
+|------------|-----------------|-----------------|
+|  GND       |  GND            |  GND            |
+|  3V3       |  3V3            |  3V3            |
+|  MISO      |  GPIOA_PIN_6    |  A6             |
+|  MOSI      |  GPIOA_PIN_7    |  A5             |
+|  SCK       |  GPIOA_PIN_5    |  A4             |
+|  CS        |  GPIOA_PIN_4    |  A3             |
+|------------|-----------------|-----------------|
 ```
