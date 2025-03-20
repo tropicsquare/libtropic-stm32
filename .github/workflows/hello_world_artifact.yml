@@ -1,4 +1,4 @@
-name: Build examples and upload hello world as artifact
+name: Build examples and upload hello world as artifacts
 on:
   push:
     branches:
@@ -18,51 +18,36 @@ jobs:
         run: |
             sudo apt-get install cmake gcc-arm-none-eabi
 
-      - name: Build Hello World example
+      - name: Build Hello World example for NUCLEO_L432KC
         run: |
             cmake NUCLEO_L432KC/ -B NUCLEO_L432KC/build/ -DLT_EX_HELLO_WORLD=ON
             pushd NUCLEO_L432KC/build/
             make
             popd
 
-      - name: Upload artifact
+      - name: Build Hello World example for NUCLEO_F439ZI
+        run: |
+            cmake NUCLEO_F439ZI/ -B NUCLEO_F439ZI/build/ -DLT_EX_HELLO_WORLD=ON
+            pushd NUCLEO_F439ZI/build/
+            make
+            popd
+
+      - name: Upload artifact for NUCLEO_L432KC
         uses: actions/upload-artifact@v4.4.0
         with:
-          # Name of the artifact to upload.
-          # Optional. Default is 'artifact'
-          name: 'libtropic-hello-world'
-
-          # A file, directory or wildcard pattern that describes what to upload
-          # Required.
+          name: 'NUCLEO_L432KC-hello-world'
           path: 'NUCLEO_L432KC/build/stm32_example.*'
-
-          # The desired behavior if no files are found using the provided path.
-          # Available Options:
-          #   warn: Output a warning but do not fail the action
-          #   error: Fail the action with an error message
-          #   ignore: Do not output any warnings or errors, the action does not fail
-          # Optional. Default is 'warn'
           if-no-files-found: 'error'
-
-          # Duration after which artifact will expire in days. 0 means using default retention.
-          # Minimum 1 day.
-          # Maximum 90 days unless changed from the repository settings page.
-          # Optional. Defaults to repository settings.
           retention-days: 0
-
-          # The level of compression for Zlib to be applied to the artifact archive.
-          # The value can range from 0 to 9.
-          # For large files that are not easily compressed, a value of 0 is recommended for significantly faster uploads.
-          # Optional. Default is '6'
-
-          # If true, an artifact with a matching name will be deleted before a new one is uploaded.
-          # If false, the action will fail if an artifact for the given name already exists.
-          # Does not fail if the artifact does not exist.
-          # Optional. Default is 'false'
           overwrite: true
+          include-hidden-files: false
 
-          # Whether to include hidden files in the provided path in the artifact
-          # The file contents of any hidden files in the path should be validated before
-          # enabled this to avoid uploading sensitive information.
-          # Optional. Default is 'false'
+      - name: Upload artifact for NUCLEO_F439ZI
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: 'NUCLEO_F439ZI-hello-world'
+          path: 'NUCLEO_F439ZI/build/stm32_example.*'
+          if-no-files-found: 'error'
+          retention-days: 0
+          overwrite: true
           include-hidden-files: false
