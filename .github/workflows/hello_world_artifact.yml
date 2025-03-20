@@ -34,7 +34,7 @@ jobs:
 
           # A file, directory or wildcard pattern that describes what to upload
           # Required.
-          path: 'build/stm32_example.*'
+          path: 'NUCLEO_L432KC/build/stm32_example.*'
 
           # The desired behavior if no files are found using the provided path.
           # Available Options:
