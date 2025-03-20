@@ -35,7 +35,7 @@ jobs:
       - name: Upload artifact for NUCLEO_L432KC
         uses: actions/upload-artifact@v4.4.0
         with:
-          name: 'NUCLEO_L432KC-hello-world'
+          name: 'NUCLEO_L432KC_hello_world'
           path: 'NUCLEO_L432KC/build/stm32_example.*'
           if-no-files-found: 'error'
           retention-days: 0
@@ -45,7 +45,7 @@ jobs:
       - name: Upload artifact for NUCLEO_F439ZI
         uses: actions/upload-artifact@v4.4.0
         with:
-          name: 'NUCLEO_F439ZI-hello-world'
+          name: 'NUCLEO_F439ZI_hello_world'
           path: 'NUCLEO_F439ZI/build/stm32_example.*'
           if-no-files-found: 'error'
           retention-days: 0
