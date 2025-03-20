@@ -19,3 +19,5 @@ Use TROPIC01 shield, or wire chip according to following diagram:
 |  CS        |  GPIOA_PIN_4    |  A3             |
 |------------|-----------------|-----------------|
 ```
+
+![NUCLEO L432KC wiring](src/nucleo_L432KC_connection_to_tropic.jpg)
