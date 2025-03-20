@@ -2,7 +2,7 @@ name: Build examples and upload hello world as artifacts
 on:
   push:
     branches:
-      - 'action-hello-world-example'
+      - 'master'
 
 jobs:
   build:
