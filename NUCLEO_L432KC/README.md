@@ -1,4 +1,4 @@
-# NUCLE-L432KC
+# NUCLEO-L432KC
 
 Devboard's web: https://os.mbed.com/platforms/ST-Nucleo-L432KC/
 

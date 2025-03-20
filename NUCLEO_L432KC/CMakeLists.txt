@@ -15,10 +15,10 @@ set(OPENOCD_CFG "/usr/share/openocd/scripts/board/st_nucleo_l4.cfg")
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/Src/STM32L432KCUX_FLASH.ld)
 # Path to toolchain file
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
-# Paths to stm32 drivers
+# Paths to stm32 drivers (added as a submodule)
 set(PATH_TO_STM32CUBEL4 "Vendor/STM32CubeL4/Drivers" )
-# Path to libtropic
-set(PATH_TO_LIBTROPIC "../../../../")
+# Path to libtropic (added as a submodule)
+set(PATH_TO_LIBTROPIC "../libtropic")
 
 
 ###########################################################################
