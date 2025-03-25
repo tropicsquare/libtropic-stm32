@@ -1,6 +1,10 @@
 # About
 
-This repository contains examples of libtropic's usage on ST Microelectronic's development boards. Currently supported are:
+This repository contains examples of libtropic's usage on ST Microelectronic's development boards.
+
+Contributors, please follow [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
+
+Currently supported boards are:
 
 * NUCLEO-L432KC https://os.mbed.com/platforms/ST-Nucleo-L432KC/
 * NUCLEO-F439ZI https://os.mbed.com/platforms/ST-Nucleo-F439ZI/
