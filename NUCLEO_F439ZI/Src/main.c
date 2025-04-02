@@ -137,11 +137,14 @@ int main(void)
   // libtropic related code BEGIN
 
    // Test routines
-#ifdef LT_EX_TEST_REVERSIBLE
-    lt_ex_test_reversible();
+#ifdef LT_TEST_REVERSIBLE
+    lt_test_reversible();
 #endif
-#ifdef LT_EX_TEST_IREVERSIBLE
-    lt_ex_test_ireversible();
+#ifdef LT_TEST_IREVERSIBLE
+    lt_test_ireversible();
+#endif
+#ifdef LT_TEST_SAMPLES_1
+    lt_test_samples_1();
 #endif
 
     // Full examples
