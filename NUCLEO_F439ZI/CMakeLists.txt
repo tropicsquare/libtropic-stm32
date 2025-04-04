@@ -18,7 +18,9 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 # Paths to stm32 drivers (added as a submodule)
 set(PATH_TO_STM32CUBEF4 "Vendor/STM32CubeF4/Drivers" )
 # Path to libtropic (added as a submodule)
-set(PATH_TO_LIBTROPIC "../libtropic")
+if(NOT DEFINED PATH_TO_LIBTROPIC)
+    set(PATH_TO_LIBTROPIC "../libtropic")
+endif()
 
 
 ###########################################################################
@@ -99,15 +101,17 @@ add_executable(stm32_example.elf ${SOURCES} ${HEADERS})
 
 # Add this so HAL knows what target MCU we use
 add_definitions(-D${STM32_DEVICE})
-# Transport layer (USE_UART or USE_SPI):
-if(USE_UART)
-    target_compile_definitions(stm32_example.elf PRIVATE USE_UART)
-else()
-    target_compile_definitions(stm32_example.elf PRIVATE USE_SPI)
-endif()
 
-if(LT_USE_TREZOR_CRYPTO)
-    target_compile_definitions(stm32_example.elf PRIVATE LT_USE_TREZOR_CRYPTO)
+
+###########################################################################
+#                                                                         #
+#   Set on which USART pins will be output routed                         #
+#                                                                         #
+###########################################################################
+
+# Used for testing. Do not use it on when running on standalone Nucleo board
+if (LT_TESTING_RIG)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
 endif()
 
 
@@ -122,20 +126,28 @@ endif()
 ###########################################################################
 
 ## Compile test routines:
-# -DLT_EX_TEST_REVERSIBLE=1
-if(LT_EX_TEST_REVERSIBLE)
+# -DLT_TEST_REVERSIBLE=1
+if(LT_TEST_REVERSIBLE)
     # This line makes libtropic to be compiled with exposed example functions
     set(LT_ADD_EXAMPLES ON)
     # This line will enable lt_test_reversible() test routine in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_TEST_REVERSIBLE)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_REVERSIBLE)
 endif()
-# --DLT_EX_TEST_IREVERSIBLE=1
-if(LT_EX_TEST_IREVERSIBLE)
+# --DLT_TEST_IREVERSIBLE=1
+if(LT_TEST_IREVERSIBLE)
     # This line makes libtropic to be compiled with exposed example functions
     set(LT_ADD_EXAMPLES ON)
     # This line will enable lt_test_ireversible() test routine in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_TEST_IREVERSIBLE)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_IREVERSIBLE)
 endif()
+# --DLT_TEST_SAMPLES_1=1
+if(LT_TEST_SAMPLES_1)
+    # This line makes libtropic to be compiled with exposed example functions
+    set(LT_ADD_EXAMPLES ON)
+    # This line will enable lt_test_ireversible() test routine in final executable
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_SAMPLES_1)
+endif()
+
 # Compile examples:
 # -DLT_EX_FW_UPDATE=1
 if(LT_EX_FW_UPDATE)
@@ -175,6 +187,7 @@ add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 
 #target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
 target_link_libraries(stm32_example.elf PRIVATE tropic)
+
 
 ###########################################################################
 #                                                                         #
