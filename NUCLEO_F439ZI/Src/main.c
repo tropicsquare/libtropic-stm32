@@ -141,9 +141,11 @@ int main(void)
     lt_test_reversible();
 #endif
 #ifdef LT_TEST_IREVERSIBLE
+    #pragma message "WARNING: Compiled code might write ireversible changes into chip"
     lt_test_ireversible();
 #endif
 #ifdef LT_TEST_SAMPLES_1
+    #pragma message "WARNING: Compiled code might write ireversible changes into chip"
     lt_test_samples_1();
 #endif
 
