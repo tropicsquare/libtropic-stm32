@@ -125,28 +125,10 @@ endif()
 #                                                                         #
 ###########################################################################
 
-## Compile test routines:
-# -DLT_TEST_REVERSIBLE=1
-if(LT_TEST_REVERSIBLE)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_test_reversible() test routine in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_REVERSIBLE)
-endif()
-# --DLT_TEST_IREVERSIBLE=1
-if(LT_TEST_IREVERSIBLE)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_test_ireversible() test routine in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_IREVERSIBLE)
-endif()
-# --DLT_TEST_SAMPLES_1=1
-if(LT_TEST_SAMPLES_1)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_test_ireversible() test routine in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_SAMPLES_1)
-endif()
+# Following two lines should be placed in next section,
+# but let's keep them here for clarity:
+set(LT_ADD_EXAMPLES ON)
+set(LT_ADD_FUNC_TESTS ON)
 
 # Compile examples:
 # -DLT_EX_FW_UPDATE=1
@@ -172,6 +154,36 @@ if(LT_EX_HW_WALLET)
     target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
 endif()
 
+
+# Compile test routines:
+# -DLT_TEST_CHIP_ID=1
+if(LT_TEST_CHIP_ID)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_CHIP_ID)
+endif()
+# -DLT_TEST_WRITE_PAIRING_KEYS=1
+if(LT_TEST_WRITE_PAIRING_KEYS)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_WRITE_PAIRING_KEYS)
+endif()
+# -DLT_TEST_WRITE_R_CONFIG=1
+if(LT_TEST_WRITE_R_CONFIG)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_WRITE_R_CONFIG)
+endif()
+# --DLT_TEST_PING=1
+if(LT_TEST_PING)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_PING)
+endif()
+# --DLT_TEST_ECC_EDDSA=1
+if(LT_TEST_ECC_EDDSA)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_ECC_EDDSA)
+endif()
+# --DLT_TEST_R_MEM=1
+if(LT_TEST_R_MEM)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_R_MEM)
+endif()
+# --DLT_TEST_ERASE_R_CONFIG=1
+if(LT_TEST_ERASE_R_CONFIG)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_TEST_ERASE_R_CONFIG)
+endif()
 
 ###########################################################################
 #                                                                         #
