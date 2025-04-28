@@ -30,14 +30,6 @@
 /* User can use this section to tailor USART_DBG/UARTx instance used and associated
    resources */
 
-/** This define controls over which pins will board drive UART.
- * if == 0, debug UART can be read when board is plugged over USB (together with stlink)
- * if == 1, debug uart can be read over pins PB_9 and PB_10 pins used on automatized testing rig
-*/
-#ifndef LT_TESTING_RIG
-  #define LT_TESTING_RIG 0
-#endif
-
 /* Definition for USART_DBG */
 #define USART_DBG                           USART3
 #define USART_DBG_CLK_ENABLE()              __HAL_RCC_USART3_CLK_ENABLE();
@@ -46,8 +38,8 @@
 #define USART_DBG_FORCE_RESET()             __HAL_RCC_USART3_FORCE_RESET()
 #define USART_DBG_RELEASE_RESET()           __HAL_RCC_USART3_RELEASE_RESET()
 
-#if LT_TESTING_RIG
-  // Used by libtropic automating testing rig, USART is wired out on PB_9 and PB_10 pins
+#if UART_TESTING_RIG
+  /* Used by libtropic automating testing rig, USART is wired out on PB_9 and PB_10 pins */
   #define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
   #define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
   #define USART_DBG_TX_PIN                    GPIO_PIN_10
@@ -55,7 +47,7 @@
   #define USART_DBG_RX_PIN                    GPIO_PIN_11
   #define USART_DBG_RX_GPIO_PORT              GPIOB
 #else
-  // Standard Nucleo's way, debug USART is wired out over st-link
+  /* Standard Nucleo's way, debug USART is wired out over st-link */
   #define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
   #define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
   #define USART_DBG_TX_PIN                    GPIO_PIN_8
@@ -87,12 +79,13 @@
 #define SPIx_MOSI_GPIO_PORT              GPIOA
 #define SPIx_MOSI_AF                     GPIO_AF5_SPI1
 
-/* Size of buffer */
-#define BUFFERSIZE                       (COUNTOF(aTxBuffer) - 1)
-
-/* Exported macro ------------------------------------------------------------*/
-#define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
-/* Exported functions ------------------------------------------------------- */
+#if USE_INT_PIN
+/* Following GPIO is used to check on INT pin for READY signal during communication */
+#define LT_INT_BANK   GPIOF
+#define LT_INT_PIN    GPIO_PIN_15
+#define LT_INT_CLK_ENABLE()      __HAL_RCC_GPIOF_CLK_ENABLE()
+#define LT_INT_GPIO_PORT              GPIOF
+#endif
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

@@ -22,6 +22,7 @@ if(NOT DEFINED PATH_TO_LIBTROPIC)
     set(PATH_TO_LIBTROPIC "../libtropic")
 endif()
 
+option(USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" ON)
 
 ###########################################################################
 #                                                                         #
@@ -110,8 +111,20 @@ add_definitions(-D${STM32_DEVICE})
 ###########################################################################
 
 # Used for testing. Do not use it on when running on standalone Nucleo board
-if (LT_TESTING_RIG)
-    target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
+if (UART_TESTING_RIG)
+    target_compile_definitions(stm32_example.elf PRIVATE UART_TESTING_RIG)
+endif()
+
+###########################################################################
+#                                                                         #
+#   Specify write/read behaviour during l2 transfer                       #
+#                                                                         #
+###########################################################################
+# Use INT pin to check whether TROPIC01 has some response
+# (If not set, by default host will poll every few ms)
+if (USE_INT_PIN)
+    set(LT_USE_INT_PIN ON)
+    target_compile_definitions(stm32_example.elf PRIVATE USE_INT_PIN)
 endif()
 
 
