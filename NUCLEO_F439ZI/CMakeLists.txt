@@ -22,7 +22,7 @@ if(NOT DEFINED PATH_TO_LIBTROPIC)
     set(PATH_TO_LIBTROPIC "../libtropic")
 endif()
 
-option(USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" ON)
+option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
 
 ###########################################################################
 #                                                                         #
@@ -122,9 +122,9 @@ endif()
 ###########################################################################
 # Use INT pin to check whether TROPIC01 has some response
 # (If not set, by default host will poll every few ms)
-if (USE_INT_PIN)
+if (LT_USE_INT_PIN)
     set(LT_USE_INT_PIN ON)
-    target_compile_definitions(stm32_example.elf PRIVATE USE_INT_PIN)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_USE_INT_PIN)
 endif()
 
 

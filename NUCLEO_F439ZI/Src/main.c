@@ -143,6 +143,7 @@ int main(void)
 #endif
     #ifdef LT_EX_HELLO_WORLD
   /*int*/ lt_ex_hello_world();
+  lt_test_dump_cert_store();
 #endif
 #ifdef LT_EX_HW_WALLET
   /*int*/ lt_ex_hardware_wallet();
