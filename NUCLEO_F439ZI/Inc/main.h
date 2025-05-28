@@ -79,7 +79,7 @@
 #define SPIx_MOSI_GPIO_PORT              GPIOA
 #define SPIx_MOSI_AF                     GPIO_AF5_SPI1
 
-#if USE_INT_PIN
+#if LT_USE_INT_PIN
 /* Following GPIO is used to check on INT pin for READY signal during communication */
 #define LT_INT_BANK   GPIOF
 #define LT_INT_PIN    GPIO_PIN_15

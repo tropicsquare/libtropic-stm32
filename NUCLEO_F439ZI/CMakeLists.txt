@@ -25,7 +25,8 @@ endif()
 if (NOT DEFINED LT_BUILD_EXAMPLES AND NOT DEFINED LT_BUILD_TESTS)
     message(FATAL_ERROR "Please define -DLT_BUILD_EXAMPLES=1 to build examples (and also select required example) or -DLT_BUILD_TESTS=1 to build tests. See docs. Nothing to do now, bye!")
 endif()
-option(USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" ON)
+
+option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
 
 ###########################################################################
 #                                                                         #
@@ -118,9 +119,9 @@ add_definitions(-D${STM32_DEVICE})
 ###########################################################################
 # Use INT pin to check whether TROPIC01 has some response
 # (If not set, by default host will poll every few ms)
-if (USE_INT_PIN)
+if (LT_USE_INT_PIN)
     set(LT_USE_INT_PIN ON)
-    target_compile_definitions(stm32_example.elf PRIVATE USE_INT_PIN)
+    target_compile_definitions(stm32_example.elf PRIVATE LT_USE_INT_PIN)
 endif()
 
 ###########################################################################
