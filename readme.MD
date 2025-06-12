@@ -1,16 +1,16 @@
 # About
 
-This repository contains examples of libtropic's usage on ST Microelectronic's development boards.
+This repository contains examples of libtropic usage on ST Microelectronic's development boards.
 
 Contributors, please follow [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
 
 Currently supported boards are:
 
-* NUCLEO-L432KC https://os.mbed.com/platforms/ST-Nucleo-L432KC/
-* NUCLEO-F439ZI https://os.mbed.com/platforms/ST-Nucleo-F439ZI/
+* [NUCLEO-L432KC](https://os.mbed.com/platforms/ST-Nucleo-L432KC/)
+* [NUCLEO-F439ZI](https://os.mbed.com/platforms/ST-Nucleo-F439ZI/)
 
 
-Debug messages are transmitted over devboard's USB ACM serial port, they can be received by opening a serial port on PC
+Debug messages are transmitted over devboard USB ACM serial port, they can be received by opening a serial port on PC
 
 More info about wiring is in each project's own README.md file.
 
@@ -23,7 +23,7 @@ More info about wiring is in each project's own README.md file.
 
 ## Cloning
 
-This repository must be cloned recursively, because it contains submodules - libtropic and target drivers:
+This repository must be cloned recursively. Repository contains submodules - libtropic and target drivers:
 
 ```bash
 git clone https://github.com/tropicsquare/libtropic-stm32.git
@@ -33,9 +33,9 @@ git submodule update --init --recursive
 
 ## Compiling
 
-Based on compilation switches passed to cmake, particular example will be compiled in. For example when `-DLT_EX_HELLO_WORLD=1` is used, function `lt_ex_hello_world()` will be executed in main. All available examples are [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
+Based on compilation switches passed to cmake, particular example will be compiled in. Example; `-DLT_EX_HELLO_WORLD=1` is used, function `lt_ex_hello_world()` will be executed in main. All available examples are [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
 
-For a quick check of correct setup, the Hello World example is already compiled for all supported boards [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/hello_world_artifact.yml) (click on latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
+For a quick check of the correct setup, the Hello World example is already compiled for all supported boards [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/hello_world_artifact.yml) (click the latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
 
 ```bash
 cd NUCLEO_L432KC/
@@ -106,17 +106,22 @@ Then place this launch.json file into .vscode folder:
 
 ```
 
-Debugging should be enabled after restarting your VS Code.
+Restart your VS code to enable debugging.
 
 # Opening in STM32CubeIDE
 
-* Open `File>New>STM32 Cmake Project`
-* Set 'Project with existing CMake sources'
-* Choose apropriate name, set source directory to `PATH_TO_THIS_EXAMPLE/stm32_example` and set the name of build directory
-* Define used MCU (Supported device is `STM32F439ZITx and STM32L432KC`)
-* Click on finish
-* Define transport layer by uncommenting an option in CMakeLists.txt
-* Click on Build, then on the left side click on `binaries`, right click on `stm32_example.elf` and choose 'run as a stm32 Application'
+1. Open `File>New>STM32 Cmake Project`
+2. Set 'Project with existing CMake sources'
+3. Choose apropriate name 
+4. Set source directory to `PATH_TO_THIS_EXAMPLE/stm32_example`
+5. Set the name of the build directory
+6. Define used MCU (Supported device is `STM32F439ZITx and STM32L432KC`)
+7. Click finish
+8. Define transport layer by uncommenting an option in CMakeLists.txt
+9. Click Build
+10. Click `binaries`
+11. Right click `stm32_example.elf`
+12. Choose 'run as a stm32 Application'
 
 # License
 
