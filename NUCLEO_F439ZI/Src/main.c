@@ -171,6 +171,8 @@ int main(void)
   /*int*/ lt_test_erase_r_config();
 #endif
 
+  LT_FINISH_TEST();
+
   // libtropic related code END
   // libtropic related code END
   // libtropic related code END
