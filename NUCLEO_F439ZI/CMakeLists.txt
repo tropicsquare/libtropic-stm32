@@ -22,6 +22,9 @@ if(NOT DEFINED PATH_TO_LIBTROPIC)
     set(PATH_TO_LIBTROPIC "../libtropic")
 endif()
 
+if (NOT DEFINED LT_BUILD_EXAMPLES AND NOT DEFINED LT_BUILD_TESTS)
+    message(FATAL_ERROR "Please define -DLT_BUILD_EXAMPLES=1 to build examples (and also select required example) or -DLT_BUILD_TESTS=1 to build tests. See docs. Nothing to do now, bye!")
+endif()
 
 ###########################################################################
 #                                                                         #
@@ -116,82 +119,84 @@ add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 #                                                                         #
 ###########################################################################
 
-# -------------------------------------------------------------------------
-# Add executable for examples
-# -------------------------------------------------------------------------
-add_executable(stm32_example.elf ${SOURCES} ${HEADERS})
+if (LT_BUILD_EXAMPLES)
+    # -------------------------------------------------------------------------
+    # Add executable for examples
+    # -------------------------------------------------------------------------
+    add_executable(stm32_example.elf ${SOURCES} ${HEADERS})
 
-# -------------------------------------------------------------------------
-# Set on which USART pins will be output routed
-# -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Set on which USART pins will be output routed
+    # -------------------------------------------------------------------------
 
-# Used for testing. Do not use it on when running on standalone Nucleo board
-if (LT_TESTING_RIG)
-    target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
-endif()
+    # Used for testing. Do not use it on when running on standalone Nucleo board
+    if (LT_TESTING_RIG)
+        target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
+    endif()
 
-#target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
-target_link_libraries(stm32_example.elf PRIVATE tropic)
+    #target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
+    target_link_libraries(stm32_example.elf PRIVATE tropic)
 
 
-# -------------------------------------------------------------------------
-# Example selection
-#                                                                    
-# Define which examples will be compiled into main().              
-# If any of examples or test routines is enabled, libtropic will be
-# compiled with all examples exposed (controlled by libtropic's    
-# LT_ADD_EXAMPLES), then a concrete example or test routine will be
-# enabled in main() int this project.                              
-#                                                                    
-# -------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Example selection
+    #                                                                    
+    # Define which examples will be compiled into main().              
+    # If any of examples or test routines is enabled, libtropic will be
+    # compiled with all examples exposed (controlled by libtropic's    
+    # LT_ADD_EXAMPLES), then a concrete example or test routine will be
+    # enabled in main() int this project.                              
+    #                                                                    
+    # -------------------------------------------------------------------------
 
-# Add examples
-set(LT_ADD_EXAMPLES ON)
-
-# Compile examples:
-# -DLT_EX_FW_UPDATE=1
-if(LT_EX_FW_UPDATE)
-    # This line makes libtropic to be compiled with exposed example functions
+    # Add examples
     set(LT_ADD_EXAMPLES ON)
-    set(LT_ENABLE_FW_UPDATE ON)
-    # This line will enable lt_ex_fw_update() example in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
+
+    # Compile examples:
+    # -DLT_EX_FW_UPDATE=1
+    if(LT_EX_FW_UPDATE)
+        # This line makes libtropic to be compiled with exposed example functions
+        set(LT_ADD_EXAMPLES ON)
+        set(LT_ENABLE_FW_UPDATE ON)
+        # This line will enable lt_ex_fw_update() example in final executable
+        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
+    endif()
+    # -DLT_EX_HELLO_WORLD=1
+    if(LT_EX_HELLO_WORLD)
+        # This line makes libtropic to be compiled with exposed example functions
+        set(LT_ADD_EXAMPLES ON)
+        # This line will enable lt_ex_hello_world() example in final executable
+        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
+    endif()
+    # -DLT_EX_HW_WALLET=1
+    if(LT_EX_HW_WALLET)
+        # This line makes libtropic to be compiled with exposed example functions
+        set(LT_ADD_EXAMPLES ON)
+        # This line will enable lt_ex_hw_wallet() example in final executable
+        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
+    endif()
+
+    # -------------------------------------------------------------------------
+    # Compilation outputs for examples
+    # -------------------------------------------------------------------------
+
+    # Create a binary from the elf
+    add_custom_command(TARGET stm32_example.elf POST_BUILD
+        COMMAND arm-none-eabi-objcopy -Oihex stm32_example.elf stm32_example.hex
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+
+    add_custom_command(TARGET stm32_example.elf
+        POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} ARGS -O binary stm32_example.elf stm32_example.bin
+    )
+
+    add_custom_target(flash
+        COMMAND openocd -f ${OPENOCD_CFG} -c 'program stm32_example.elf verify reset exit'
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS stm32_example.elf
+    )
 endif()
-# -DLT_EX_HELLO_WORLD=1
-if(LT_EX_HELLO_WORLD)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_ex_hello_world() example in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
-endif()
-# -DLT_EX_HW_WALLET=1
-if(LT_EX_HW_WALLET)
-    # This line makes libtropic to be compiled with exposed example functions
-    set(LT_ADD_EXAMPLES ON)
-    # This line will enable lt_ex_hw_wallet() example in final executable
-    target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
-endif()
-
-# -------------------------------------------------------------------------
-# Compilation outputs for examples
-# -------------------------------------------------------------------------
-
-# Create a binary from the elf
-add_custom_command(TARGET stm32_example.elf POST_BUILD
-    COMMAND arm-none-eabi-objcopy -Oihex stm32_example.elf stm32_example.hex
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-
-add_custom_command(TARGET stm32_example.elf
-    POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} ARGS -O binary stm32_example.elf stm32_example.bin
-)
-
-add_custom_target(flash
-    COMMAND openocd -f ${OPENOCD_CFG} -c 'program stm32_example.elf verify reset exit'
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS stm32_example.elf
-)
 
 ###########################################################################
 #                                                                         #
