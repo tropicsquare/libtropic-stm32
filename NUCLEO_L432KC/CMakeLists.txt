@@ -119,7 +119,6 @@ endif()
 # Following two lines should be placed in next section,
 # but let's keep them here for clarity:
 set(LT_ADD_EXAMPLES ON)
-set(LT_ADD_FUNC_TESTS ON)
 
 # Compile examples:
 # -DLT_EX_FW_UPDATE=1
