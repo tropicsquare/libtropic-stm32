@@ -149,7 +149,9 @@ int main(void)
     /*int*/ lt_ex_hardware_wallet();
   #endif
 
+  #ifdef LT_BUILD_TESTS
   #include "lt_test_registry.c.inc"
+  #endif
   
   LT_FINISH_TEST();
 
