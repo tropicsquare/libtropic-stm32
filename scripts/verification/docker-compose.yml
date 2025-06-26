@@ -1,0 +1,27 @@
+# Define TS11 USB device paths and mount tested project repository in docker-compose.override.yml.
+
+version: '3.8'
+services:
+  ci-job:
+    build: .
+    # devices:
+      # Define USB devices in docker-compose.override.yml. This file is normally generated automatically in libtropic-verification.
+    # volumes:
+      # Define mount volumes in docker-compose.override.yml depending on your setup.
+      # Pass at least this repo to the /work/repo directory inside the container.
+      # So, using relative paths, this would be: 
+      # - ../../.:/work/repo:ro
+    restart: "no"
+    tty: true
+    stdin_open: true
+    # networks:
+    #   - dummy
+    # cap_drop:
+    #   - ALL
+    # pids_limit: 100
+    # mem_limit: 512m
+  
+# networks:
+#   dummy:
+#     driver: bridge
+#     internal: true

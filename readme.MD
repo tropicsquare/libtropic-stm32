@@ -112,6 +112,33 @@ ctest -N
 If you want to launch the tests without the platform, simply flash select binary manually and inspect
 the UART output. Note that a different UART is used for test output. This method is not officially supported.
 
+### Using Docker
+There is a Docker setup available for building libtropic-stm32 and running regression tests using TS11 verification hardware.
+Configuration files are present in `scripts/verification`. To use the Docker, create a `docker-compose.override.yml` in the same directory.
+
+In the file, you have to define paths where the TS11 USB devices are mounted. The script uses both FTDI kernel driver
+(for UART access) and libftdi (for JTAG access), so you need to provide both `/dev/ttyX` mounts and
+`/dev/bus/usb/XXX` mounts.
+
+Also, you need to make this repository available in the container. Mount it to the `/work/repo` directory.
+
+Here is an example of the `docker-compose.override.yml` file:
+```yml
+version: '3.8'
+services:
+  ci-job:
+    devices:
+    - /dev/bus/usb/001/101:/dev/bus/usb/001/101
+    - /dev/ttyUSB1:/dev/ttyUSB1
+    volumes:
+    - /home/me/libtropic-stm32:/work/repo:ro
+```
+
+When the override file is ready, launch the container using docker compose:
+```sh
+docker compose up --build
+```
+
 ## Debugging in VS Code
 
 For compiling in debug mode pass `-DCMAKE_BUILD_TYPE=Debug` during cmake call.
