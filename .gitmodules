@@ -1,9 +1,9 @@
 [submodule "NUCLEO_F439ZI/Vendor/STM32CubeF4"]
 	path = NUCLEO_F439ZI/Vendor/STM32CubeF4
 	url = https://github.com/STMicroelectronics/STM32CubeF4.git
-[submodule "NUCLEO_L432KC/Vendor/STM32CubeL4"]
-	path = NUCLEO_L432KC/Vendor/STM32CubeL4
-	url = https://github.com/STMicroelectronics/STM32CubeL4.git
+# [submodule "NUCLEO_L432KC/Vendor/STM32CubeL4"]
+# 	path = NUCLEO_L432KC/Vendor/STM32CubeL4
+# 	url = https://github.com/STMicroelectronics/STM32CubeL4.git
 [submodule "libtropic"]
 	path = libtropic
 	url = https://github.com/tropicsquare/libtropic.git
