@@ -39,6 +39,7 @@ To compile examples, pass `-DLT_BUILD_EXAMPLES=1` to CMake and a switch for each
 ```bash
 cmake -DLT_BUILD_EXAMPLES=1 -DLT_EX_HELLO_WORLD=1 ..
 ```
+> Examples require SH0 private key to establish a secure session with TROPIC01. CMake variable `LT_SH0_PRIV_PATH` is used for that and its default value is set to path to the SH0 private key from the currently used `lab_batch_package`, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. Naturally, it can be overridden with another path to SH0 private key.
 
 All available examples are [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
 
@@ -88,6 +89,8 @@ cd build
 cmake -DLT_BUILD_TESTS=1 ..
 make
 ```
+
+> Functional tests require SH0 private key to establish a secure session with TROPIC01. CMake variable `LT_SH0_PRIV_PATH` is used for that and its default value is set to path to the SH0 private key from the currently used `lab_batch_package`, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. Naturally, it can be overridden with another path to SH0 private key.
 
 For each test, an ELF binary will be created in the build directory.
 
