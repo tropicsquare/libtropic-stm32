@@ -7,8 +7,7 @@ This repository contains examples of libtropic's usage on ST Microelectronic's d
 Contributors, please follow [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
 
 Currently supported boards are:
-
-* NUCLEO-L432KC https://os.mbed.com/platforms/ST-Nucleo-L432KC/
+<!-- * NUCLEO-L432KC https://os.mbed.com/platforms/ST-Nucleo-L432KC/ -->
 * NUCLEO-F439ZI https://os.mbed.com/platforms/ST-Nucleo-F439ZI/
 
 
@@ -156,7 +155,7 @@ Debugging should be enabled after restarting your VS Code.
 * Open `File>New>STM32 Cmake Project`
 * Set 'Project with existing CMake sources'
 * Choose apropriate name, set source directory to `PATH_TO_THIS_EXAMPLE/stm32_example` and set the name of build directory
-* Define used MCU (Supported device is `STM32F439ZITx and STM32L432KC`)
+* Define used MCU (Supported device is `STM32F439ZITx`<!--  and STM32L432KC -->)
 * Click on finish
 * Define transport layer by uncommenting an option in CMakeLists.txt
 * Click on Build, then on the left side click on `binaries`, right click on `stm32_example.elf` and choose 'run as a stm32 Application'
