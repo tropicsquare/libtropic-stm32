@@ -19,7 +19,6 @@ jobs:
             sudo apt-get install cmake gcc-arm-none-eabi
 
       - name: Build Hello World example for NUCLEO_L432KC
-        if: false
         run: |
             cmake NUCLEO_L432KC/ -B NUCLEO_L432KC/build/ -DLT_BUILD_EXAMPLES=1 -DLT_EX_HELLO_WORLD=1
             pushd NUCLEO_L432KC/build/
@@ -34,7 +33,6 @@ jobs:
             popd
 
       - name: Upload artifact for NUCLEO_L432KC
-        if: false
         uses: actions/upload-artifact@v4.4.0
         with:
           name: 'NUCLEO_L432KC_hello_world'
