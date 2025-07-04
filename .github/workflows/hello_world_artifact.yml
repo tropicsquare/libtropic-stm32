@@ -20,14 +20,14 @@ jobs:
 
       - name: Build Hello World example for NUCLEO_L432KC
         run: |
-            cmake NUCLEO_L432KC/ -B NUCLEO_L432KC/build/ -DLT_EX_HELLO_WORLD=ON
+            cmake NUCLEO_L432KC/ -B NUCLEO_L432KC/build/ -DLT_BUILD_EXAMPLES=1 -DLT_EX_HELLO_WORLD=1
             pushd NUCLEO_L432KC/build/
             make
             popd
 
       - name: Build Hello World example for NUCLEO_F439ZI
         run: |
-            cmake NUCLEO_F439ZI/ -B NUCLEO_F439ZI/build/ -DLT_EX_HELLO_WORLD=ON
+            cmake NUCLEO_F439ZI/ -B NUCLEO_F439ZI/build/ -DLT_BUILD_EXAMPLES=1 -DLT_EX_HELLO_WORLD=1
             pushd NUCLEO_F439ZI/build/
             make
             popd

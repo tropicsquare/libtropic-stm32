@@ -21,9 +21,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <stdio.h>
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
+#include "libtropic_logging.h"
 
 /** @addtogroup STM32L4xx_HAL_Examples
   * @{
@@ -36,13 +36,11 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
-
+#define LOG_OUT(f_, ...) printf(f_, ##__VA_ARGS__)
+#define NUM_OF_PING_CMDS 1
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void Error_Handler(void);
-
 #ifdef __GNUC__
 /* With GCC, small printf (option LD Linker->Libraries->Small printf
    set to 'Yes') calls __io_putchar() */
@@ -50,6 +48,8 @@ static void Error_Handler(void);
 #else
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif /* __GNUC__ */
+static void SystemClock_Config(void);
+static void Error_Handler(void);
 
 
 /* Private functions ---------------------------------------------------------*/
@@ -180,39 +180,22 @@ int main(void)
   // libtropic related code BEGIN
   // libtropic related code BEGIN
 
-  // Full examples
-#ifdef LT_EX_FW_UPDATE
-  lt_ex_fw_update();
-#endif
-    #ifdef LT_EX_HELLO_WORLD
-  /*int*/ lt_ex_hello_world();
-#endif
-#ifdef LT_EX_HW_WALLET
-  /*int*/ lt_ex_hardware_wallet();
-#endif
+ // Full examples
+  #ifdef LT_EX_FW_UPDATE
+    lt_ex_fw_update();
+  #endif
+      #ifdef LT_EX_HELLO_WORLD
+    /*int*/ lt_ex_hello_world();
+  #endif
+  #ifdef LT_EX_HW_WALLET
+    /*int*/ lt_ex_hardware_wallet();
+  #endif
 
-// Test routines
-#ifdef LT_TEST_CHIP_ID
-  /*int*/ lt_test_chip_id();
-#endif
-#ifdef LT_TEST_WRITE_PAIRING_KEYS
-  /*int*/ lt_test_write_pairing_keys();
-#endif
-#ifdef LT_TEST_WRITE_R_CONFIG
-  /*int*/ lt_test_write_r_config();
-#endif
-#ifdef LT_TEST_PING
-  /*int*/ lt_test_ping();
-#endif
-#ifdef LT_TEST_ECC_EDDSA
-  /*int*/ lt_test_ecc_eddsa();
-#endif
-#ifdef LT_TEST_R_MEM
-  /*int*/ lt_test_r_mem();
-#endif
-#ifdef LT_TEST_ERASE_R_CONFIG
-  /*int*/ lt_test_erase_r_config();
-#endif
+  #ifdef LT_BUILD_TESTS
+  #include "lt_test_registry.c.inc"
+  #endif
+  
+  LT_FINISH_TEST();
 
   // libtropic related code END
   // libtropic related code END
@@ -299,6 +282,26 @@ void SystemClock_Config(void)
     while(1);
   }
 }
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+
+  /* Infinite loop */
+  while (1)
+  {
+  }
+}
+#endif
 
 /**
   * @}
