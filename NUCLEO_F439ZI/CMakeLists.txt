@@ -177,11 +177,6 @@ if (LT_BUILD_EXAMPLES)
         COMMAND ${CMAKE_OBJCOPY} ARGS -O binary stm32_example.elf stm32_example.bin
     )
 
-    add_custom_target(flash
-        COMMAND openocd -f ${OPENOCD_CFG} -c 'program stm32_example.elf verify reset exit'
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS stm32_example.elf
-    )
 endif()
 
 ###########################################################################

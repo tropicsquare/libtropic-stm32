@@ -55,14 +55,13 @@ make
 
 ### Flashing
 
-Connect NUCLEO devboard with usb, then execute:
+Connect NUCLEO devboard with usb, then execute in the `NUCLEO_F439ZI/` directory:
 
 ```bash
-cd build/
-make flash
+./flash.sh build/<chosen_binary>
 ```
 
-Similar output should be visible over serialport:
+Similar output should be visible over serial port:
 ```
 52	;INFO;	=======================================================================
 53	;INFO;	=====  TROPIC01 Hello World                                         ===
