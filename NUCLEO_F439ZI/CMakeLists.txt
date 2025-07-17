@@ -116,66 +116,33 @@ add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 ###########################################################################
 
 if (LT_BUILD_EXAMPLES)
-    # -------------------------------------------------------------------------
-    # Add executable for examples
-    # -------------------------------------------------------------------------
-    add_executable(stm32_example.elf ${SOURCES} ${HEADERS})
 
-    # -------------------------------------------------------------------------
-    # Set on which USART pins will be output routed
-    # -------------------------------------------------------------------------
+    # So we can include preprocessed example registry (lt_ex_registry.c.inc).
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/libtropic)
 
-    # Used for testing. Do not use it on when running on standalone Nucleo board
-    if (LT_TESTING_RIG)
-        target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
-    endif()
+    # Loop through examples defined in libtropic and prepare environment.
+    foreach(example_name IN LISTS LIBTROPIC_EXAMPLE_LIST)
 
-    #target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
-    target_link_libraries(stm32_example.elf PRIVATE tropic)
+        # Create a correct macro from example name.
+        string(TOUPPER ${example_name} example_macro)
+        string(REPLACE " " "_" example_macro ${example_macro})
 
+        set(exe_name ${example_name}.elf)
 
-    # -------------------------------------------------------------------------
-    # Example selection
-    #                                                                    
-    # Define which examples will be compiled into main().              
-    # If any of examples or test routines is enabled, libtropic will be
-    # compiled with all examples exposed and a concrete example or test routine
-    # will be enabled in main() int this project.                              
-    #                                                                    
-    # -------------------------------------------------------------------------
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
-    # Compile examples:
-    # -DLT_EX_FW_UPDATE=1
-    if(LT_EX_FW_UPDATE)
-        set(LT_ENABLE_FW_UPDATE ON)
-        # This line will enable lt_ex_fw_update() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
-    endif()
-    # -DLT_EX_HELLO_WORLD=1
-    if(LT_EX_HELLO_WORLD)
-        # This line will enable lt_ex_hello_world() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
-    endif()
-    # -DLT_EX_HW_WALLET=1
-    if(LT_EX_HW_WALLET)
-        # This line will enable lt_ex_hw_wallet() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
-    endif()
+        # Define executable (separate for each example) and link dependencies.
+        add_executable(${exe_name} ${SOURCES} ${HEADERS})
+        target_link_libraries(${exe_name} PRIVATE tropic)
 
-    # -------------------------------------------------------------------------
-    # Compilation outputs for examples
-    # -------------------------------------------------------------------------
+        # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
+        target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
+        target_compile_definitions(${exe_name} PRIVATE ${example_macro})
 
-    # Create a binary from the elf
-    add_custom_command(TARGET stm32_example.elf POST_BUILD
-        COMMAND arm-none-eabi-objcopy -Oihex stm32_example.elf stm32_example.hex
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-
-    add_custom_command(TARGET stm32_example.elf
-        POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} ARGS -O binary stm32_example.elf stm32_example.bin
-    )
+    endforeach()
 
 endif()
 

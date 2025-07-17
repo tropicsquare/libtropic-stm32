@@ -138,15 +138,8 @@ int main(void)
   // libtropic related code BEGIN
   // libtropic related code BEGIN
 
-  // Full examples
-  #ifdef LT_EX_FW_UPDATE
-    lt_ex_fw_update();
-  #endif
-      #ifdef LT_EX_HELLO_WORLD
-    /*int*/ lt_ex_hello_world();
-  #endif
-  #ifdef LT_EX_HW_WALLET
-    /*int*/ lt_ex_hardware_wallet();
+  #ifdef LT_BUILD_EXAMPLES
+  #include "lt_ex_registry.c.inc"
   #endif
 
   #ifdef LT_BUILD_TESTS
