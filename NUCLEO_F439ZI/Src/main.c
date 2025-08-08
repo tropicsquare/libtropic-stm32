@@ -138,13 +138,20 @@ int main(void)
   // libtropic related code BEGIN
   // libtropic related code BEGIN
 
-  #ifdef LT_BUILD_EXAMPLES
-  #include "lt_ex_registry.c.inc"
-  #endif
+    lt_handle_t __lt_handle__;
+#if LT_SEPARATE_L3_BUFF
+    uint8_t l3_buffer[L3_PACKET_MAX_SIZE] __attribute__((aligned(16))) = {0};
+    __lt_handle__.l3.buff = l3_buffer;
+    __lt_handle__.l3.buff_len = sizeof(l3_buffer);
+#endif
 
-  #ifdef LT_BUILD_TESTS
-  #include "lt_test_registry.c.inc"
-  #endif
+#ifdef LT_BUILD_TESTS
+#include "lt_test_registry.c.inc"
+#endif
+
+#ifdef LT_BUILD_EXAMPLES
+#include "lt_ex_registry.c.inc"
+#endif
   
   LT_FINISH_TEST();
 
