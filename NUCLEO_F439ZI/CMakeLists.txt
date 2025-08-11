@@ -153,6 +153,7 @@ if (LT_BUILD_EXAMPLES)
         target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
 
         # Apply the strict compilation flags
+        # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
         if(LT_STRICT_COMP_FLAGS)
             target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
         endif()
@@ -200,6 +201,7 @@ if(LT_BUILD_TESTS)
         target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
 
         # Apply the strict compilation flags
+        # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
         if(LT_STRICT_COMP_FLAGS)
             target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
         endif()
