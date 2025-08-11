@@ -151,6 +151,7 @@ int main(void)
 
 #ifdef LT_BUILD_EXAMPLES
 #include "lt_ex_registry.c.inc"
+  UNUSED(__lt_ex_return_val__);
 #endif
   
   LT_FINISH_TEST();
@@ -169,6 +170,7 @@ int main(void)
     BSP_LED_Off(LED2);
     HAL_Delay(500);
   }
+
   return 0;
 }
 
