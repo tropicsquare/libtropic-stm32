@@ -37,20 +37,12 @@ project(stm32_example LANGUAGES C ASM)
 
 ###########################################################################
 #                                                                         #
-#   Sources                                                               #
+#   Vendor Libraries                                                      #
 #                                                                         #
 ###########################################################################
 
-# Specify other source files
-set(SOURCES ${SOURCES}
-    Src/main.c
-    Src/stm32f4xx_it.c
-    Src/stm32f4xx_hal_msp.c
-    Src/system_stm32f4xx.c
-    Src/startup_stm32f429zitx.s
-    Src/syscalls.c
-    Src/sysmem.c
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_f439zi.c
+# Create a library for all STM32CubeF4 HAL source files
+add_library(stm32_vendor STATIC
     ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
@@ -60,6 +52,32 @@ set(SOURCES ${SOURCES}
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
+)
+
+# Tell CMake to treat the HAL include directories as SYSTEM directories
+target_include_directories(stm32_vendor PUBLIC
+    SYSTEM ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
+    SYSTEM ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
+    SYSTEM ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
+    SYSTEM ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/
+)
+
+###########################################################################
+#                                                                         #
+#   Sources                                                               #
+#                                                                         #
+###########################################################################
+
+# Specify other source files
+set(SOURCES
+    Src/main.c
+    Src/stm32f4xx_it.c
+    Src/stm32f4xx_hal_msp.c
+    Src/system_stm32f4xx.c
+    Src/startup_stm32f429zitx.s
+    Src/syscalls.c
+    Src/sysmem.c
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_f439zi.c
 )
 
 set(HEADERS
@@ -87,10 +105,6 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
-    ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
-    ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
-    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/
 )
 
 # Add this so HAL knows what target MCU we use
@@ -136,7 +150,15 @@ if (LT_BUILD_EXAMPLES)
 
         # Define executable (separate for each example) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE tropic)
+        target_link_libraries(${exe_name} PRIVATE
+            tropic
+            stm32_vendor # Link to the new vendor library
+        )
+
+        # Apply the strict compilation flags
+        if(LT_STRICT_COMP_FLAGS)
+            target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
+        endif()
 
         # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
@@ -178,7 +200,15 @@ if(LT_BUILD_TESTS)
 
         # Define executable (separate for each test) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE tropic)
+        target_link_libraries(${exe_name} PRIVATE
+            tropic
+            stm32_vendor # Link to the new vendor library
+        )
+
+        # Apply the strict compilation flags
+        if(LT_STRICT_COMP_FLAGS)
+            target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
+        endif()
 
         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
@@ -207,4 +237,3 @@ if(LT_BUILD_TESTS)
         )
     endforeach()
 endif()
-
