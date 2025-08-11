@@ -169,7 +169,12 @@ int main(void)
     BSP_LED_Off(LED2);
     HAL_Delay(500);
   }
-  return 0;
+
+#ifdef LT_BUILD_EXAMPLES
+  return __lt_ex_return_val__;
+#else
+    return 0;
+#endif
 }
 
 

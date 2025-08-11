@@ -108,6 +108,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
   */
 void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
 {
+  UNUSED(hspi);
   GPIO_InitTypeDef  GPIO_InitStruct;
 
   /*##-1- Enable peripherals and GPIO Clocks #################################*/
@@ -151,6 +152,8 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
   */
 void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
 {
+  UNUSED(hspi);
+
   /*##-1- Reset peripherals ##################################################*/
   SPIx_FORCE_RESET();
   SPIx_RELEASE_RESET();
@@ -177,6 +180,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef *hspi)
   */
 void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
 {
+  UNUSED(hrng);
   /* RNG Peripheral clock enable */
   __HAL_RCC_RNG_CLK_ENABLE();
 }
@@ -190,6 +194,7 @@ void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
   */
 void HAL_RNG_MspDeInit(RNG_HandleTypeDef *hrng)
 {
+  UNUSED(hrng);
   /* Enable RNG reset state */
   __HAL_RCC_RNG_FORCE_RESET();
 
