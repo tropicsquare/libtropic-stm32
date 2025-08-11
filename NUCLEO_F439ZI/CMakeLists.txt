@@ -150,10 +150,7 @@ if (LT_BUILD_EXAMPLES)
 
         # Define executable (separate for each example) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE
-            tropic
-            stm32_vendor # Link to the new vendor library
-        )
+        target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
 
         # Apply the strict compilation flags
         if(LT_STRICT_COMP_FLAGS)
@@ -200,10 +197,7 @@ if(LT_BUILD_TESTS)
 
         # Define executable (separate for each test) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE
-            tropic
-            stm32_vendor # Link to the new vendor library
-        )
+        target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
 
         # Apply the strict compilation flags
         if(LT_STRICT_COMP_FLAGS)
