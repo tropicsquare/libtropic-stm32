@@ -151,6 +151,7 @@ int main(void)
 
 #ifdef LT_BUILD_EXAMPLES
 #include "lt_ex_registry.c.inc"
+  UNUSED(__lt_ex_return_val__);
 #endif
   
   LT_FINISH_TEST();
@@ -170,11 +171,7 @@ int main(void)
     HAL_Delay(500);
   }
 
-#ifdef LT_BUILD_EXAMPLES
-  return __lt_ex_return_val__;
-#else
-    return 0;
-#endif
+  return 0;
 }
 
 
