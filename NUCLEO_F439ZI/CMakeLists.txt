@@ -105,6 +105,7 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32
 )
 
 # Add this so HAL knows what target MCU we use
