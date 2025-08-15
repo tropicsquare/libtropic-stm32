@@ -126,6 +126,8 @@ int main(void)
   HAL_Init();
   /* Configure the system clock to 180 MHz */
   SystemClock_Config();
+  /* Enable Random Number Generator clock */
+  __HAL_RCC_RNG_CLK_ENABLE();
   /* Initialize BSP Led for LED2 */
   BSP_LED_Init(LED2);
 
@@ -153,7 +155,9 @@ int main(void)
   device.spi_instance = LT_SPI_INSTANCE;
   device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
   device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
-  
+
+  device.rng_handle.Instance = RNG;
+
 #ifdef LT_USE_INT_PIN
   device.int_gpio_bank = LT_INT_BANK;
   device.int_gpio_pin = LT_INT_PIN;
