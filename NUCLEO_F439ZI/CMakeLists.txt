@@ -114,18 +114,6 @@ add_definitions(-D${STM32_DEVICE})
 
 ###########################################################################
 #                                                                         #
-#   Specify write/read behaviour during l2 transfer                       #
-#                                                                         #
-###########################################################################
-# Use INT pin to check whether TROPIC01 has some response
-# (If not set, by default host will poll every few ms)
-if (LT_USE_INT_PIN)
-    set(LT_USE_INT_PIN ON)
-    target_compile_definitions(stm32_example.elf PRIVATE LT_USE_INT_PIN)
-endif()
-
-###########################################################################
-#                                                                         #
 #   Add libtropic                                                         #
 #                                                                         #
 ###########################################################################
@@ -160,6 +148,13 @@ if (LT_BUILD_EXAMPLES)
         # Used for testing. Do not use it on when running on standalone Nucleo board
         if (LT_TESTING_RIG)
             target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
+
+        # Use INT pin to check whether TROPIC01 has some response
+        # (If not set, by default host will poll every few ms)
+        if (LT_USE_INT_PIN)
+            set(LT_USE_INT_PIN ON)
+            target_compile_definitions(${exe_name} PRIVATE LT_USE_INT_PIN)
         endif()
 
         # Define executable (separate for each example) and link dependencies.
@@ -227,6 +222,13 @@ if(LT_BUILD_TESTS)
         # This is needed for our target to define correct UART output -- the test rig is connected
         # to an external UART.
         target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+
+        # Use INT pin to check whether TROPIC01 has some response
+        # (If not set, by default host will poll every few ms)
+        if (LT_USE_INT_PIN)
+            set(LT_USE_INT_PIN ON)
+            target_compile_definitions(${exe_name} PRIVATE LT_USE_INT_PIN)
+        endif()
 
         # We don't need binary format for now.
         # add_custom_command(TARGET ${exe_name}
