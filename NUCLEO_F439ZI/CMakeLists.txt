@@ -105,6 +105,7 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32
 )
 
 # Add this so HAL knows what target MCU we use
@@ -143,11 +144,6 @@ if (LT_BUILD_EXAMPLES)
 
         set(exe_name ${example_name}.elf)
 
-        # Used for testing. Do not use it on when running on standalone Nucleo board
-        if (LT_TESTING_RIG)
-            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
-        endif()
-
         # Define executable (separate for each example) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
         target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
@@ -161,6 +157,11 @@ if (LT_BUILD_EXAMPLES)
         # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
         target_compile_definitions(${exe_name} PRIVATE ${example_macro})
+
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
     endforeach()
 
