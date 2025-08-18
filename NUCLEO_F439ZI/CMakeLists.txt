@@ -210,9 +210,10 @@ if(LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
 
-        # This is needed for our target to define correct UART output -- the test rig is connected
-        # to an external UART.
-        target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
         # We don't need binary format for now.
         # add_custom_command(TARGET ${exe_name}
