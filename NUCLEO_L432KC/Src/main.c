@@ -180,20 +180,39 @@ int main(void)
   // libtropic related code BEGIN
   // libtropic related code BEGIN
 
- // Full examples
-  #ifdef LT_EX_FW_UPDATE
-    lt_ex_fw_update();
-  #endif
-      #ifdef LT_EX_HELLO_WORLD
-    /*int*/ lt_ex_hello_world();
-  #endif
-  #ifdef LT_EX_HW_WALLET
-    /*int*/ lt_ex_hardware_wallet();
-  #endif
+    lt_handle_t __lt_handle__ = {0};
+#if LT_SEPARATE_L3_BUFF
+    uint8_t l3_buffer[L3_PACKET_MAX_SIZE] __attribute__((aligned(16))) = {0};
+    __lt_handle__.l3.buff = l3_buffer;
+    __lt_handle__.l3.buff_len = sizeof(l3_buffer);
+#endif
+  
+  // The device structure has to be zero initialized!
+  // STM32 HAL depends on zero init values.
+//   lt_dev_stm32_nucleo_f439zi device = {0};
 
-  #ifdef LT_BUILD_TESTS
-  #include "lt_test_registry.c.inc"
-  #endif
+//   device.spi_instance = LT_SPI_INSTANCE;
+//   device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_32;
+//   device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
+//   device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
+
+//   device.rng_handle.Instance = RNG;
+
+// #ifdef LT_USE_INT_PIN
+//   device.int_gpio_bank = LT_INT_BANK;
+//   device.int_gpio_pin = LT_INT_PIN;
+// #endif
+
+  // __lt_handle__.l2.device = &device;
+
+#ifdef LT_BUILD_TESTS
+#include "lt_test_registry.c.inc"
+#endif
+
+#ifdef LT_BUILD_EXAMPLES
+#include "lt_ex_registry.c.inc"
+  UNUSED(__lt_ex_return_val__);
+#endif
   
   LT_FINISH_TEST();
 

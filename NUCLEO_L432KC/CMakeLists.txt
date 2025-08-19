@@ -34,6 +34,33 @@ endif()
 
 project(stm32_example LANGUAGES C ASM)
 
+###########################################################################
+#                                                                         #
+#   Vendor Libraries                                                      #
+#                                                                         #
+###########################################################################
+
+# Create a library for all STM32CubeL4 HAL source files
+add_library(stm32_vendor STATIC
+    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/stm32l4xx_nucleo_32.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
+)
+
+# Tell CMake to treat the HAL include directories as SYSTEM directories
+target_include_directories(stm32_vendor PUBLIC
+    SYSTEM ${PATH_TO_STM32CUBEL4}/CMSIS/Core/Include/
+    SYSTEM ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include/
+    SYSTEM ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/
+    SYSTEM ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/
+)
 
 ###########################################################################
 #                                                                         #
@@ -51,16 +78,7 @@ set(SOURCES ${SOURCES}
     Src/syscalls.c
     Src/sysmem.c
     ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_l432kc.c
-    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/stm32l4xx_nucleo_32.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
+
 )
 
 set(HAL_HEADERS
@@ -88,10 +106,7 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
-    ${PATH_TO_STM32CUBEL4}/CMSIS/Core/Include/
-    ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include/
-    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32
 )
 
 # Add this so HAL knows what target MCU we use
@@ -117,71 +132,40 @@ add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 ###########################################################################
 
 if (LT_BUILD_EXAMPLES)
-    # -------------------------------------------------------------------------
-    # Add executable for examples
-    # -------------------------------------------------------------------------
-    add_executable(stm32_example.elf ${SOURCES} ${HEADERS})
 
-    # -------------------------------------------------------------------------
-    # Set on which USART pins will be output routed
-    # -------------------------------------------------------------------------
+    # So we can include preprocessed example registry (lt_ex_registry.c.inc).
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/libtropic)
 
-    # Used for testing. Do not use it on when running on standalone Nucleo board
-    if (LT_TESTING_RIG)
-        target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
-    endif()
+    # Loop through examples defined in libtropic and prepare environment.
+    foreach(example_name IN LISTS LIBTROPIC_EXAMPLE_LIST)
 
-    #target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
-    target_link_libraries(stm32_example.elf PRIVATE tropic)
+        # Create a correct macro from example name.
+        string(TOUPPER ${example_name} example_macro)
+        string(REPLACE " " "_" example_macro ${example_macro})
 
-    # -------------------------------------------------------------------------
-    # Example selection
-    #                                                                    
-    # Define which examples will be compiled into main().              
-    # If any of examples or test routines is enabled, libtropic will be
-    # compiled with all examples exposed and a concrete example or test routine
-    # will be enabled in main() int this project.                              
-    #                                                                    
-    # -------------------------------------------------------------------------
+        set(exe_name ${example_name}.elf)
 
-    # Compile examples:
-    # -DLT_EX_FW_UPDATE=1
-    if(LT_EX_FW_UPDATE)
-        set(LT_ENABLE_FW_UPDATE ON)
-        # This line will enable lt_ex_fw_update() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
-    endif()
-    # -DLT_EX_HELLO_WORLD=1
-    if(LT_EX_HELLO_WORLD)
-        # This line will enable lt_ex_hello_world() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
-    endif()
-    # -DLT_EX_HW_WALLET=1
-    if(LT_EX_HW_WALLET)
-        # This line will enable lt_ex_hw_wallet() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
-    endif()
+        # Define executable (separate for each example) and link dependencies.
+        add_executable(${exe_name} ${SOURCES} ${HEADERS})
+        target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
 
-    # -------------------------------------------------------------------------
-    # Compilation outputs for examples
-    # -------------------------------------------------------------------------
+        # Apply the strict compilation flags
+        # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
+        if(LT_STRICT_COMP_FLAGS)
+            target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
+        endif()
 
-    # Create a binary from the elf
-    add_custom_command(TARGET stm32_example.elf POST_BUILD
-        COMMAND arm-none-eabi-objcopy -Oihex stm32_example.elf stm32_example.hex
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
+        # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
+        target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
+        target_compile_definitions(${exe_name} PRIVATE ${example_macro})
 
-    add_custom_command(TARGET stm32_example.elf
-        POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} ARGS -O binary stm32_example.elf stm32_example.bin
-    )
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
-    add_custom_target(flash
-        COMMAND openocd -f ${OPENOCD_CFG} -c 'program stm32_example.elf verify reset exit'
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS stm32_example.elf
-    )
+    endforeach()
+
 endif()
 
 ###########################################################################
@@ -216,15 +200,22 @@ if(LT_BUILD_TESTS)
 
         # Define executable (separate for each test) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE tropic)
+        target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
+
+        # Apply the strict compilation flags
+        # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
+        if(LT_STRICT_COMP_FLAGS)
+            target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
+        endif()
 
         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
 
-        # This is needed for our target to define correct UART output -- the test rig is connected
-        # to an external UART.
-        target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
         # We don't need binary format for now.
         # add_custom_command(TARGET ${exe_name}
