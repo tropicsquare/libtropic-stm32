@@ -30,19 +30,23 @@
 #include <sys/time.h>
 #include <sys/times.h>
 
+#include "syscalls.h"
+
 
 /* Variables */
-extern int __io_putchar(int ch) __attribute__((weak));
-extern int __io_getchar(void) __attribute__((weak));
-
-
 char *__env[1] = { 0 };
 char **environ = __env;
 
 
 /* Functions */
-void initialise_monitor_handles()
+void initialise_monitor_handles(void)
 {
+}
+
+int __attribute__((weak)) __io_getchar(void)
+{
+  // Default behavior: return end-of-file
+  return -1;
 }
 
 int _getpid(void)
