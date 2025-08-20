@@ -20,9 +20,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "main.h"
+#include "syscalls.h"
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
 #include "libtropic_logging.h"
+#include "lt_port_stm32_nucleo_f439zi.h"
 
 
 /** @addtogroup STM32F4xx_HAL_Examples
@@ -125,6 +127,8 @@ int main(void)
   HAL_Init();
   /* Configure the system clock to 180 MHz */
   SystemClock_Config();
+  /* Enable Random Number Generator clock */
+  __HAL_RCC_RNG_CLK_ENABLE();
   /* Initialize BSP Led for LED2 */
   BSP_LED_Init(LED2);
 
@@ -138,12 +142,30 @@ int main(void)
   // libtropic related code BEGIN
   // libtropic related code BEGIN
 
-    lt_handle_t __lt_handle__;
+    lt_handle_t __lt_handle__ = {0};
 #if LT_SEPARATE_L3_BUFF
     uint8_t l3_buffer[L3_PACKET_MAX_SIZE] __attribute__((aligned(16))) = {0};
     __lt_handle__.l3.buff = l3_buffer;
     __lt_handle__.l3.buff_len = sizeof(l3_buffer);
 #endif
+  
+  // The device structure has to be zero initialized!
+  // STM32 HAL depends on zero init values.
+  lt_dev_stm32_nucleo_f439zi device = {0};
+
+  device.spi_instance = LT_SPI_INSTANCE;
+  device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_32;
+  device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
+  device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
+
+  device.rng_handle.Instance = RNG;
+
+#ifdef LT_USE_INT_PIN
+  device.int_gpio_bank = LT_INT_BANK;
+  device.int_gpio_pin = LT_INT_PIN;
+#endif
+
+  __lt_handle__.l2.device = &device;
 
 #ifdef LT_BUILD_TESTS
 #include "lt_test_registry.c.inc"

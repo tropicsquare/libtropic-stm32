@@ -101,12 +101,14 @@ set(HEADERS
     Inc/main.h
     Inc/stm32f4xx_hal_conf.h
     Inc/stm32f4xx_it.h
+    Inc/syscalls.h
     ${HEADERS}
 )
 
 # Include path for directories containing header files
 include_directories(
     Inc/
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32
 )
 
 # Add this so HAL knows what target MCU we use
@@ -145,18 +147,6 @@ if (LT_BUILD_EXAMPLES)
 
         set(exe_name ${example_name}.elf)
 
-        # Used for testing. Do not use it on when running on standalone Nucleo board
-        if (LT_TESTING_RIG)
-            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
-        endif()
-
-        # Use INT pin to check whether TROPIC01 has some response
-        # (If not set, by default host will poll every few ms)
-        if (LT_USE_INT_PIN)
-            set(LT_USE_INT_PIN ON)
-            target_compile_definitions(${exe_name} PRIVATE LT_USE_INT_PIN)
-        endif()
-
         # Define executable (separate for each example) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
         target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
@@ -170,6 +160,18 @@ if (LT_BUILD_EXAMPLES)
         # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
         target_compile_definitions(${exe_name} PRIVATE ${example_macro})
+
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
+
+        # Use INT pin to check whether TROPIC01 has some response
+        # (If not set, by default host will poll every few ms)
+        if (LT_USE_INT_PIN)
+            set(LT_USE_INT_PIN ON)
+            target_compile_definitions(${exe_name} PRIVATE LT_USE_INT_PIN)
+        endif()
 
     endforeach()
 
@@ -219,9 +221,10 @@ if(LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
 
-        # This is needed for our target to define correct UART output -- the test rig is connected
-        # to an external UART.
-        target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
         # Use INT pin to check whether TROPIC01 has some response
         # (If not set, by default host will poll every few ms)
