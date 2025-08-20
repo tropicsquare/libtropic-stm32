@@ -154,7 +154,7 @@ int main(void)
   lt_dev_stm32_nucleo_f439zi device = {0};
 
   device.spi_instance = LT_SPI_INSTANCE;
-  device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_32;
+  device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_16;
   device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
   device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
 
