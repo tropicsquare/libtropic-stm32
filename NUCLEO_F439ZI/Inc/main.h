@@ -47,7 +47,7 @@
 #define USART_DBG_RELEASE_RESET()           __HAL_RCC_USART3_RELEASE_RESET()
 
 #if LT_TESTING_RIG
-  // Used by libtropic automating testing rig, USART is wired out on PB_9 and PB_10 pins
+  /* Used by libtropic automating testing rig, USART is wired out on PB_9 and PB_10 pins */
   #define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
   #define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOB_CLK_ENABLE()
   #define USART_DBG_TX_PIN                    GPIO_PIN_10
@@ -55,7 +55,7 @@
   #define USART_DBG_RX_PIN                    GPIO_PIN_11
   #define USART_DBG_RX_GPIO_PORT              GPIOB
 #else
-  // Standard Nucleo's way, debug USART is wired out over st-link
+  /* Standard Nucleo's way, debug USART is wired out over st-link */
   #define USART_DBG_RX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
   #define USART_DBG_TX_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOD_CLK_ENABLE()
   #define USART_DBG_TX_PIN                    GPIO_PIN_8
@@ -87,12 +87,13 @@
 #define SPIx_MOSI_GPIO_PORT              GPIOA
 #define SPIx_MOSI_AF                     GPIO_AF5_SPI1
 
-/* Size of buffer */
-#define BUFFERSIZE                       (COUNTOF(aTxBuffer) - 1)
-
-/* Exported macro ------------------------------------------------------------*/
-#define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
-/* Exported functions ------------------------------------------------------- */
+#if LT_USE_INT_PIN
+/* Following GPIO is used to check on INT pin for READY signal during communication */
+#define LT_INT_BANK   GPIOF
+#define LT_INT_PIN    GPIO_PIN_15
+#define LT_INT_CLK_ENABLE()      __HAL_RCC_GPIOF_CLK_ENABLE()
+#define LT_INT_GPIO_PORT              GPIOF
+#endif
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

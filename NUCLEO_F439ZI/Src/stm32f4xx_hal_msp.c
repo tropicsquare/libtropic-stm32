@@ -123,7 +123,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *hspi)
   /* SPI SCK GPIO pin configuration  */
   GPIO_InitStruct.Pin       = SPIx_SCK_PIN;
   GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull      = GPIO_PULLUP;
+  GPIO_InitStruct.Pull      = GPIO_NOPULL;
   GPIO_InitStruct.Speed     = GPIO_SPEED_FAST;
   GPIO_InitStruct.Alternate = SPIx_SCK_AF;
 
