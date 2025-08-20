@@ -11,7 +11,7 @@ Currently supported boards are:
 * NUCLEO-F439ZI https://os.mbed.com/platforms/ST-Nucleo-F439ZI/
 
 
-Debug messages are transmitted over devboard's USB ACM serial port, they can be received by opening a serial port on PC
+Debug messages are transmitted over devboard's USB ACM serial port, they can be received by opening a serial port on PC.
 
 More info about wiring is in each project's own README.md file.
 
@@ -32,26 +32,24 @@ cd libtropic-stm32
 git submodule update --init --recursive
 ```
 
-## Compiling and Running Examples
+## Building and Running Examples
+All available examples can be found [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
 
-To compile examples, pass `-DLT_BUILD_EXAMPLES=1` to CMake and a switch for each example to include. For example, to include only `lt_ex_hello_world()`, invoke CMake like this:
-```bash
-cmake -DLT_BUILD_EXAMPLES=1 -DLT_EX_HELLO_WORLD=1 ..
-```
-> Examples require SH0 private key to establish a secure session with TROPIC01. CMake variable `LT_SH0_PRIV_PATH` is used for that and its default value is set to path to the SH0 private key from the currently used `lab_batch_package`, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. Naturally, it can be overridden with another path to SH0 private key.
-
-All available examples are [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
-
-For a quick check of correct setup, the Hello World example is already compiled for all supported boards [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/hello_world_artifact.yml) (click on latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
-
-All steps to build the Hello World example on the F439ZI:
+To build examples (in this case, for the `NUCLEO_F439ZI` board), do the following:
 ```bash
 cd NUCLEO_F439ZI/
 mkdir build
 cd build
-cmake -DLT_BUILD_EXAMPLES=1 -DLT_EX_HELLO_WORLD=1 ..
+cmake -DLT_BUILD_EXAMPLES=1 ..
 make
 ```
+
+For each example, an ELF binary will be created in the build directory.
+
+For a quick check of correct setup, all examples are already precompiled for all supported boards [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/build_and_upload_examples.yml) (click on latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
+
+> [!IMPORTANT]
+> When `LT_BUILD_EXAMPLES` are set, there has to be a way to define the SH0 private key for the TROPIC01's pairing key slot 0, because both the examples and the tests depend on it. For this purpose, the CMake variable `LT_SH0_PRIV_PATH` is used, which should hold the path to the file with the SH0 private key in PEM or DER format. By default, the path is set to the currently used lab batch package, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. But it can be overriden by the user either from the command line when executing CMake (switch `-DLT_SH0_PRIV_PATH=<path>`), or from a child CMakeLists.txt.
 
 ### Flashing
 
@@ -61,25 +59,12 @@ Connect NUCLEO devboard with usb, then execute in the `NUCLEO_F439ZI/` directory
 ./flash.sh build/<chosen_binary>
 ```
 
-Similar output should be visible over serial port:
-```
-52	;INFO;	=======================================================================
-53	;INFO;	=====  TROPIC01 Hello World                                         ===
-54	;INFO;	=======================================================================
-57	;INFO;	-------------------------------------------------------------------------------------------------------------
-58	;INFO;	 Session with H0 keys:
-33	;INFO;Establish session with H0
-35	;SYSTEM;ASSERT_OK
-40	;INFO;lt_ping()
-41	;SYSTEM;ASSERT_OK
-42	;INFO;		Message: This is Hello World message from TROPIC01!!
-63	;INFO;	-------------------------------------------------------------------------------------------------------------
-65	;INFO;	 End of execution, no errors.
-
-```
+After this, output should be seen in the opened serial port.
 
 ## Building Functional Tests
-To build functional test suite from libtropic, pass `-DLT_BUILD_TESTS=1` to CMake:
+All available functional tests can be found [here](https://github.com/tropicsquare/libtropic/tree/master/tests/functional/).
+
+To build functional tests (in this case, for the `NUCLEO_F439ZI` board), do the following:
 ```bash
 cd NUCLEO_F439ZI/
 mkdir build
@@ -88,9 +73,11 @@ cmake -DLT_BUILD_TESTS=1 ..
 make
 ```
 
-> Functional tests require SH0 private key to establish a secure session with TROPIC01. CMake variable `LT_SH0_PRIV_PATH` is used for that and its default value is set to path to the SH0 private key from the currently used `lab_batch_package`, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. Naturally, it can be overridden with another path to SH0 private key.
-
 For each test, an ELF binary will be created in the build directory.
+
+> [!IMPORTANT]
+> When `LT_BUILD_TESTS` are set, there has to be a way to define the SH0 private key for the TROPIC01's pairing key slot 0, because both the examples and the tests depend on it. For this purpose, the CMake variable `LT_SH0_PRIV_PATH` is used, which should hold the path to the file with the SH0 private key in PEM or DER format. By default, the path is set to the currently used lab batch package, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. But it can be overriden by the user either from the command line when executing CMake (switch `-DLT_SH0_PRIV_PATH=<path>`), or from a child CMakeLists.txt.
+
 
 Normally, we use CTest for handling the functional tests. They are executed using `lt_test_runner` on internal TS11 evaluation boards.
 
@@ -98,7 +85,8 @@ To launch all tests:
 ```bash
 ctest
 ```
-*Tip: To see all output use `--verbose`.*
+> [!TIP]
+> To see all output use `--verbose`.
 
 To launch a selected test:
 ```bash
@@ -115,7 +103,7 @@ the UART output. Note that a different UART is used for test output. This method
 
 ## Debugging in VS Code
 
-For compiling in debug mode pass `-DCMAKE_BUILD_TYPE=Debug` during cmake call.
+For compiling in debug mode, pass `-DCMAKE_BUILD_TYPE=Debug` during cmake call.
 
 Install dependencies:
 
@@ -153,11 +141,11 @@ Debugging should be enabled after restarting your VS Code.
 
 * Open `File>New>STM32 Cmake Project`
 * Set 'Project with existing CMake sources'
-* Choose apropriate name, set source directory to `PATH_TO_THIS_EXAMPLE/stm32_example` and set the name of build directory
+* Choose apropriate name, set source directory to `PATH_TO_THIS_EXAMPLE/<binary_name>` and set the name of build directory
 * Define used MCU (Supported device is `STM32F439ZITx` and `STM32L432KC`)
 * Click on finish
 * Define transport layer by uncommenting an option in CMakeLists.txt
-* Click on Build, then on the left side click on `binaries`, right click on `stm32_example.elf` and choose 'run as a stm32 Application'
+* Click on Build, then on the left side click on `binaries`, right click on one of the built binaries and choose 'run as a stm32 Application'
 
 ## License
 
