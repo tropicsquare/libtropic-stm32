@@ -35,7 +35,7 @@ git submodule update --init --recursive
 ## Building and Running Examples
 All available examples can be found [here](https://github.com/tropicsquare/libtropic/tree/master/examples).
 
-To build examples (in this case, for the `NUCLEO_F439ZI` board), do the following:
+To build examples, switch to one of the platform directories (in this case, the `NUCLEO_F439ZI`), and do the following:
 ```bash
 cd NUCLEO_F439ZI/
 mkdir build
@@ -61,10 +61,37 @@ Connect NUCLEO devboard with usb, then execute in the `NUCLEO_F439ZI/` directory
 
 After this, output should be seen in the opened serial port.
 
+For example, upon flashing the `lt_ex_hello_world` example as:
+```bash
+./flash.sh build/lt_ex_hello_world.elf
+```
+you should see some output similar to this:
+```
+INFO    [  21] ======================================
+INFO    [  22] ==== TROPIC01 Hello World Example ====
+INFO    [  23] ======================================
+INFO    [  27] Initializing handle
+INFO    [  35] Starting Secure Session with key 0
+INFO    [  43] 	-------------------------------------------------
+INFO    [  46] Sending Ping command with message:
+INFO    [  47] 	"This is Hello World message from TROPIC01!!"
+INFO    [  55] 	-------------------------------------------------
+INFO    [  57] Message received from TROPIC01:
+INFO    [  58] 	"This is Hello World message from TROPIC01!!"
+INFO    [  59] 	-------------------------------------------------
+INFO    [  61] Aborting Secure Session
+INFO    [  69] Deinitializing handle
+```
+
 ## Building Functional Tests
 All available functional tests can be found [here](https://github.com/tropicsquare/libtropic/tree/master/tests/functional/).
 
-To build functional tests (in this case, for the `NUCLEO_F439ZI` board), do the following:
+> [!WARNING]
+> Some tests make irreversible changes to the chip, such as writing pairing keys. Those irreversible
+> tests contain `_ire_` in their name. On the other hand, reversible tests are marked `_rev_`
+> and are generally safe to run, as they do only temporary changes and always do a clean up.
+
+To build functional tests, switch to one of the platform directories (in this case, the `NUCLEO_F439ZI`), and do the following:
 ```bash
 cd NUCLEO_F439ZI/
 mkdir build
