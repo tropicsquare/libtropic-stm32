@@ -30,6 +30,7 @@ This repository must be cloned recursively, because it contains submodules with 
 git clone https://github.com/tropicsquare/libtropic-stm32.git
 cd libtropic-stm32
 git submodule update --init --recursive
+cd NUCLEO_L432KC/
 ```
 
 ## Dependencies and Requirements
@@ -66,7 +67,7 @@ The Nucleo board provides a virtual serial port over USB. To view the output fro
  > If you want to do a quick connectivity check for example with 'Hello World' example, all elf binaries are available [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/build_and_upload_examples.yml) (click on latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
 
 ## Display And Save Chip ID And Fw Versions
-To display actual versions of internal firmwares and details from CHIP ID data field, execute following example:
+To display actual versions of internal firmwares and details from CHIP ID data field, program and execute following example:
 ```bash
 ./flash.sh build/lt_ex_show_chip_id_and_fwver.elf
 ```
@@ -75,7 +76,7 @@ We recommend to save printed output for future reference.
 
 ## Update Internal Firmwares
 
-To update both internal firmwares to latest versions execute following example:
+To update both internal firmwares to latest versions program and execute following example:
 ```bash
 ./flash.sh build/lt_ex_fw_update.elf
 ```
@@ -90,7 +91,7 @@ After successfull execution your chip will contain latest firmwares and will be 
 > Some examples causes irreversible changes to chip. For more detail read [`README.md`](https://github.com/tropicsquare/libtropic/tree/master/examples/).
 
 
-For each built example, a binary was created in the build directory. For example, upon running the `lt_ex_hello_world` example as:
+For each built example, a binary was created in the build directory. For example, flash and execute the `lt_ex_hello_world` example as:
 ```bash
 ./flash.sh build/lt_ex_hello_world.elf
 ```

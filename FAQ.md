@@ -2,6 +2,10 @@
 
 This list might help you to resolve some issues.
 
+- [Cannot establish a secure session?](#cannot-establish-a-secure-session)
+- [Debugging in VS Code](#debugging-in-vs-code)
+- [Opening in STM32CubeIDE](#opening-in-stm32cubeide)
+
 
 ## Cannot establish a secure session?
 

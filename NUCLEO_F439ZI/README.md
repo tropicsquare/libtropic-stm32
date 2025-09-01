@@ -26,6 +26,7 @@ This repository must be cloned recursively, because it contains submodules with 
 git clone https://github.com/tropicsquare/libtropic-stm32.git
 cd libtropic-stm32
 git submodule update --init --recursive
+cd NUCLEO_F439ZI/
 ```
 
 ## Dependencies and Requirements
