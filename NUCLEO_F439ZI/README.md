@@ -3,7 +3,7 @@ This folder contains examples of libtropic's usage on [Nucleo F439ZI](https://os
 
 Contributors, please follow [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
 
-We recommend to use our [Arduino shield](https://www.github.com/tropicsquare/tropic01-arduino-shield-hw). In each case this example expects TROPIC01 to be wired to the following pins:
+We recommend to use our [Arduino shield](https://www.github.com/tropicsquare/tropic01-arduino-shield-hw). If you are using MikroE's [SECURE TROPIC CLICK](https://www.mikroe.com/secure-tropic-click) or some own PCB, example's code expects TROPIC01 to be wired to the following pins:
 ```
 |------------|------------------|
 |  TROPIC01  |   NUCLEO F437ZI  |
@@ -14,6 +14,7 @@ We recommend to use our [Arduino shield](https://www.github.com/tropicsquare/tro
 |  MOSI      |  GPIOA_7         |
 |  SCK       |  GPIOA_5         |
 |  CS        |  GPIOD_14        |
+|  GPO       |  GPIOF_15        |
 |------------|------------------|
 ```
 
@@ -155,5 +156,5 @@ ctest -R test_name
 
 # FAQ
 
-If you encounter any issue, please have a look [here](./../FAQ.md) before filling an issue here or before reaching out to our [support](https://www.tropicsquare.com/contact-us) .
+If you encounter any issue, please have a look [here](./../FAQ.md) before filling an issue here or before reaching out to our [support](https://support.desk.tropicsquare.com/).
 

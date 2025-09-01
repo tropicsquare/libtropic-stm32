@@ -10,7 +10,7 @@ Contributors, please follow [guidelines](https://github.com/tropicsquare/libtrop
 
 ### Supported Hardware
 
-We have example integration for following nucleo boards:
+We have integration examples for following nucleo boards:
 
  > [!IMPORTANT]
  > Before you start with various examples, we strongly recommend to do two things first:
