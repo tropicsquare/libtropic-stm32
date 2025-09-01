@@ -95,6 +95,14 @@
 #define COUNTOF(__BUFFER__) (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 /* Exported functions ------------------------------------------------------- */
 
+#if LT_USE_INT_PIN
+/* Following GPIO is used to check on INT pin for READY signal during communication */
+#define LT_INT_BANK GPIOF
+#define LT_INT_PIN GPIO_PIN_15
+#define LT_INT_CLK_ENABLE() __HAL_RCC_GPIOF_CLK_ENABLE()
+#define LT_INT_GPIO_PORT GPIOF
+#endif
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
