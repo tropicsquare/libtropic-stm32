@@ -9,7 +9,11 @@ This list might help you to resolve some issues.
 
 ## Cannot establish a secure session?
 
-Maybe you have engineering sample - you should use different SH0 key.
+Maybe you have TROPIC01 engineering sample - some of older engineering samples require different SH0 key. Try to compile with `-DLT_SH0_PRIV_PATH=../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`, for example like this:
+```bash
+cd NUCLEO_F439ZI/
+mkdir build &&  cd build && cmake -DLT_BUILD_EXAMPLES=1 -DLT_SH0_PRIV_PATH=../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem .. && make
+```
 
 ## Debugging in VS Code
 
