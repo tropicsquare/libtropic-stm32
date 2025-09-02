@@ -151,6 +151,13 @@ ctest -R test_name
 > [!TIP]
 > To see all output, use `--verbose`.
 
+### Implementation Details and Troubleshooting
+CTest uses the `run_test.sh` script, which flashes a binary containing the test and immediately reads the serial port output to evaluate the test results. This script attempts to automatically detect your NUCLEO's serial port. However, if you are using a non-standard setup (e.g., a different ST-Link, special OS configuration) or have multiple NUCLEOs connected to your computer, you must manually specify the path to the serial port during CTest configuration:
+
+```bash
+cmake -DLT_BUILD_TESTS=1 -DSTLINK_UART=<path> ..
+```
+
 # FAQ
 
 If you encounter any issues, please check [here](./../FAQ.md) before filing an issue or reaching out to our [support](https://support.desk.tropicsquare.com/).
