@@ -2,11 +2,9 @@
 
 if [ -z $1 ]; then
     echo "libtropic f439zi script for flashing and running tests"
-    echo "usage: ./flash.sh PATH_TO_BINARY [PATH_TO_STLINK_UART]"
+    echo "usage: ./run_test.sh PATH_TO_BINARY [PATH_TO_STLINK_UART]"
     exit 1
 fi
-
-# what if no device found / incorrect param -- check return value
 
 if [ -z $2 ]; then
     echo "No UART selected, trying to autodiscover STLink UART..."
@@ -22,7 +20,7 @@ if [ -z $2 ]; then
 else
 
     if ! ls "$2"; then
-        echo "Cannot find $2, terminating."
+        echo "Cannot open UART at $2, terminating."
         exit 1
     fi
 
