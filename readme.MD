@@ -1,25 +1,25 @@
 # libtropic-stm32
 
-This repository contains examples of our official SDK [`libtropic`](https://github.com/tropicsquare/libtropic)'s usage on STM32-based platforms (NUCLEO development kits).
+This repository provides examples of how to use our official SDK, [`libtropic`](https://github.com/tropicsquare/libtropic), on STM32-based platforms (NUCLEO development kits).
 
-Contributors, please follow [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
+Contributors, please follow the [contribution guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
 
 
  > [!IMPORTANT]
- > Example projects in separate folders represent TROPIC01 connected to different NUCLEO development boards. They all wrap [`libtropic`](https://github.com/tropicsquare/libtropic) and are ready to be cross-compiled and programmed into Nucleo-64 or Nucleo-144 development board.
+ > Example projects in separate folders demonstrate TROPIC01 connected to different NUCLEO development boards. Each project wraps [`libtropic`](https://github.com/tropicsquare/libtropic) and is ready to be cross-compiled and programmed into a Nucleo-64 or Nucleo-144 development board.
 
 ### Supported Hardware
 
-We have integration examples for following nucleo boards:
+We provide integration examples for the following NUCLEO boards:
 
  > [!IMPORTANT]
- > Before you start with various examples, we strongly recommend to do two things first:
- > * Read CHIP ID and TROPIC01's firmware versions and **save printed output for future reference**
- > * Update TROPIC01's both internal firmware to latest version.
+ > Before starting with the examples, we strongly recommend completing the following steps:
+ > * Read the CHIP ID and TROPIC01's firmware versions, and **save the printed output for future reference**.
+ > * Update both of TROPIC01's internal firmware components to the latest version.
 
 Choose instruction based on hardware you want to use:
 * [Nucleo F439ZI](./NUCLEO_F439ZI/README.md)
-* [Nucleo L432KC](./NUCLEO_L432KC/README.md) (Obsolete and not supported)
+* [Nucleo L432KC](./NUCLEO_L432KC/README.md) (not currently supported)
 
 ### License
 
@@ -27,4 +27,4 @@ See the [LICENSE.md](LICENSE.md) file in the root of this repository or consult 
 
 # FAQ
 
-If you encounter any issue, please have a look [here](./FAQ.md) before filling an issue here or before reaching out to our [support](https://support.desk.tropicsquare.com/).
+If you encounter any issues, please check the [FAQ](./FAQ.md) before opening an issue or contacting our [support team](https://support.desk.tropicsquare.com/).
