@@ -1,7 +1,7 @@
 # Nucleo L432KC + TROPIC01 Arduino shield
 
  > [!WARNING]
- > L432KC example is no longer updated and it stays here only from historical reasons
+ > L432KC example is no longer updated and it stays here only for historical reasons
 
 This folder contains examples of libtropic's usage on [Nucleo L432KC](https://os.mbed.com/platforms/ST-Nucleo-L432KC/) ST Microelectronic's development board.
 
