@@ -1,9 +1,9 @@
 #ifndef INC_SYSCALLS_H_
 #define INC_SYSCALLS_H_
 
+#include <stddef.h>
 #include <sys/stat.h>
 #include <sys/times.h>
-#include <stddef.h>
 
 // Semihosting initialization
 void initialise_monitor_handles(void);
@@ -22,7 +22,7 @@ int _lseek(int file, int ptr, int dir);
 int _open(char *path, int flags, ...);
 int _read(int file, char *ptr, int len);
 int _stat(char *file, struct stat *st);
-struct tms; // Forward declaration for tms struct
+struct tms;  // Forward declaration for tms struct
 int _times(struct tms *buf);
 int _unlink(char *name);
 int _wait(int *status);
