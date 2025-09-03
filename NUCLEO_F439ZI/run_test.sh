@@ -35,11 +35,6 @@ SENTINEL_FAIL_3="ERROR"
 
 set -euo pipefail
 
-# Save current settings and restore on exit
-OLDSTTY=$(stty -F "$DEV" -g || true)
-cleanup() { [[ -n "${OLDSTTY:-}" ]] && stty -F "$DEV" "$OLDSTTY"; }
-trap cleanup EXIT
-
 # Configure serial port
 stty -F "$DEV" "$BAUD" \
   cs8 -cstopb -parenb \
