@@ -28,6 +28,15 @@ endif()
 
 option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
 
+# Path to STLink UART device which will be used for reading test output.
+# You need to define this only if you:
+#   1. Want to run tests using CTest AND
+#   2. You are using standalone STM32 connected using built-in STLink AND
+#   3. STLink UART cannot be discovered automatically using the CTest script.
+if (NOT DEFINED STLINK_UART)
+    set(STLINK_UART "")
+endif()
+
 ###########################################################################
 #                                                                         #
 #   Define project's name                                                 #
@@ -223,7 +232,24 @@ if(LT_BUILD_TESTS)
 
         # Used for testing. Do not use it on when running on standalone Nucleo board
         if (LT_TESTING_RIG)
+            # Redirect serial output to external UART (instead of using built-in STLink)
             target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+            
+            # Add CTest entry.
+            add_test(NAME ${test_name}
+                    COMMAND python3 -m lt_test_runner stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
+            )
+            
+            # Correctly define Python module path, so we can call lt_test_runner.
+            get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
+            set_tests_properties(${test_name} PROPERTIES
+                ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
+            )
+        else()
+            # Add CTest entry.
+            add_test(NAME ${test_name}
+                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh ${CMAKE_CURRENT_BINARY_DIR}/${exe_name} ${STLINK_UART}
+            )
         endif()
 
         # Use INT pin to check whether TROPIC01 has some response
@@ -241,14 +267,5 @@ if(LT_BUILD_TESTS)
         #     COMMENT "Converting ${exe_name} to ${bin_name}"
         # )
 
-        # Add CTest entry.
-        add_test(NAME ${test_name}
-                COMMAND python3 -m lt_test_runner stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
-        )
-        # Correctly define Python module path, so we can call lt_test_runner.
-        get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
-        set_tests_properties(${test_name} PROPERTIES
-            ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
-        )
     endforeach()
 endif()
