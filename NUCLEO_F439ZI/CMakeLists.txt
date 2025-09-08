@@ -37,6 +37,12 @@ if (NOT DEFINED STLINK_UART)
     set(STLINK_UART "")
 endif()
 
+# Optional prefix to tests registered to CTest. Useful when running same test against
+# different chips to differentiate them by their name in JUnit output.
+if (NOT DEFINED CTEST_PREFIX)
+    set(CTEST_PREFIX "")
+endif()
+
 ###########################################################################
 #                                                                         #
 #   Define project's name                                                 #
@@ -230,24 +236,30 @@ if(LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
 
+        if(CTEST_PREFIX STREQUAL "")
+            set(TEST_NAME_WITH_PREFIX ${test_name})
+        else()
+            set(TEST_NAME_WITH_PREFIX ${CTEST_PREFIX}_${test_name})
+        endif()
+
         # Used for testing. Do not use it on when running on standalone Nucleo board
         if (LT_TESTING_RIG)
             # Redirect serial output to external UART (instead of using built-in STLink)
             target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
             
             # Add CTest entry.
-            add_test(NAME ${test_name}
+            add_test(NAME ${TEST_NAME_WITH_PREFIX}
                     COMMAND python3 -m lt_test_runner stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
             )
             
             # Correctly define Python module path, so we can call lt_test_runner.
             get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
-            set_tests_properties(${test_name} PROPERTIES
+            set_tests_properties(${TEST_NAME_WITH_PREFIX} PROPERTIES
                 ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
             )
         else()
             # Add CTest entry.
-            add_test(NAME ${test_name}
+            add_test(NAME ${TEST_NAME_WITH_PREFIX}
                     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh ${CMAKE_CURRENT_BINARY_DIR}/${exe_name} ${STLINK_UART}
             )
         endif()
