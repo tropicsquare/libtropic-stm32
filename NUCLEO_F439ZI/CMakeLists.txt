@@ -94,7 +94,7 @@ set(SOURCES
     Src/startup_stm32f429zitx.s
     Src/syscalls.c
     Src/sysmem.c
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_f439zi.c
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32/libtropic_port_stm32_nucleo_f439zi.c
 )
 
 set(HEADERS
