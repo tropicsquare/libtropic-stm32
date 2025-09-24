@@ -43,6 +43,13 @@ if (NOT DEFINED CTEST_PREFIX)
     set(CTEST_PREFIX "")
 endif()
 
+option(LT_TEST_RUNNER_DEBUG "Run lt_test_runner with debug output enabled." OFF)
+if (LT_TEST_RUNNER_DEBUG)
+    set(LT_TEST_RUNNER_FLAGS "-v")
+else()
+    set(LT_TEST_RUNNER_FLAGS "")
+endif()
+
 ###########################################################################
 #                                                                         #
 #   Define project's name                                                 #
@@ -249,7 +256,7 @@ if(LT_BUILD_TESTS)
             
             # Add CTest entry.
             add_test(NAME ${TEST_NAME_WITH_PREFIX}
-                    COMMAND python3 -m lt_test_runner stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
+                    COMMAND python3 -m lt_test_runner ${LT_TEST_RUNNER_FLAGS} stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
             )
             
             # Correctly define Python module path, so we can call lt_test_runner.
