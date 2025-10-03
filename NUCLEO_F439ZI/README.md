@@ -107,7 +107,7 @@ INFO    [  69] Deinitializing handle
 ```
 
 > [!IMPORTANT]
-> During the build, the SH0 keypair is automatically chosen from `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. This SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (e.g., first engineering samples), it might be necessary to manually set it (in PEM or DER format) with the following CMake switch: `-DLT_SH0_PRIV_PATH=../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`.
+> During the build, the SH0 keypair is automatically chosen from `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. This SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (e.g., first engineering samples), it might be necessary to manually set it (in PEM or DER format) with the following CMake switch: `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`.
 
 ## Building Functional Tests
 
@@ -129,7 +129,7 @@ make
 For each test, a binary is created in the build directory, the same as when building examples.
 
 > [!IMPORTANT]
-> During the build, the SH0 keypair is automatically chosen from `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. This SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (e.g., first engineering samples), it might be necessary to manually set it (in PEM or DER format) with the following CMake switch: `-DLT_SH0_PRIV_PATH=../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`.
+> During the build, the SH0 keypair is automatically chosen from `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. This SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (e.g., first engineering samples), it might be necessary to manually set it (in PEM or DER format) with the following CMake switch: `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`.
 
 We recommend using CTest for handling functional tests.
 
@@ -150,6 +150,13 @@ ctest -R test_name
 
 > [!TIP]
 > To see all output, use `--verbose`.
+
+### Implementation Details and Troubleshooting
+CTest uses the `run_test.sh` script, which flashes a binary containing the test and immediately reads the serial port output to evaluate the test results. This script attempts to automatically detect your NUCLEO's serial port. However, if you are using a non-standard setup (e.g., a different ST-Link, special OS configuration) or have multiple NUCLEOs connected to your computer, you must manually specify the path to the serial port during CTest configuration:
+
+```bash
+cmake -DLT_BUILD_TESTS=1 -DSTLINK_UART=<path> ..
+```
 
 # FAQ
 

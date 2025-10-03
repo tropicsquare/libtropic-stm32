@@ -104,7 +104,7 @@ add_definitions(-D${STM32_DEVICE})
 ###########################################################################
 
 # Libtropic related setup, use trezor crypto library for host side cryptography
-set(LT_USE_TREZOR_CRYPTO ON)
+set(LT_CRYPTO "trezor_crypto")
 
 # Provide path to a root of libtropic repository
 add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")

@@ -28,6 +28,28 @@ endif()
 
 option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
 
+# Path to STLink UART device which will be used for reading test output.
+# You need to define this only if you:
+#   1. Want to run tests using CTest AND
+#   2. You are using standalone STM32 connected using built-in STLink AND
+#   3. STLink UART cannot be discovered automatically using the CTest script.
+if (NOT DEFINED STLINK_UART)
+    set(STLINK_UART "")
+endif()
+
+# Optional prefix to tests registered to CTest. Useful when running same test against
+# different chips to differentiate them by their name in JUnit output.
+if (NOT DEFINED CTEST_PREFIX)
+    set(CTEST_PREFIX "")
+endif()
+
+option(LT_TEST_RUNNER_DEBUG "Run lt_test_runner with debug output enabled." OFF)
+if (LT_TEST_RUNNER_DEBUG)
+    set(LT_TEST_RUNNER_FLAGS "-v")
+else()
+    set(LT_TEST_RUNNER_FLAGS "")
+endif()
+
 ###########################################################################
 #                                                                         #
 #   Define project's name                                                 #
@@ -79,7 +101,7 @@ set(SOURCES
     Src/startup_stm32f429zitx.s
     Src/syscalls.c
     Src/sysmem.c
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_f439zi.c
+    ${PATH_TO_LIBTROPIC}/hal/port/stm32/libtropic_port_stm32_nucleo_f439zi.c
 )
 
 set(HEADERS
@@ -121,7 +143,7 @@ add_definitions(-D${STM32_DEVICE})
 ###########################################################################
 
 # Libtropic related setup, use trezor crypto library for host side cryptography
-set(LT_USE_TREZOR_CRYPTO ON)
+set(LT_CRYPTO "trezor_crypto")
 
 # Provide path to a root of libtropic repository
 add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
@@ -221,9 +243,32 @@ if(LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
 
+        if(CTEST_PREFIX STREQUAL "")
+            set(TEST_NAME_WITH_PREFIX ${test_name})
+        else()
+            set(TEST_NAME_WITH_PREFIX ${CTEST_PREFIX}_${test_name})
+        endif()
+
         # Used for testing. Do not use it on when running on standalone Nucleo board
         if (LT_TESTING_RIG)
+            # Redirect serial output to external UART (instead of using built-in STLink)
             target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+            
+            # Add CTest entry.
+            add_test(NAME ${TEST_NAME_WITH_PREFIX}
+                    COMMAND python3 -m lt_test_runner ${LT_TEST_RUNNER_FLAGS} stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
+            )
+            
+            # Correctly define Python module path, so we can call lt_test_runner.
+            get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
+            set_tests_properties(${TEST_NAME_WITH_PREFIX} PROPERTIES
+                ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
+            )
+        else()
+            # Add CTest entry.
+            add_test(NAME ${TEST_NAME_WITH_PREFIX}
+                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh ${CMAKE_CURRENT_BINARY_DIR}/${exe_name} ${STLINK_UART}
+            )
         endif()
 
         # Use INT pin to check whether TROPIC01 has some response
@@ -241,14 +286,5 @@ if(LT_BUILD_TESTS)
         #     COMMENT "Converting ${exe_name} to ${bin_name}"
         # )
 
-        # Add CTest entry.
-        add_test(NAME ${test_name}
-                COMMAND python3 -m lt_test_runner stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
-        )
-        # Correctly define Python module path, so we can call lt_test_runner.
-        get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
-        set_tests_properties(${test_name} PROPERTIES
-            ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
-        )
     endforeach()
 endif()

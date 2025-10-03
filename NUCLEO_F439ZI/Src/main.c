@@ -25,7 +25,7 @@
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
 #include "libtropic_logging.h"
-#include "lt_port_stm32_nucleo_f439zi.h"
+#include "libtropic_port_stm32_nucleo_f439zi.h"
 #include "syscalls.h"
 
 /** @addtogroup STM32F4xx_HAL_Examples

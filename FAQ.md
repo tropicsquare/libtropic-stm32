@@ -2,17 +2,18 @@
 
 This list might help you resolve some issues.
 
-- [Cannot establish a secure session?](#cannot-establish-a-secure-session)
-- [Debugging in VS Code](#debugging-in-vs-code)
-- [Opening in STM32CubeIDE](#opening-in-stm32cubeide)
+- [FAQ](#faq)
+  - [Cannot establish a secure session?](#cannot-establish-a-secure-session)
+  - [Debugging in VS Code](#debugging-in-vs-code)
+  - [Opening in STM32CubeIDE](#opening-in-stm32cubeide)
 
 ## Cannot establish a secure session?
 
-If you have a TROPIC01 engineering sample, note that some older engineering samples require a different SH0 key. Try compiling with `-DLT_SH0_PRIV_PATH=../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`. For example:
+If you have a TROPIC01 engineering sample, note that some older engineering samples require a different SH0 key. Try compiling with `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`. For example:
 
 ```bash
 cd NUCLEO_F439ZI/
-mkdir build && cd build && cmake -DLT_BUILD_EXAMPLES=1 -DLT_SH0_PRIV_PATH=../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem .. && make
+mkdir build && cd build && cmake -DLT_BUILD_EXAMPLES=1 -DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem .. && make
 ```
 
 ## Debugging in VS Code
