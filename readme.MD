@@ -1,12 +1,12 @@
 # libtropic-stm32
 
-This repository provides examples of how to use our official SDK, [`libtropic`](https://github.com/tropicsquare/libtropic), on STM32-based platforms (NUCLEO development kits).
+This repository provides examples of how to use our official SDK, [libtropic](https://github.com/tropicsquare/libtropic), on STM32-based platforms (NUCLEO development kits).
 
 Contributors, please follow the [contribution guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
 
 
  > [!IMPORTANT]
- > Example projects in separate folders demonstrate TROPIC01 connected to different NUCLEO development boards. Each project wraps [`libtropic`](https://github.com/tropicsquare/libtropic) and is ready to be cross-compiled and programmed into a Nucleo-64 or Nucleo-144 development board.
+ > Example projects in separate folders demonstrate TROPIC01 connected to different NUCLEO development boards. Each project wraps [libtropic](https://github.com/tropicsquare/libtropic) and is ready to be cross-compiled and programmed into a Nucleo-64 or Nucleo-144 development board.
 
 ### Supported Hardware
 

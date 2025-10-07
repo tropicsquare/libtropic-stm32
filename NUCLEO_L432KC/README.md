@@ -42,7 +42,7 @@ You need to have:
 
 # Build All Examples
 
-All available examples are taken from [`libtropic`](https://github.com/tropicsquare/libtropic/tree/master/examples).
+All examples are implemented in the [libtropic](https://github.com/tropicsquare/libtropic) repository. For more information about them, refer to the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the libtropic documentation.
 
 Build all examples in one place with following commands:
 
@@ -83,12 +83,10 @@ To update both internal firmwares to latest versions program and execute followi
 
 After successfull execution your chip will contain latest firmwares and will be compatible with libtropic API.
 
-
-
 ## Building and Running Other Examples
 
 > [!WARNING]
-> Some examples causes irreversible changes to chip. For more detail read [`README.md`](https://github.com/tropicsquare/libtropic/tree/master/examples/).
+> Some examples cause irreversible changes to the chip. For more details, refer to the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the libtropic documentation.
 
 
 For each built example, a binary was created in the build directory. For example, flash and execute the `lt_ex_hello_world` example as:
@@ -119,14 +117,12 @@ INFO    [  69] Deinitializing handle
 
 ## Building Functional Tests
 
-All available functional tests can be found [here](https://github.com/tropicsquare/libtropic/tree/master/tests/functional/).
+All functional tests are implemented in the [libtropic](https://github.com/tropicsquare/libtropic) repository. For more information about them, refer to the [Functional Tests](https://tropicsquare.github.io/libtropic/latest/for_contributors/functional_tests/) section in the libtropic documentation.
 
 > [!WARNING]
-> Some tests make irreversible changes to the chip, such as writing pairing keys. Those irreversible
-> tests contain `_ire_` in their name. On the other hand, reversible tests are marked `_rev_`
-> and are generally safe to run, as they do only temporary changes and always do a clean up.
+> Some tests make irreversible changes to the chip, such as writing pairing keys. Those irreversible tests contain `_ire_` in their name. On the other hand, reversible tests are marked `_rev_` and are generally safe to run, as they only make temporary changes and always perform cleanup.
 
-To build functional tests do the following:
+Build all functional tests in one place with the following commands:
 ```bash
 mkdir build
 cd build
@@ -134,7 +130,7 @@ cmake -DLT_BUILD_TESTS=1 ..
 make
 ```
 
-For each test, a binary will be created in the build directory, the same as when building examples.
+For each test, a binary will be created in the build directory (similarly as when building the examples).
 
 > [!IMPORTANT]
 > During build, SH0 keypair is automatically chosen from  `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`, this SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (first engineering samples) it might be necessary to manually set it (in PEM or DER format) with following cmake switch: `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`
