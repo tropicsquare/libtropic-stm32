@@ -9,12 +9,7 @@ This list might help you resolve some issues.
 
 ## Cannot establish a secure session?
 
-If you have a TROPIC01 engineering sample, note that some older engineering samples require a different SH0 key. Try compiling with `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`. For example:
-
-```bash
-cd NUCLEO_F439ZI/
-mkdir build && cd build && cmake -DLT_BUILD_EXAMPLES=1 -DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem .. && make
-```
+You might be using wrong default pairing keys - refer to [Default Pairing Keys for a Secure Channel Handshake](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/) section in libtropic documentation for more information.
 
 ## Debugging in VS Code
 
