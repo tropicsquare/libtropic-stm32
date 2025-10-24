@@ -1,7 +1,7 @@
 # Nucleo L432KC + TROPIC01 Arduino shield
 
  > [!WARNING]
- > L432KC example is no longer updated and it stays here only for historical reasons
+ > L432KC example is no longer updated and it stays here only for historical reasons.
 
 This folder contains examples of libtropic's usage on [Nucleo L432KC](https://os.mbed.com/platforms/ST-Nucleo-L432KC/) ST Microelectronic's development board.
 
@@ -112,7 +112,7 @@ INFO    [  69] Deinitializing handle
 ```
 
 > [!IMPORTANT]
-> During build, SH0 keypair is automatically chosen from  `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`, this SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (first engineering samples) it might be necessary to manually set it (in PEM or DER format) with following cmake switch: `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`
+> You may encounter issues with examples that establish a Secure Session - refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) section in libtropic documentation for more information.
 
 
 ## Building Functional Tests
@@ -133,7 +133,7 @@ make
 For each test, a binary will be created in the build directory (similarly as when building the examples).
 
 > [!IMPORTANT]
-> During build, SH0 keypair is automatically chosen from  `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`, this SH0 key is present in the majority of distributed TROPIC01 chips. In certain cases (first engineering samples) it might be necessary to manually set it (in PEM or DER format) with following cmake switch: `-DLT_SH0_PRIV_PATH=../../libtropic/provisioning_data/sh0_priv_engineering_sample01.pem`
+> You may encounter issues with tests that establish a Secure Session - refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) section in libtropic documentation for more information.
 
 
 We recommend to use CTest for handling of functional tests.
