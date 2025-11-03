@@ -3,15 +3,15 @@
 This list might help you resolve some issues.
 
 - [FAQ](#faq)
-  - [Cannot establish a secure session?](#cannot-establish-a-secure-session)
-  - [Debugging in VS Code](#debugging-in-vs-code)
-  - [Opening in STM32CubeIDE](#opening-in-stm32cubeide)
+  - [I cannot establish a secure session](#i-cannot-establish-a-secure-session)
+  - [How to debug in VS Code?](#how-to-debug-in-vs-code)
+  - [How to open the project in STM32CubeIDE?](#how-to-open-the-project-in-stm32cubeide)
 
-## Cannot establish a secure session?
+## I cannot establish a secure session
 
-You might be using wrong default pairing keys - refer to [Default Pairing Keys for a Secure Channel Handshake](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/) section in libtropic documentation for more information.
+You might be using wrong default pairing keys. Refer to [Default Pairing Keys for a Secure Channel Handshake](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/) section in libtropic documentation for more information.
 
-## Debugging in VS Code
+## How to debug in VS Code?
 
 To compile in debug mode, pass `-DCMAKE_BUILD_TYPE=Debug` during the CMake call.
 
@@ -21,6 +21,7 @@ Install the following dependencies:
 * `arm-none-eabi-gdb`
 
 Then place this `launch.json` file into the `.vscode` folder and update:
+
 * `EXAMPLE_NAME` according to the example you programmed into the board.
 * `configFiles` according to the board you are using.
 
@@ -48,7 +49,7 @@ Then place this `launch.json` file into the `.vscode` folder and update:
 
 Debugging should be enabled after restarting VS Code.
 
-## Opening in STM32CubeIDE
+## How to open the project in STM32CubeIDE?
 
 * Open `File > New > STM32 CMake Project`.
 * Set the project type to 'Project with existing CMake sources'.
