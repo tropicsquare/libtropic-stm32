@@ -63,7 +63,7 @@ For each example, an ELF binary will be created in the build directory. Once all
 ### Run First Examples
 The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using a terminal emulator (e.g., `minicom`, `screen`, or PuTTY).
 
-At first, it is recommended to run **lt_ex_show_chip_id_and_fwver** example. This example will print among other information the CHIP ID and TROPIC01's firmware versions. To run this example on the Nucleo board, you can use a provided `flash.sh` script:
+First, it is recommended to run the **lt_ex_show_chip_id_and_fwver** example. This example will print, among other information, the CHIP ID and TROPIC01's firmware versions. To run this example on the Nucleo board, you can use a provided `flash.sh` script:
 
 ```sh
 ./flash.sh build/lt_ex_show_chip_id_and_fwver.elf
