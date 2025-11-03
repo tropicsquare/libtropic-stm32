@@ -19,11 +19,14 @@ We recommend using our [Arduino shield](https://www.github.com/tropicsquare/trop
 ```
 
 ## First Steps
+> [!IMPORTANT]
+> **Do not skip these steps**. You will gather basic information about the chip (which you will need for any eventual support) and update your chip's firmware, which will guarantee compatibility with the latest Libtropic API.
+
 Before proceeding, familiarize yourself with the [Libtropic SDK documentation](https://tropicsquare.github.io/libtropic/latest/).
 
-### Install Dependencies and Requirements
-
+### Install Dependencies
 Make sure to have these dependencies installed:
+
 * CMake
     * Ubuntu/Debian: `sudo apt install cmake`
     * Fedora: `sudo dnf install cmake`
@@ -34,7 +37,7 @@ Make sure to have these dependencies installed:
     * Ubuntu/Debian: `sudo apt install openocd`
     * Fedora: `sudo dnf install openocd`
 
-### Clone
+### Clone the libtropic-stm32 Repository
 
 This repository must be cloned recursively because it contains submodules with dependencies (such as Libtropic or STM32 libraries).
 
@@ -58,9 +61,9 @@ cmake -DLT_BUILD_EXAMPLES=1 -DLT_CAL=trezor_crypto ..
 make
 ```
 
-For each example, an ELF binary will be created in the build directory. Once all examples are built, continue with the following section.
+For each example, an ELF binary will be created in the build directory. Once all examples are built, **continue with the following section**.
 
-### Run First Examples
+### Run a Basic Example: Read CHIP ID and firmware versions
 The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using a terminal emulator (e.g., `minicom`, `screen`, or PuTTY).
 
 First, it is recommended to run the **lt_ex_show_chip_id_and_fwver** example. This example will print, among other information, the CHIP ID and TROPIC01's firmware versions. To run this example on the Nucleo board, you can use a provided `flash.sh` script:
@@ -71,7 +74,8 @@ First, it is recommended to run the **lt_ex_show_chip_id_and_fwver** example. Th
 
 Save the output of this example for future reference.
 
-Next, upgrade TROPIC01's internal firmware, as newer versions fix bugs and ensure compatibility with the latest Libtropic SDK.
+### Update Internal Firmware
+After trying out communication and noting CHIP ID and firmware versions using the first example, upgrade TROPIC01's internal firmware, as newer versions fix bugs and ensure compatibility with the latest Libtropic SDK.
 
 > [!IMPORTANT]
 > Using outdated firmware is not recommended. Outdated firmware may not be compatible with the latest version of the Libtropic SDK.
@@ -84,6 +88,9 @@ To update both internal firmware components to the latest versions, execute the 
 After successful execution, your chip will contain the latest firmware and will be compatible with the current Libtropic API.
 
 ## Running Advanced Examples
+
+> [!IMPORTANT]
+> Make sure you already ran basic examples as described in previous section.
 
 > [!CAUTION]
 > Some examples cause **irreversible changes** to the chip. Proceed only after reading the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the Libtropic documentation and you understand the consequences. The documentation describes which examples are irreversible and what each example does.
@@ -139,9 +146,9 @@ CTest uses the `run_test.sh` script, which flashes a binary containing the test 
 cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto -DSTLINK_UART=<path> ..
 ```
 
-# FAQ
+## FAQ
 
-If you encounter any issues, please check [here](./../FAQ.md) before filing an issue or reaching out to our [support](https://support.desk.tropicsquare.com/).
+If you encounter any issues, please check the [FAQ](./../FAQ.md) before filing an issue or reaching out to our [support](https://support.desk.tropicsquare.com/).
 
 > [!NOTE]
 > Running tests is not officially supported. We do not provide any support for running tests.
