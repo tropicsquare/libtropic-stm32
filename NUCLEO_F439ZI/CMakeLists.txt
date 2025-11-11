@@ -17,6 +17,8 @@ set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32F429ZITX_FLASH.ld)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 # Paths to stm32 drivers (added as a submodule)
 set(PATH_TO_STM32CUBEF4 "Vendor/STM32CubeF4/Drivers" )
+# Path to common vendor libraries
+set(PATH_VENDOR "../vendor/")
 # Path to libtropic (added as a submodule)
 if(NOT DEFINED PATH_TO_LIBTROPIC)
     set(PATH_TO_LIBTROPIC "../vendor/libtropic/")
@@ -162,6 +164,40 @@ include_directories(PROJ_INCLUDE_DIRS
 
 # Add this so HAL knows what target MCU we use
 add_definitions(-D${STM32_DEVICE})
+
+# Special dependencies for tests, such as signature verification libraries
+if(LT_BUILD_TESTS)
+    # micro-ecc library is used for ECDSA signature verification
+    add_library(micro_ecc_lib STATIC
+        ${PATH_VENDOR}/micro-ecc/uECC.c
+    )
+
+    target_include_directories(micro_ecc_lib PUBLIC # PUBLIC as it is also used in tropic target
+        ${PATH_VENDOR}/micro-ecc
+    )
+
+    target_link_libraries(tropic PRIVATE micro_ecc_lib)
+
+    # ed25519 library is used for EdDSA signature verification
+    add_library(ed25519_lib STATIC
+        ${PATH_VENDOR}/ed25519/src/verify.c
+        ${PATH_VENDOR}/ed25519/src/add_scalar.c
+        ${PATH_VENDOR}/ed25519/src/fe.c
+        ${PATH_VENDOR}/ed25519/src/ge.c
+        ${PATH_VENDOR}/ed25519/src/key_exchange.c
+        ${PATH_VENDOR}/ed25519/src/keypair.c
+        ${PATH_VENDOR}/ed25519/src/sc.c
+        ${PATH_VENDOR}/ed25519/src/seed.c
+        ${PATH_VENDOR}/ed25519/src/sha512.c
+        ${PATH_VENDOR}/ed25519/src/sign.c
+    )
+
+    target_include_directories(ed25519_lib PUBLIC # PUBLIC as it is also used in tropic target
+        ${PATH_VENDOR}/ed25519/src/
+    )
+
+    target_link_libraries(tropic PRIVATE ed25519_lib)
+endif()
 
 ###########################################################################
 #                                                                         #
