@@ -148,7 +148,7 @@ int main(void)
 
     // The device structure has to be zero initialized!
     // STM32 HAL depends on zero init values.
-    lt_dev_stm32_nucleo_f439zi device = {0};
+    lt_dev_stm32_nucleo_f439zi_t device = {0};
 
     device.spi_instance = LT_SPI_INSTANCE;
     device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_16;
