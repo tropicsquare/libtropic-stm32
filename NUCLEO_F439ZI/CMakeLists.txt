@@ -151,7 +151,7 @@ set(SOURCES
 )
 
 # Include path for directories containing header files
-include_directories(PROJ_INCLUDE_DIRS
+set(PROJ_INCLUDE_DIRS
     ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
     ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
     ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
@@ -221,7 +221,7 @@ if (LT_BUILD_EXAMPLES)
 
         # Define executable (separate for each example) and link dependencies.
         add_executable(${exe_name} ${SOURCES})
-        target_include_directories(${exe_name} PRIVATE PROJ_INCLUDE_DIRS)
+        target_include_directories(${exe_name} PRIVATE ${PROJ_INCLUDE_DIRS})
         target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Apply the strict compilation flags
@@ -282,7 +282,7 @@ if(LT_BUILD_TESTS)
 
         # Define executable (separate for each test) and link dependencies.
         add_executable(${exe_name} ${SOURCES})
-        target_include_directories(${exe_name} PRIVATE PROJ_INCLUDE_DIRS)
+        target_include_directories(${exe_name} PRIVATE ${PROJ_INCLUDE_DIRS})
         target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Apply the strict compilation flags
