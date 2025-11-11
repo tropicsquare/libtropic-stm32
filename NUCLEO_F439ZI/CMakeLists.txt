@@ -19,7 +19,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 set(PATH_TO_STM32CUBEF4 "Vendor/STM32CubeF4/Drivers" )
 # Path to libtropic (added as a submodule)
 if(NOT DEFINED PATH_TO_LIBTROPIC)
-    set(PATH_TO_LIBTROPIC "../libtropic")
+    set(PATH_TO_LIBTROPIC "../vendor/libtropic/")
 endif()
 
 if (NOT DEFINED LT_BUILD_EXAMPLES AND NOT DEFINED LT_BUILD_TESTS)
@@ -58,33 +58,66 @@ endif()
 
 project(stm32_example LANGUAGES C ASM)
 
+###########################################################################
+#                                                                         #
+#   Add libtropic                                                         #
+#                                                                         #
+###########################################################################
+
+# Libtropic related setup, use trezor crypto library for host side cryptography
+set(LT_CRYPTO "trezor_crypto")
+
+# Provide path to a root of libtropic repository
+add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 
 ###########################################################################
 #                                                                         #
-#   Vendor Libraries                                                      #
+#   Crypto backend handling                                               #
+#                                                                         #
+#   Note: The libtropic consumer does not have to do this in his          #
+#   application, we do this to quickly switch crypto backends.            #
+#   Refer to the libtropic documentation for more info about what should  #
+#   be done by the consumer.                                              #
 #                                                                         #
 ###########################################################################
 
-# Create a library for all STM32CubeF4 HAL source files
-add_library(stm32_vendor STATIC
-    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
-)
+# Developers who integrate Libtropic do not have to use these variables
+# It's used in main.c to switch crypto contexts without manual changes
+set(LT_USE_TREZOR_CRYPTO 0 CACHE INTERNAL "")
+set(LT_USE_MBEDTLS_V4 0 CACHE INTERNAL "")
 
-# Tell CMake to treat the HAL include directories as SYSTEM directories
-target_include_directories(stm32_vendor PUBLIC
-    SYSTEM ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
-    SYSTEM ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
-    SYSTEM ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
-    SYSTEM ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/
-)
+# Handle LT_CAL
+if(LT_CAL STREQUAL "trezor_crypto")
+    message(STATUS "Crypto provider set to trezor_crypto")
+    add_subdirectory("${PATH_TO_LIBTROPIC}cal/trezor_crypto" "trezor_crypto_cal")
+    
+    # Developers who integrate Libtropic do not have to use this variable
+    # It's used in main.c to switch crypto contexts without manual changes
+    set(LT_USE_TREZOR_CRYPTO 1)
+
+    add_subdirectory("${PATH_TO_LIBTROPIC}/vendor/trezor_crypto/" "trezor_crypto")
+    target_compile_definitions(trezor_crypto PRIVATE AES_VAR USE_INSECURE_PRNG)
+    target_link_libraries(tropic PUBLIC trezor_crypto)
+elseif(LT_CAL STREQUAL "mbedtls_v4")
+    message(STATUS "Crypto provider set to mbedtls_v4")
+    add_subdirectory("${PATH_TO_LIBTROPIC}cal/mbedtls_v4" "mbedtls_v4_cal")
+
+    # Developers who integrate Libtropic do not have to use this variable
+    # It's used in main.c to switch crypto contexts without manual changes
+    set(LT_USE_MBEDTLS_V4 1)
+
+    set(ENABLE_TESTING OFF CACHE BOOL "Disable mbedtls_v4 test building.")
+    set(ENABLE_PROGRAMS OFF CACHE BOOL "Disable mbedtls_v4 examples building.")
+    add_subdirectory("${PATH_VENDOR}mbedtls_v4/" "mbedtls_v4")
+
+    target_link_libraries(tropic PUBLIC mbedtls)
+else()
+    get_property(lt_cal_choices CACHE LT_CAL PROPERTY STRINGS)
+    message(FATAL_ERROR "Incorrect CAL set to LT_CAL!\nSupported CALs: ${lt_cal_choices}")
+endif()
+
+target_sources(tropic PRIVATE ${LT_CAL_SRCS})
+target_include_directories(tropic PUBLIC ${LT_CAL_INC_DIRS})
 
 ###########################################################################
 #                                                                         #
@@ -94,6 +127,16 @@ target_include_directories(stm32_vendor PUBLIC
 
 # Specify other source files
 set(SOURCES
+    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
+
     Src/main.c
     Src/stm32f4xx_it.c
     Src/stm32f4xx_hal_msp.c
@@ -101,7 +144,7 @@ set(SOURCES
     Src/startup_stm32f429zitx.s
     Src/syscalls.c
     Src/sysmem.c
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32/libtropic_port_stm32_nucleo_f439zi.c
+    ${PATH_TO_LIBTROPIC}/hal/stm32/nucleo_f439zi/libtropic_port_stm32_nucleo_f439zi.c
 )
 
 set(HEADERS
@@ -130,24 +173,16 @@ set(HEADERS
 # Include path for directories containing header files
 include_directories(
     Inc/
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32
+    ${PATH_TO_LIBTROPIC}/hal/stm32/nucleo_f439zi/
+
+    ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
+    ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
+    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
+    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/
 )
 
 # Add this so HAL knows what target MCU we use
 add_definitions(-D${STM32_DEVICE})
-
-###########################################################################
-#                                                                         #
-#   Add libtropic                                                         #
-#                                                                         #
-###########################################################################
-
-# Libtropic related setup, use trezor crypto library for host side cryptography
-set(LT_CRYPTO "trezor_crypto")
-
-# Provide path to a root of libtropic repository
-add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
-
 
 ###########################################################################
 #                                                                         #
@@ -171,13 +206,13 @@ if (LT_BUILD_EXAMPLES)
 
         # Define executable (separate for each example) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
+        target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Apply the strict compilation flags
         # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
-        if(LT_STRICT_COMP_FLAGS)
-            target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
-        endif()
+        # if(LT_STRICT_COMP_FLAGS)
+        #     target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
+        # endif()
 
         # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
@@ -231,13 +266,13 @@ if(LT_BUILD_TESTS)
 
         # Define executable (separate for each test) and link dependencies.
         add_executable(${exe_name} ${SOURCES} ${HEADERS})
-        target_link_libraries(${exe_name} PRIVATE tropic stm32_vendor)
+        target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Apply the strict compilation flags
         # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
-        if(LT_STRICT_COMP_FLAGS)
-            target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
-        endif()
+        # if(LT_STRICT_COMP_FLAGS)
+        #     target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
+        # endif()
 
         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
