@@ -127,6 +127,9 @@ target_include_directories(tropic PUBLIC ${LT_CAL_INC_DIRS})
 #                                                                         #
 ###########################################################################
 
+# Add Libtropic STM32 HAL
+add_subdirectory("${PATH_TO_LIBTROPIC}hal/stm32/nucleo_f439zi" "nucleo_f439zi_hal")
+
 # Specify other source files
 set(SOURCES
     ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
@@ -147,7 +150,7 @@ set(SOURCES
     Src/syscalls.c
     Src/sysmem.c
 
-    ${PATH_TO_LIBTROPIC}/hal/stm32/nucleo_f439zi/libtropic_port_stm32_nucleo_f439zi.c
+    ${LT_HAL_SRCS}
 )
 
 # Include path for directories containing header files
@@ -159,7 +162,7 @@ set(PROJ_INCLUDE_DIRS
 
     Inc/
 
-    ${PATH_TO_LIBTROPIC}/hal/stm32/nucleo_f439zi/
+    ${LT_HAL_INC_DIRS}
 )
 
 # Add this so HAL knows what target MCU we use
