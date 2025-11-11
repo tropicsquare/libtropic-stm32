@@ -147,29 +147,6 @@ set(SOURCES
     ${PATH_TO_LIBTROPIC}/hal/stm32/nucleo_f439zi/libtropic_port_stm32_nucleo_f439zi.c
 )
 
-set(HEADERS
-    ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.h
-    ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_exti.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-    ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h
-)
-
-set(HEADERS
-    Inc/main.h
-    Inc/stm32f4xx_hal_conf.h
-    Inc/stm32f4xx_it.h
-    Inc/syscalls.h
-    ${HEADERS}
-)
-
 # Include path for directories containing header files
 include_directories(
     Inc/
@@ -205,7 +182,7 @@ if (LT_BUILD_EXAMPLES)
         set(exe_name ${example_name}.elf)
 
         # Define executable (separate for each example) and link dependencies.
-        add_executable(${exe_name} ${SOURCES} ${HEADERS})
+        add_executable(${exe_name} ${SOURCES})
         target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Apply the strict compilation flags
@@ -265,7 +242,7 @@ if(LT_BUILD_TESTS)
         # set(bin_name ${test_name}.bin)
 
         # Define executable (separate for each test) and link dependencies.
-        add_executable(${exe_name} ${SOURCES} ${HEADERS})
+        add_executable(${exe_name} ${SOURCES})
         target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Apply the strict compilation flags
