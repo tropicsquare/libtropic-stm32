@@ -258,6 +258,13 @@ if (LT_BUILD_EXAMPLES)
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
         target_compile_definitions(${exe_name} PRIVATE ${example_macro})
 
+        # Developers who integrate Libtropic do not have to use these variables
+        # It's used in main.c to switch crypto contexts without manual changes
+        target_compile_definitions(${exe_name} PRIVATE
+            LT_USE_TREZOR_CRYPTO=${LT_USE_TREZOR_CRYPTO}
+            LT_USE_MBEDTLS_V4=${LT_USE_MBEDTLS_V4}
+        )
+
         # Used for testing. Do not use it on when running on standalone Nucleo board
         if (LT_TESTING_RIG)
             target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
@@ -312,6 +319,13 @@ if(LT_BUILD_TESTS)
         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
+
+        # Developers who integrate Libtropic do not have to use these variables
+        # It's used in main.c to switch crypto contexts without manual changes
+        target_compile_definitions(${exe_name} PRIVATE
+            LT_USE_TREZOR_CRYPTO=${LT_USE_TREZOR_CRYPTO}
+            LT_USE_MBEDTLS_V4=${LT_USE_MBEDTLS_V4}
+        )
 
         if(CTEST_PREFIX STREQUAL "")
             set(TEST_NAME_WITH_PREFIX ${test_name})
