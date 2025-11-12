@@ -132,6 +132,7 @@ add_subdirectory("${PATH_TO_LIBTROPIC}hal/stm32/nucleo_f439zi" "nucleo_f439zi_ha
 
 # Specify other source files
 set(SOURCES
+    # STM32 vendor HAL, BSP
     ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/stm32f4xx_nucleo_144.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
@@ -142,6 +143,7 @@ set(SOURCES
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
 
+    # Project sources
     Src/main.c
     Src/stm32f4xx_it.c
     Src/stm32f4xx_hal_msp.c
@@ -150,22 +152,26 @@ set(SOURCES
     Src/syscalls.c
     Src/sysmem.c
 
+    # Libtropic HAL sources
     ${LT_HAL_SRCS}
 )
 
 # Include path for directories containing header files
 set(PROJ_INCLUDE_DIRS
+    # STM32 vendor HAL, BSP
     ${PATH_TO_STM32CUBEF4}/CMSIS/Core/Include/
     ${PATH_TO_STM32CUBEF4}/CMSIS/Device/ST/STM32F4xx/Include/
     ${PATH_TO_STM32CUBEF4}/BSP/STM32F4xx_Nucleo_144/
     ${PATH_TO_STM32CUBEF4}/STM32F4xx_HAL_Driver/Inc/
 
+    # Project includes
     Inc/
 
+    # Libtropic HAL includes
     ${LT_HAL_INC_DIRS}
 )
 
-# Add this so HAL knows what target MCU we use
+# Configure target MCU (used by STM32 HAL)
 add_definitions(-D${STM32_DEVICE})
 
 # Special dependencies for tests, such as signature verification libraries
