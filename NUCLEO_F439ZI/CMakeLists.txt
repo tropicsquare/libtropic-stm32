@@ -174,6 +174,27 @@ set(PROJ_INCLUDE_DIRS
 # Configure target MCU (used by STM32 HAL)
 add_definitions(-D${STM32_DEVICE})
 
+# Temporary: This will be moved to libtropic repo.
+set(LT_STRICT_COMP_FLAGS_LIST
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -Wshadow
+    -Wformat=2
+    -Wcast-align
+    -Wfloat-equal
+    -Wnull-dereference
+    -Wredundant-decls
+    -Wlogical-op
+    -Wstrict-prototypes
+    -Wunused-result
+    -Wmissing-prototypes
+    -fstack-protector-strong
+)
+# Enable strict compile flags for main.c and Libtropic HAL sources
+set_source_files_properties(Src/main.c ${LT_HAL_SRCS} PROPERTIES COMPILE_OPTIONS "${LT_STRICT_COMP_FLAGS_LIST}")   
+
 # Special dependencies for tests, such as signature verification libraries
 if(LT_BUILD_TESTS)
     # micro-ecc library is used for ECDSA signature verification
@@ -233,12 +254,6 @@ if (LT_BUILD_EXAMPLES)
         target_include_directories(${exe_name} PRIVATE ${PROJ_INCLUDE_DIRS})
         target_link_libraries(${exe_name} PRIVATE tropic)
 
-        # Apply the strict compilation flags
-        # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
-        # if(LT_STRICT_COMP_FLAGS)
-        #     target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
-        # endif()
-
         # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
         target_compile_definitions(${exe_name} PRIVATE ${example_macro})
@@ -293,12 +308,6 @@ if(LT_BUILD_TESTS)
         add_executable(${exe_name} ${SOURCES})
         target_include_directories(${exe_name} PRIVATE ${PROJ_INCLUDE_DIRS})
         target_link_libraries(${exe_name} PRIVATE tropic)
-
-        # Apply the strict compilation flags
-        # (they are already applied for libtropic from the libtropic's CMakeLists.txt)
-        # if(LT_STRICT_COMP_FLAGS)
-        #     target_link_libraries(${exe_name} PRIVATE libtropic::strict_comp_flags)
-        # endif()
 
         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
