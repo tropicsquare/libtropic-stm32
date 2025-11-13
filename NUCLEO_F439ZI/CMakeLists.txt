@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.21.0)
 
-
 ###########################################################################
 #                                                                         #
 #   Paths and setup                                                       #
@@ -28,6 +27,14 @@ if (NOT DEFINED LT_BUILD_EXAMPLES AND NOT DEFINED LT_BUILD_TESTS)
     message(FATAL_ERROR "Please define -DLT_BUILD_EXAMPLES=1 to build examples (and also select required example) or -DLT_BUILD_TESTS=1 to build tests. See docs. Nothing to do now, bye!")
 endif()
 
+include(${PATH_TO_LIBTROPIC}cmake/strict_compile_flags.cmake)
+
+###########################################################################
+#                                                                         #
+#   Options and user config                                               #
+#                                                                         #
+###########################################################################
+
 option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
 
 # Path to STLink UART device which will be used for reading test output.
@@ -52,6 +59,12 @@ else()
     set(LT_TEST_RUNNER_FLAGS "")
 endif()
 
+option(LT_STRICT_COMPILATION "Enable strict compilation flags" ON)
+
+# Select CAL
+set(LT_CAL "" CACHE STRING "Set a CAL (Crypto Abstraction Layer)")
+set_property(CACHE LT_CAL PROPERTY STRINGS "trezor_crypto" "mbedtls_v4")
+
 ###########################################################################
 #                                                                         #
 #   Define project's name                                                 #
@@ -70,6 +83,11 @@ project(
 ###########################################################################
 
 add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
+if(LT_STRICT_COMPILATION)
+    message(STATUS "Enabling strict compilation flags.")
+    # Enable strict compile flags for Libtropic library
+    target_link_libraries(tropic PRIVATE libtropic::strict_comp_flags)
+endif()
 
 ###########################################################################
 #                                                                         #
@@ -177,26 +195,10 @@ set(PROJ_INCLUDE_DIRS
 # Configure target MCU (used by STM32 HAL)
 add_definitions(-D${STM32_DEVICE})
 
-# Temporary: This will be moved to libtropic repo.
-set(LT_STRICT_COMP_FLAGS_LIST
-    -Wall
-    -Wextra
-    -Werror
-    -Wpedantic
-    -Wshadow
-    -Wformat=2
-    -Wcast-align
-    -Wfloat-equal
-    -Wnull-dereference
-    -Wredundant-decls
-    -Wlogical-op
-    -Wstrict-prototypes
-    -Wunused-result
-    -Wmissing-prototypes
-    -fstack-protector-strong
-)
 # Enable strict compile flags for main.c and Libtropic HAL sources
-set_source_files_properties(Src/main.c ${LT_HAL_SRCS} PROPERTIES COMPILE_OPTIONS "${LT_STRICT_COMP_FLAGS_LIST}")   
+if(LT_STRICT_COMPILATION)
+    set_source_files_properties(Src/main.c ${LT_HAL_SRCS} PROPERTIES COMPILE_OPTIONS "${LT_STRICT_COMPILATION_FLAGS}")   
+endif()
 
 # Special dependencies for tests, such as signature verification libraries
 if(LT_BUILD_TESTS)
