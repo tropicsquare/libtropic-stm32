@@ -20,7 +20,7 @@ We recommend using our [Arduino shield](https://www.github.com/tropicsquare/trop
 
 ## Clone
 
-This repository must be cloned recursively because it contains submodules with the libtropic SDK and STM32 drivers.
+This repository must be cloned recursively because it contains submodules with dependencies (such as Libtropic or STM32 libraries).
 
 ```bash
 git clone https://github.com/tropicsquare/libtropic-stm32.git
