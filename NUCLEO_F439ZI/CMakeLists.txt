@@ -58,27 +58,26 @@ endif()
 #                                                                         #
 ###########################################################################
 
-project(stm32_example LANGUAGES C ASM)
+project(
+    stm32_f439zi
+    DESCRIPTION "Example of Libtropic usage on Nucleo F439ZI board"
+    LANGUAGES C ASM)
 
 ###########################################################################
 #                                                                         #
-#   Add libtropic                                                         #
+#   Add Libtropic                                                         #
 #                                                                         #
 ###########################################################################
 
-# Libtropic related setup, use trezor crypto library for host side cryptography
-set(LT_CRYPTO "trezor_crypto")
-
-# Provide path to a root of libtropic repository
 add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
 
 ###########################################################################
 #                                                                         #
 #   Crypto backend handling                                               #
 #                                                                         #
-#   Note: The libtropic consumer does not have to do this in his          #
+#   Note: The Libtropic consumer does not have to do this in his          #
 #   application, we do this to quickly switch crypto backends.            #
-#   Refer to the libtropic documentation for more info about what should  #
+#   Refer to the Libtropic documentation for more info about what should  #
 #   be done by the consumer.                                              #
 #                                                                         #
 ###########################################################################
@@ -98,7 +97,11 @@ if(LT_CAL STREQUAL "trezor_crypto")
     set(LT_USE_TREZOR_CRYPTO 1)
 
     add_subdirectory("${PATH_TO_LIBTROPIC}/vendor/trezor_crypto/" "trezor_crypto")
-    target_compile_definitions(trezor_crypto PRIVATE AES_VAR USE_INSECURE_PRNG)
+    target_compile_definitions(trezor_crypto PRIVATE
+            AES_VAR
+            USE_INSECURE_PRNG
+            ed25519_verify=trezor_crypto_ed25519_verify # Rename symbol to avoid conflicts with ed25519 library used in tests
+        )
     target_link_libraries(tropic PUBLIC trezor_crypto)
 elseif(LT_CAL STREQUAL "mbedtls_v4")
     message(STATUS "Crypto provider set to mbedtls_v4")
@@ -233,6 +236,8 @@ endif()
 #                                                                         #
 #   EXAMPLES CONFIGURATION                                                #
 #                                                                         #
+#   To build examples, use -DLT_BUILD_EXAMPLES=1 in cmake invocation.     #
+#                                                                         #
 ###########################################################################
 
 if (LT_BUILD_EXAMPLES)
@@ -286,8 +291,8 @@ endif()
 # FUNCTIONAL TESTS CONFIGURATION                                          #
 #                                                                         #
 # This section will automatically configure CTest for launching tests     #
-# defined in libtropic. Do NOT hardcode any test definitions here.        #
-# Define them in libtropic.                                               #
+# defined in Libtropic. Do NOT hardcode any test definitions here.        #
+# Define them in Libtropic.                                               #
 #                                                                         #
 # To build functional tests, use -DLT_BUILD_TESTS=1 in cmake invocation.  #
 #                                                                         #
