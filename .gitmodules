@@ -5,5 +5,14 @@
 	path = NUCLEO_L432KC/Vendor/STM32CubeL4
 	url = https://github.com/STMicroelectronics/STM32CubeL4.git
 [submodule "libtropic"]
-	path = libtropic
+	path = vendor/libtropic
 	url = https://github.com/tropicsquare/libtropic.git
+[submodule "vendor/mbedtls"]
+	path = vendor/mbedtls_v4
+	url = https://github.com/Mbed-TLS/mbedtls.git
+[submodule "vendor/micro-ecc"]
+	path = vendor/micro-ecc
+	url = https://github.com/kmackay/micro-ecc.git
+[submodule "vendor/ed25519"]
+	path = vendor/ed25519
+	url = https://github.com/orlp/ed25519.git

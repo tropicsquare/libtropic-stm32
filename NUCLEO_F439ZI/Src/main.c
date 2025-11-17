@@ -28,6 +28,13 @@
 #include "libtropic_port_stm32_nucleo_f439zi.h"
 #include "syscalls.h"
 
+#if LT_USE_TREZOR_CRYPTO
+#include "libtropic_trezor_crypto.h"
+#elif LT_USE_MBEDTLS_V4
+#include "libtropic_mbedtls_v4.h"
+#include "psa/crypto.h"
+#endif
+
 /** @addtogroup STM32F4xx_HAL_Examples
  * @{
  */
@@ -139,6 +146,28 @@ int main(void)
     // libtropic related code BEGIN
     // libtropic related code BEGIN
 
+    ////////////////////////////////////////////////////////////////
+    // CRYPTOGRAPHIC FUNCTION PROVIDER INITIALIZATION             //
+    //                                                            //
+    // In production, this would typically be done only once,     //
+    // usually at the start of the application or before          //
+    // the first use of cryptographic functions but no later than //
+    // the first occurrence of any Libtropic function             //
+    ////////////////////////////////////////////////////////////////
+#if LT_USE_MBEDTLS_V4
+    psa_status_t status = psa_crypto_init();
+    if (status != PSA_SUCCESS) {
+        LT_LOG_ERROR("PSA Crypto initialization failed, status=%d (psa_status_t)", status);
+        Error_Handler();
+    }
+#endif
+
+    ////////////////////////////////////////////////////////////////
+    // HANDLE INITIALIZATION                                      //
+    //                                                            //
+    // Libtropic handle is declared here (on stack) for           //
+    // simplicity. In production, you put it on heap if needed.   //
+    ////////////////////////////////////////////////////////////////
     lt_handle_t __lt_handle__ = {0};
 #if LT_SEPARATE_L3_BUFF
     uint8_t l3_buffer[L3_PACKET_MAX_SIZE] __attribute__((aligned(16))) = {0};
@@ -146,9 +175,18 @@ int main(void)
     __lt_handle__.l3.buff_len = sizeof(l3_buffer);
 #endif
 
+    ////////////////////////////////////////////////////////////////
+    // DEVICE MAPPINGS                                            //
+    //                                                            //
+    // Modify this according to your environment. Usually you     //
+    // have to change at least the dev_path, as it is dynamically //
+    // assigned by the OS (if you have multiple USB serial        //
+    // devices).                                                  //
+    ////////////////////////////////////////////////////////////////
+
     // The device structure has to be zero initialized!
     // STM32 HAL depends on zero init values.
-    lt_dev_stm32_nucleo_f439zi device = {0};
+    lt_dev_stm32_nucleo_f439zi_t device = {0};
 
     device.spi_instance = LT_SPI_INSTANCE;
     device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_16;
@@ -164,16 +202,50 @@ int main(void)
 
     __lt_handle__.l2.device = &device;
 
+    ////////////////////////////////////////////////////////////////
+    // CRYPTO ABSTRACTION LAYER CONTEXT                           //
+    //                                                            //
+    // Context for the selected CAL implementation is chosen here //
+    // based on the configuration macro. This is only for         //
+    // convenient switching between different CALs for demo       //
+    // purposes, in production applications you would typically   //
+    // stick to a single CAL.                                     //
+    ////////////////////////////////////////////////////////////////
+#if LT_USE_TREZOR_CRYPTO
+    lt_ctx_trezor_crypto_t
+#elif LT_USE_MBEDTLS_V4
+    lt_ctx_mbedtls_v4_t
+#endif
+        crypto_ctx;
+    __lt_handle__.l3.crypto_ctx = &crypto_ctx;
+
+    ////////////////////////////////////////////////////////////////
+    // EXAMPLE OR TEST CODE                                       //
+    //                                                            //
+    // Depending on the build configuration, either examples or   //
+    // tests are executed here.                                   //
+    ////////////////////////////////////////////////////////////////
 #ifdef LT_BUILD_TESTS
 #include "lt_test_registry.c.inc"
 #endif
 
+// When examples are being built, special variable containing example return value is defined.
 #ifdef LT_BUILD_EXAMPLES
 #include "lt_ex_registry.c.inc"
     UNUSED(__lt_ex_return_val__);
 #endif
 
     LT_FINISH_TEST();
+
+    ////////////////////////////////////////////////////////////////
+    // CRYPTOGRAPHIC FUNCTION PROVIDER DEINITIALIZATION           //
+    //                                                            //
+    // In production, this would be done only once, typically     //
+    // during termination of the application.                     //
+    ////////////////////////////////////////////////////////////////
+#if LT_USE_MBEDTLS_V4
+    mbedtls_psa_crypto_free();
+#endif
 
     // libtropic related code END
     // libtropic related code END
@@ -187,8 +259,6 @@ int main(void)
         BSP_LED_Off(LED2);
         HAL_Delay(500);
     }
-
-    return 0;
 }
 
 /**

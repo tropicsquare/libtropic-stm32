@@ -20,7 +20,7 @@ We recommend using our [Arduino shield](https://www.github.com/tropicsquare/trop
 
 ## Clone
 
-This repository must be cloned recursively because it contains submodules with the libtropic SDK and STM32 drivers.
+This repository must be cloned recursively because it contains submodules with dependencies (such as Libtropic or STM32 libraries).
 
 ```bash
 git clone https://github.com/tropicsquare/libtropic-stm32.git
@@ -45,7 +45,7 @@ Build all examples in one place with the following commands:
 ```bash
 mkdir build
 cd build
-cmake -DLT_BUILD_EXAMPLES=1 ..
+cmake -DLT_BUILD_EXAMPLES=1 -DLT_CAL=trezor_crypto ..
 make
 ```
 For each example, an ELF binary will be created in the build directory. Once all examples are built, continue with the following chapter.
@@ -122,7 +122,7 @@ Build all functional tests in one place with the following commands:
 ```bash
 mkdir build
 cd build
-cmake -DLT_BUILD_TESTS=1 ..
+cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto ..
 make
 ```
 
@@ -155,7 +155,7 @@ ctest -R test_name
 CTest uses the `run_test.sh` script, which flashes a binary containing the test and immediately reads the serial port output to evaluate the test results. This script attempts to automatically detect your NUCLEO's serial port. However, if you are using a non-standard setup (e.g., a different ST-Link, special OS configuration) or have multiple NUCLEOs connected to your computer, you must manually specify the path to the serial port during CTest configuration:
 
 ```bash
-cmake -DLT_BUILD_TESTS=1 -DSTLINK_UART=<path> ..
+cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto -DSTLINK_UART=<path> ..
 ```
 
 # FAQ
