@@ -183,5 +183,5 @@ cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto -DSTLINK_UART=<path> ..
 
 If you encounter any issues, please check the [FAQ](./../FAQ.md) before filing an issue or reaching out to our [support](https://support.desk.tropicsquare.com/).
 
-> [!NOTE]
-> We do not provide any support for running the tests.
+> [!IMPORTANT]  
+> We do not provide any support for running the tests.  
