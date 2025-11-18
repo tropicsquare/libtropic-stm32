@@ -35,7 +35,7 @@ Make sure to have these dependencies installed:
 * arm-none-eabi-gcc
   * Ubuntu/Debian: `sudo apt install arm-none-eabi-gcc`
   * Fedora: `sudo dnf install arm-none-eabi-gcc`
-  * Windows: [offical web](https://developer.arm.com/downloads/-/gnu-rm)
+  * Windows: [official web](https://developer.arm.com/downloads/-/gnu-rm)
 * OpenOCD (https://openocd.org/pages/getting-openocd.html)
   * Ubuntu/Debian: `sudo apt install openocd`
   * Fedora: `sudo dnf install openocd`
@@ -53,7 +53,7 @@ As the output of examples is printed to the serial port, you need an access to i
 
 ```bash
 # Check if you are in the plugdev and the dialout groups
-# Required groups can be different, check documentation of your 
+# Required groups can be different, check the documentation of your 
 # Linux distribution
 groups
 # Add yourself to each group you are not in
@@ -91,7 +91,7 @@ make
 For each example, an ELF binary will be created in the build directory. Once all examples are built, **continue with the following section**.
 
 ### Run a Basic Example: Read CHIP ID and firmware versions
-The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using your preffered serial monitor you have prepared in [Install Dependencies](#install-dependencies).
+The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using your preferred serial monitor you have prepared in [Install Dependencies](#install-dependencies).
 
 First, it is recommended to run the **lt_ex_show_chip_id_and_fwver** example. This example will print, among other information, the CHIP ID and TROPIC01's firmware versions.
 
