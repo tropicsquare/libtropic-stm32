@@ -1,9 +1,7 @@
-# Nucleo F439ZI + TROPIC01 Arduino shield
-This folder contains examples demonstrating how to use Libtropic on the [Nucleo F439ZI](https://os.mbed.com/platforms/ST-Nucleo-F439ZI/) STMicroelectronics development board.
+# Nucleo F439ZI with Arduino Shield Tutorial
+This folder contains examples demonstrating how to use Libtropic on the [Nucleo F439ZI](https://os.mbed.com/platforms/ST-Nucleo-F439ZI/) STMicroelectronics development board using our [TROPIC01 Arduino shield](https://github.com/tropicsquare/tropic01-arduino-shield-hw). Follow the link to get more details about this shield, including schematics, design files, and manufacturing data.
 
-Contributors: please follow the [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
-
-We recommend using our [Arduino shield](https://www.github.com/tropicsquare/tropic01-arduino-shield-hw). If you are using MikroE's [SECURE TROPIC CLICK](https://www.mikroe.com/secure-tropic-click) or a custom PCB, the example code expects TROPIC01 to be wired to the following pins:
+**We recommend using the [Arduino shield](https://www.github.com/tropicsquare/tropic01-arduino-shield-hw)**. If you are using MikroE's [SECURE TROPIC CLICK](https://www.mikroe.com/secure-tropic-click) or a custom PCB, the example code expects TROPIC01 to be wired to the following pins:
 ```
 |------------|------------------|
 |  TROPIC01  |   NUCLEO F439ZI  |
@@ -24,18 +22,44 @@ We recommend using our [Arduino shield](https://www.github.com/tropicsquare/trop
 
 Before proceeding, familiarize yourself with the [Libtropic SDK documentation](https://tropicsquare.github.io/libtropic/latest/).
 
+> [!TIP]
+> For this tutorial, we recommend using Linux machine if you have one available.
+
 ### Install Dependencies
 Make sure to have these dependencies installed:
 
 * CMake
-    * Ubuntu/Debian: `sudo apt install cmake`
-    * Fedora: `sudo dnf install cmake`
+  * Ubuntu/Debian: `sudo apt install cmake`
+  * Fedora: `sudo dnf install cmake`
+  * Windows: [official web](https://cmake.org/download/)
 * arm-none-eabi-gcc
-    * Ubuntu/Debian: `sudo apt install arm-none-eabi-gcc`
-    * Fedora: `sudo dnf install arm-none-eabi-gcc`
+  * Ubuntu/Debian: `sudo apt install arm-none-eabi-gcc`
+  * Fedora: `sudo dnf install arm-none-eabi-gcc`
+  * Windows: [offical web](https://developer.arm.com/downloads/-/gnu-rm)
 * OpenOCD (https://openocd.org/pages/getting-openocd.html)
-    * Ubuntu/Debian: `sudo apt install openocd`
-    * Fedora: `sudo dnf install openocd`
+  * Ubuntu/Debian: `sudo apt install openocd`
+  * Fedora: `sudo dnf install openocd`
+  * Windows: [build from source](https://openocd.org/doc-release/README.Windows) or search for pre-built binaries
+* Serial monitor of your choice
+  * On GNU/Linux (Ubuntu/Debian/Fedora/...) you can use `minicom`, `screen` or GTKTerm (recommended).
+  * Windows: [PuTTY](https://putty.org/index.html) or [RealTerm](https://sourceforge.net/projects/realterm/)
+
+### System Setup
+
+#### GNU/Linux
+To upload the example programs, you need to have access to USB devices (usually, you must be a member of the `plugdev` group). Also, permissions (udev rules) have to be correctly configured, refer to the OpenOCD documentation.
+
+As the output of examples is printed to the serial port, you need an access to it. Either run the serial port monitor as root, or you have to add yourself to a group with access to serial ports. Usually, you must be a member of the `dialout` group.
+
+```bash
+# Check if you are in the plugdev and the dialout groups
+# Required groups can be different, check documentation of your 
+# Linux distribution
+groups
+# Add yourself to each group you are not in
+sudo usermod -aG plugdev "$USER"
+sudo usermod -aG dialout "$USER"
+```
 
 ### Clone the libtropic-stm32 Repository
 
@@ -61,16 +85,23 @@ cmake -DLT_BUILD_EXAMPLES=1 -DLT_CAL=trezor_crypto ..
 make
 ```
 
+> [!NOTE]
+> `-DLT_CAL` is used to select Cryptography Function Provider. We provide multiple, refer to the [Libtropic SDK documentation](https://tropicsquare.github.io/libtropic/latest/).
+
 For each example, an ELF binary will be created in the build directory. Once all examples are built, **continue with the following section**.
 
 ### Run a Basic Example: Read CHIP ID and firmware versions
-The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using a terminal emulator (e.g., `minicom`, `screen`, or PuTTY).
+The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using your preffered serial monitor you have prepared in [Install Dependencies](#install-dependencies).
 
-First, it is recommended to run the **lt_ex_show_chip_id_and_fwver** example. This example will print, among other information, the CHIP ID and TROPIC01's firmware versions. To run this example on the Nucleo board, you can use a provided `flash.sh` script:
+First, it is recommended to run the **lt_ex_show_chip_id_and_fwver** example. This example will print, among other information, the CHIP ID and TROPIC01's firmware versions.
+
+To flash this example to the Nucleo board on Linux, you can use a provided `flash.sh` script:
 
 ```sh
 ./flash.sh build/lt_ex_show_chip_id_and_fwver.elf
 ```
+
+On Windows and other platforms you have to invoke OpenOCD manually.
 
 Save the output of this example for future reference.
 
@@ -78,7 +109,9 @@ Save the output of this example for future reference.
 After trying out communication and noting CHIP ID and firmware versions using the first example, upgrade TROPIC01's internal firmware, as newer versions fix bugs and ensure compatibility with the latest Libtropic SDK.
 
 > [!IMPORTANT]
-> Using outdated firmware is not recommended. Outdated firmware may not be compatible with the latest version of the Libtropic SDK.
+> - Using outdated firmware is not recommended. Outdated firmware may not be compatible with the latest version of the Libtropic SDK.
+> - Firmware updates should be performed only after you saved output from `lt_ex_show_chip_id_and_fwver`.
+> - Use a stable power source and avoid disconnecting the devkit or rebooting your computer during the update. Interrupting a firmware update can brick the device.
 
 To update both internal firmware components to the latest versions, execute the following example:
 ```bash
@@ -122,7 +155,7 @@ make
 For each test, a binary will be created in the build directory (similar to when building the examples).
 
 > [!IMPORTANT]
-> You may encounter issues with tests that establish a Secure Session - refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) in the Libtropic documentation for more information.
+> You may encounter issues with tests that establish a Secure Session — refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) in the Libtropic documentation for more information.
 
 We use CTest to run functional tests.
 
@@ -151,4 +184,4 @@ cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto -DSTLINK_UART=<path> ..
 If you encounter any issues, please check the [FAQ](./../FAQ.md) before filing an issue or reaching out to our [support](https://support.desk.tropicsquare.com/).
 
 > [!NOTE]
-> Running tests is not officially supported. We do not provide any support for running tests.
+> We do not provide any support for running the tests.
