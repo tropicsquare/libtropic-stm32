@@ -81,7 +81,7 @@ Examples are built using the following commands:
 ```bash
 mkdir build
 cd build
-cmake -DLT_BUILD_EXAMPLES=1 -DLT_CAL=trezor_crypto ..
+cmake -DLT_BUILD_EXAMPLES=1 -DLT_CAL=mbedtls_v4 ..
 make
 ```
 
@@ -148,7 +148,7 @@ Build all functional tests in one place with the following commands:
 ```bash
 mkdir build
 cd build
-cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto ..
+cmake -DLT_BUILD_TESTS=1 -DLT_CAL=mbedtls_v4 ..
 make
 ```
 
