@@ -20,8 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#include <string.h>
 #include <inttypes.h>
+#include <string.h>
 
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
@@ -145,7 +145,7 @@ int main(void)
     }
 
     // IMPORTANT: Initialize RNG peripheral.
-    // Do not forget to do this in your application, as the 
+    // Do not forget to do this in your application, as the
     // Libtropic HAL uses RNG for entropy source!
     RNGHandle.Instance = RNG;
     if (HAL_RNG_Init(&RNGHandle) != HAL_OK) {

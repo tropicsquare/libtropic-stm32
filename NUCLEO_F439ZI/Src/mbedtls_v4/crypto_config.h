@@ -45,82 +45,82 @@
  * \{
  */
 
-#define PSA_WANT_ALG_CBC_NO_PADDING             1
-#define PSA_WANT_ALG_CBC_PKCS7                  1
-#define PSA_WANT_ALG_CCM                        1
-#define PSA_WANT_ALG_CCM_STAR_NO_TAG            1
-#define PSA_WANT_ALG_CMAC                       1
-#define PSA_WANT_ALG_CFB                        1
-#define PSA_WANT_ALG_CHACHA20_POLY1305          1
-#define PSA_WANT_ALG_CTR                        1
-#define PSA_WANT_ALG_DETERMINISTIC_ECDSA        1
-#define PSA_WANT_ALG_ECB_NO_PADDING             1
-#define PSA_WANT_ALG_ECDH                       1
-#define PSA_WANT_ALG_FFDH                       1
-#define PSA_WANT_ALG_ECDSA                      1
-#define PSA_WANT_ALG_JPAKE                      1
-#define PSA_WANT_ALG_GCM                        1
-#define PSA_WANT_ALG_HKDF                       1
-#define PSA_WANT_ALG_HKDF_EXTRACT               1
-#define PSA_WANT_ALG_HKDF_EXPAND                1
-#define PSA_WANT_ALG_HMAC                       1
-#define PSA_WANT_ALG_MD5                        1
-#define PSA_WANT_ALG_OFB                        1
-#define PSA_WANT_ALG_PBKDF2_HMAC                1
-#define PSA_WANT_ALG_PBKDF2_AES_CMAC_PRF_128    1
-#define PSA_WANT_ALG_RIPEMD160                  1
-#define PSA_WANT_ALG_RSA_OAEP                   1
-#define PSA_WANT_ALG_RSA_PKCS1V15_CRYPT         1
-#define PSA_WANT_ALG_RSA_PKCS1V15_SIGN          1
-#define PSA_WANT_ALG_RSA_PSS                    1
-#define PSA_WANT_ALG_SHA_1                      1
-#define PSA_WANT_ALG_SHA_224                    1
-#define PSA_WANT_ALG_SHA_256                    1
-#define PSA_WANT_ALG_SHA_384                    1
-#define PSA_WANT_ALG_SHA_512                    1
-#define PSA_WANT_ALG_SHA3_224                   1
-#define PSA_WANT_ALG_SHA3_256                   1
-#define PSA_WANT_ALG_SHA3_384                   1
-#define PSA_WANT_ALG_SHA3_512                   1
-#define PSA_WANT_ALG_STREAM_CIPHER              1
-#define PSA_WANT_ALG_TLS12_PRF                  1
-#define PSA_WANT_ALG_TLS12_PSK_TO_MS            1
-#define PSA_WANT_ALG_TLS12_ECJPAKE_TO_PMS       1
+#define PSA_WANT_ALG_CBC_NO_PADDING 1
+#define PSA_WANT_ALG_CBC_PKCS7 1
+#define PSA_WANT_ALG_CCM 1
+#define PSA_WANT_ALG_CCM_STAR_NO_TAG 1
+#define PSA_WANT_ALG_CMAC 1
+#define PSA_WANT_ALG_CFB 1
+#define PSA_WANT_ALG_CHACHA20_POLY1305 1
+#define PSA_WANT_ALG_CTR 1
+#define PSA_WANT_ALG_DETERMINISTIC_ECDSA 1
+#define PSA_WANT_ALG_ECB_NO_PADDING 1
+#define PSA_WANT_ALG_ECDH 1
+#define PSA_WANT_ALG_FFDH 1
+#define PSA_WANT_ALG_ECDSA 1
+#define PSA_WANT_ALG_JPAKE 1
+#define PSA_WANT_ALG_GCM 1
+#define PSA_WANT_ALG_HKDF 1
+#define PSA_WANT_ALG_HKDF_EXTRACT 1
+#define PSA_WANT_ALG_HKDF_EXPAND 1
+#define PSA_WANT_ALG_HMAC 1
+#define PSA_WANT_ALG_MD5 1
+#define PSA_WANT_ALG_OFB 1
+#define PSA_WANT_ALG_PBKDF2_HMAC 1
+#define PSA_WANT_ALG_PBKDF2_AES_CMAC_PRF_128 1
+#define PSA_WANT_ALG_RIPEMD160 1
+#define PSA_WANT_ALG_RSA_OAEP 1
+#define PSA_WANT_ALG_RSA_PKCS1V15_CRYPT 1
+#define PSA_WANT_ALG_RSA_PKCS1V15_SIGN 1
+#define PSA_WANT_ALG_RSA_PSS 1
+#define PSA_WANT_ALG_SHA_1 1
+#define PSA_WANT_ALG_SHA_224 1
+#define PSA_WANT_ALG_SHA_256 1
+#define PSA_WANT_ALG_SHA_384 1
+#define PSA_WANT_ALG_SHA_512 1
+#define PSA_WANT_ALG_SHA3_224 1
+#define PSA_WANT_ALG_SHA3_256 1
+#define PSA_WANT_ALG_SHA3_384 1
+#define PSA_WANT_ALG_SHA3_512 1
+#define PSA_WANT_ALG_STREAM_CIPHER 1
+#define PSA_WANT_ALG_TLS12_PRF 1
+#define PSA_WANT_ALG_TLS12_PSK_TO_MS 1
+#define PSA_WANT_ALG_TLS12_ECJPAKE_TO_PMS 1
 
-#define PSA_WANT_ECC_BRAINPOOL_P_R1_256         1
-#define PSA_WANT_ECC_BRAINPOOL_P_R1_384         1
-#define PSA_WANT_ECC_BRAINPOOL_P_R1_512         1
-#define PSA_WANT_ECC_MONTGOMERY_255             1
-#define PSA_WANT_ECC_MONTGOMERY_448             1
-#define PSA_WANT_ECC_SECP_K1_256                1
+#define PSA_WANT_ECC_BRAINPOOL_P_R1_256 1
+#define PSA_WANT_ECC_BRAINPOOL_P_R1_384 1
+#define PSA_WANT_ECC_BRAINPOOL_P_R1_512 1
+#define PSA_WANT_ECC_MONTGOMERY_255 1
+#define PSA_WANT_ECC_MONTGOMERY_448 1
+#define PSA_WANT_ECC_SECP_K1_256 1
 /* For secp256r1, consider enabling #MBEDTLS_PSA_P256M_DRIVER_ENABLED
  * (see the description in psa/crypto_config.h for details). */
-#define PSA_WANT_ECC_SECP_R1_256                1
-#define PSA_WANT_ECC_SECP_R1_384                1
-#define PSA_WANT_ECC_SECP_R1_521                1
+#define PSA_WANT_ECC_SECP_R1_256 1
+#define PSA_WANT_ECC_SECP_R1_384 1
+#define PSA_WANT_ECC_SECP_R1_521 1
 /* These 2 curves are not part of the public API. They are kept temporarily for
  * internal testing only and will removed in a future minor version. */
-#define PSA_WANT_ECC_SECP_K1_192                1
-#define PSA_WANT_ECC_SECP_R1_192                1
+#define PSA_WANT_ECC_SECP_K1_192 1
+#define PSA_WANT_ECC_SECP_R1_192 1
 
-#define PSA_WANT_DH_RFC7919_2048                1
-#define PSA_WANT_DH_RFC7919_3072                1
-#define PSA_WANT_DH_RFC7919_4096                1
-#define PSA_WANT_DH_RFC7919_6144                1
-#define PSA_WANT_DH_RFC7919_8192                1
+#define PSA_WANT_DH_RFC7919_2048 1
+#define PSA_WANT_DH_RFC7919_3072 1
+#define PSA_WANT_DH_RFC7919_4096 1
+#define PSA_WANT_DH_RFC7919_6144 1
+#define PSA_WANT_DH_RFC7919_8192 1
 
-#define PSA_WANT_KEY_TYPE_DERIVE                1
-#define PSA_WANT_KEY_TYPE_PASSWORD              1
-#define PSA_WANT_KEY_TYPE_PASSWORD_HASH         1
-#define PSA_WANT_KEY_TYPE_HMAC                  1
-#define PSA_WANT_KEY_TYPE_AES                   1
-#define PSA_WANT_KEY_TYPE_ARIA                  1
-#define PSA_WANT_KEY_TYPE_CAMELLIA              1
-#define PSA_WANT_KEY_TYPE_CHACHA20              1
-#define PSA_WANT_KEY_TYPE_ECC_PUBLIC_KEY        1
-#define PSA_WANT_KEY_TYPE_DH_PUBLIC_KEY         1
-#define PSA_WANT_KEY_TYPE_RAW_DATA              1
-#define PSA_WANT_KEY_TYPE_RSA_PUBLIC_KEY        1
+#define PSA_WANT_KEY_TYPE_DERIVE 1
+#define PSA_WANT_KEY_TYPE_PASSWORD 1
+#define PSA_WANT_KEY_TYPE_PASSWORD_HASH 1
+#define PSA_WANT_KEY_TYPE_HMAC 1
+#define PSA_WANT_KEY_TYPE_AES 1
+#define PSA_WANT_KEY_TYPE_ARIA 1
+#define PSA_WANT_KEY_TYPE_CAMELLIA 1
+#define PSA_WANT_KEY_TYPE_CHACHA20 1
+#define PSA_WANT_KEY_TYPE_ECC_PUBLIC_KEY 1
+#define PSA_WANT_KEY_TYPE_DH_PUBLIC_KEY 1
+#define PSA_WANT_KEY_TYPE_RAW_DATA 1
+#define PSA_WANT_KEY_TYPE_RSA_PUBLIC_KEY 1
 
 /*
  * The following symbols extend and deprecate the legacy
@@ -129,23 +129,23 @@
  * a generic suport, whereas other ones add more features on top of that and
  * they are more specific.
  */
-#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_BASIC      1
-#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_IMPORT   1
-#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_EXPORT   1
+#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_BASIC 1
+#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_IMPORT 1
+#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_EXPORT 1
 #define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_GENERATE 1
-#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_DERIVE   1
+#define PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_DERIVE 1
 
-#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_BASIC      1
-#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_IMPORT   1
-#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_EXPORT   1
+#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_BASIC 1
+#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_IMPORT 1
+#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_EXPORT 1
 #define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_GENERATE 1
-//#define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_DERIVE   1 /* Not supported */
+// #define PSA_WANT_KEY_TYPE_RSA_KEY_PAIR_DERIVE   1 /* Not supported */
 
-#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_BASIC       1
-#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_IMPORT    1
-#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_EXPORT    1
-#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_GENERATE  1
-//#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_DERIVE    1 /* Not supported */
+#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_BASIC 1
+#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_IMPORT 1
+#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_EXPORT 1
+#define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_GENERATE 1
+// #define PSA_WANT_KEY_TYPE_DH_KEY_PAIR_DERIVE    1 /* Not supported */
 /** \} name SECTION Cryptographic mechanism selection (PSA API) */
 
 /**
@@ -169,14 +169,14 @@
  *
  * Enable this module to enable the buffer memory allocator.
  */
-//#define MBEDTLS_MEMORY_BUFFER_ALLOC_C
+// #define MBEDTLS_MEMORY_BUFFER_ALLOC_C
 
 /**
  * \def MBEDTLS_FS_IO
  *
  * Enable functions that use the filesystem.
  */
-//#define MBEDTLS_FS_IO
+// #define MBEDTLS_FS_IO
 
 /**
  * \def MBEDTLS_HAVE_TIME
@@ -212,7 +212,7 @@
  * mbedtls_platform_gmtime_r() at compile-time by using the macro
  * MBEDTLS_PLATFORM_GMTIME_R_ALT.
  */
-//#define MBEDTLS_HAVE_TIME_DATE
+// #define MBEDTLS_HAVE_TIME_DATE
 
 /**
  * \def MBEDTLS_MEMORY_DEBUG
@@ -225,7 +225,7 @@
  *
  * Uncomment this macro to let the buffer allocator print out error messages.
  */
-//#define MBEDTLS_MEMORY_DEBUG
+// #define MBEDTLS_MEMORY_DEBUG
 
 /**
  * \def MBEDTLS_MEMORY_BACKTRACE
@@ -237,7 +237,7 @@
  *
  * Uncomment this macro to include backtrace information
  */
-//#define MBEDTLS_MEMORY_BACKTRACE
+// #define MBEDTLS_MEMORY_BACKTRACE
 
 /**
  * \def MBEDTLS_PLATFORM_C
@@ -284,13 +284,13 @@
  */
 #define MBEDTLS_PLATFORM_SETBUF_ALT
 #define MBEDTLS_PLATFORM_EXIT_ALT
-//#define MBEDTLS_PLATFORM_TIME_ALT
-//#define MBEDTLS_PLATFORM_FPRINTF_ALT
+// #define MBEDTLS_PLATFORM_TIME_ALT
+// #define MBEDTLS_PLATFORM_FPRINTF_ALT
 #define MBEDTLS_PLATFORM_PRINTF_ALT
 #define MBEDTLS_PLATFORM_SNPRINTF_ALT
 #define MBEDTLS_PLATFORM_VSNPRINTF_ALT
-//#define MBEDTLS_PLATFORM_NV_SEED_ALT
-//#define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT
+// #define MBEDTLS_PLATFORM_NV_SEED_ALT
+// #define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT
 #define MBEDTLS_PLATFORM_MS_TIME_ALT
 
 /**
@@ -310,7 +310,7 @@
  * unconditionally use the implementation for mbedtls_platform_gmtime_r()
  * supplied at compile time.
  */
-//#define MBEDTLS_PLATFORM_GMTIME_R_ALT
+// #define MBEDTLS_PLATFORM_GMTIME_R_ALT
 
 /**
  * \def MBEDTLS_PLATFORM_MEMORY
@@ -338,7 +338,8 @@
  *     - if (MBEDTLS_PLATFORM_CALLOC_MACRO && MBEDTLS_PLATFORM_FREE_MACRO):
  *         - mbedtls_calloc = MBEDTLS_PLATFORM_CALLOC_MACRO
  *     - if !(MBEDTLS_PLATFORM_CALLOC_MACRO && MBEDTLS_PLATFORM_FREE_MACRO):
- *         - Dynamic setup via mbedtls_platform_set_calloc_free is now possible with a default value MBEDTLS_PLATFORM_STD_CALLOC.
+ *         - Dynamic setup via mbedtls_platform_set_calloc_free is now possible with a default value
+ * MBEDTLS_PLATFORM_STD_CALLOC.
  *         - How is MBEDTLS_PLATFORM_STD_CALLOC handled?
  *         - if MBEDTLS_PLATFORM_NO_STD_FUNCTIONS:
  *             - MBEDTLS_PLATFORM_STD_CALLOC is not set to anything;
@@ -357,8 +358,8 @@
  *
  * Defining MBEDTLS_PLATFORM_CALLOC_MACRO and #MBEDTLS_PLATFORM_STD_CALLOC at the same time is not possible.
  * MBEDTLS_PLATFORM_CALLOC_MACRO and MBEDTLS_PLATFORM_FREE_MACRO must both be defined or undefined at the same time.
- * #MBEDTLS_PLATFORM_STD_CALLOC and #MBEDTLS_PLATFORM_STD_FREE do not have to be defined at the same time, as, if they are used,
- * dynamic setup of these functions is possible. See the tree above to see how are they handled in all cases.
+ * #MBEDTLS_PLATFORM_STD_CALLOC and #MBEDTLS_PLATFORM_STD_FREE do not have to be defined at the same time, as, if they
+ * are used, dynamic setup of these functions is possible. See the tree above to see how are they handled in all cases.
  * An uninitialized #MBEDTLS_PLATFORM_STD_CALLOC always fails, returning a null pointer.
  * An uninitialized #MBEDTLS_PLATFORM_STD_FREE does not do anything.
  *
@@ -385,7 +386,7 @@
  * Uncomment to prevent default assignment of standard functions in the
  * platform layer.
  */
-//#define MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
+// #define MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
 
 /**
  * Uncomment the macro to let Mbed TLS use your alternate implementation of
@@ -408,7 +409,7 @@
  * detect its presence, define `MBEDTLS_PLATFORM_ZEROIZE_ALT` to be
  * `explicit_bzero` to use that function as mbedtls_platform_zeroize().
  */
-//#define MBEDTLS_PLATFORM_ZEROIZE_ALT
+// #define MBEDTLS_PLATFORM_ZEROIZE_ALT
 
 /**
  * \def MBEDTLS_THREADING_ALT
@@ -433,7 +434,7 @@
  *
  * Uncomment this to allow your own alternate threading implementation.
  */
-//#define MBEDTLS_THREADING_ALT
+// #define MBEDTLS_THREADING_ALT
 
 /**
  * \def MBEDTLS_THREADING_PTHREAD
@@ -444,7 +445,7 @@
  *
  * Uncomment this to enable pthread mutexes.
  */
-//#define MBEDTLS_THREADING_PTHREAD
+// #define MBEDTLS_THREADING_PTHREAD
 
 /**
  * \def MBEDTLS_THREADING_C
@@ -467,24 +468,27 @@
  *
  * Enable this layer to allow use of mutexes within Mbed TLS
  */
-//#define MBEDTLS_THREADING_C
+// #define MBEDTLS_THREADING_C
 
 /* Memory buffer allocator options */
-//#define MBEDTLS_MEMORY_ALIGN_MULTIPLE      4 /**< Align on multiples of this value */
+// #define MBEDTLS_MEMORY_ALIGN_MULTIPLE      4 /**< Align on multiples of this value */
 
 /* To use the following function macros, MBEDTLS_PLATFORM_C must be enabled. */
 /* MBEDTLS_PLATFORM_XXX_MACRO and MBEDTLS_PLATFORM_XXX_ALT cannot both be defined */
-//#define MBEDTLS_PLATFORM_CALLOC_MACRO        calloc /**< Default allocator macro to use, can be undefined. See MBEDTLS_PLATFORM_STD_CALLOC for requirements. */
-//#define MBEDTLS_PLATFORM_EXIT_MACRO            exit /**< Default exit macro to use, can be undefined */
-//#define MBEDTLS_PLATFORM_FREE_MACRO            free /**< Default free macro to use, can be undefined. See MBEDTLS_PLATFORM_STD_FREE for requirements. */
-//#define MBEDTLS_PLATFORM_FPRINTF_MACRO      fprintf /**< Default fprintf macro to use, can be undefined */
-//#define MBEDTLS_PLATFORM_MS_TIME_TYPE_MACRO   int64_t //#define MBEDTLS_PLATFORM_MS_TIME_TYPE_MACRO   int64_t /**< Default milliseconds time macro to use, can be undefined. MBEDTLS_HAVE_TIME must be enabled. It must be signed, and at least 64 bits. If it is changed from the default, MBEDTLS_PRINTF_MS_TIME must be updated to match.*/
-//#define MBEDTLS_PLATFORM_NV_SEED_READ_MACRO   mbedtls_platform_std_nv_seed_read /**< Default nv_seed_read function to use, can be undefined */
-//#define MBEDTLS_PLATFORM_NV_SEED_WRITE_MACRO  mbedtls_platform_std_nv_seed_write /**< Default nv_seed_write function to use, can be undefined */
-//#define MBEDTLS_PLATFORM_PRINTF_MACRO        printf /**< Default printf macro to use, can be undefined */
-//#define MBEDTLS_PLATFORM_SETBUF_MACRO      setbuf /**< Default setbuf macro to use, can be undefined */
+// #define MBEDTLS_PLATFORM_CALLOC_MACRO        calloc /**< Default allocator macro to use, can be undefined. See
+// MBEDTLS_PLATFORM_STD_CALLOC for requirements. */ #define MBEDTLS_PLATFORM_EXIT_MACRO            exit /**< Default
+// exit macro to use, can be undefined */ #define MBEDTLS_PLATFORM_FREE_MACRO            free /**< Default free macro to
+// use, can be undefined. See MBEDTLS_PLATFORM_STD_FREE for requirements. */ #define MBEDTLS_PLATFORM_FPRINTF_MACRO
+// fprintf /**< Default fprintf macro to use, can be undefined */ #define MBEDTLS_PLATFORM_MS_TIME_TYPE_MACRO   int64_t
+// //#define MBEDTLS_PLATFORM_MS_TIME_TYPE_MACRO   int64_t /**< Default milliseconds time macro to use, can be
+// undefined. MBEDTLS_HAVE_TIME must be enabled. It must be signed, and at least 64 bits. If it is changed from the
+// default, MBEDTLS_PRINTF_MS_TIME must be updated to match.*/ #define MBEDTLS_PLATFORM_NV_SEED_READ_MACRO
+// mbedtls_platform_std_nv_seed_read /**< Default nv_seed_read function to use, can be undefined */ #define
+// MBEDTLS_PLATFORM_NV_SEED_WRITE_MACRO  mbedtls_platform_std_nv_seed_write /**< Default nv_seed_write function to use,
+// can be undefined */ #define MBEDTLS_PLATFORM_PRINTF_MACRO        printf /**< Default printf macro to use, can be
+// undefined */ #define MBEDTLS_PLATFORM_SETBUF_MACRO      setbuf /**< Default setbuf macro to use, can be undefined */
 /* Note: your snprintf must correctly zero-terminate the buffer! */
-//#define MBEDTLS_PLATFORM_SNPRINTF_MACRO    snprintf /**< Default snprintf macro to use, can be undefined */
+// #define MBEDTLS_PLATFORM_SNPRINTF_MACRO    snprintf /**< Default snprintf macro to use, can be undefined */
 
 /** \def MBEDTLS_PLATFORM_STD_CALLOC
  *
@@ -492,17 +496,17 @@
  * It must initialize the allocated buffer memory to zeroes.
  * The size of the buffer is the product of the two parameters.
  * The calloc function returns either a null pointer or a pointer to the allocated space.
- * If the product is 0, the function may either return NULL or a valid pointer to an array of size 0 which is a valid input to the deallocation function.
- * An uninitialized #MBEDTLS_PLATFORM_STD_CALLOC always fails, returning a null pointer.
- * See the description of #MBEDTLS_PLATFORM_MEMORY for more details.
- * The corresponding deallocation function is #MBEDTLS_PLATFORM_STD_FREE.
+ * If the product is 0, the function may either return NULL or a valid pointer to an array of size 0 which is a valid
+ * input to the deallocation function. An uninitialized #MBEDTLS_PLATFORM_STD_CALLOC always fails, returning a null
+ * pointer. See the description of #MBEDTLS_PLATFORM_MEMORY for more details. The corresponding deallocation function is
+ * #MBEDTLS_PLATFORM_STD_FREE.
  */
-//#define MBEDTLS_PLATFORM_STD_CALLOC        calloc
+// #define MBEDTLS_PLATFORM_STD_CALLOC        calloc
 
-//#define MBEDTLS_PLATFORM_STD_EXIT            exit /**< Default exit to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_EXIT_FAILURE       1 /**< Default exit value to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_EXIT_SUCCESS       0 /**< Default exit value to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_FPRINTF      fprintf /**< Default fprintf to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_EXIT            exit /**< Default exit to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_EXIT_FAILURE       1 /**< Default exit value to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_EXIT_SUCCESS       0 /**< Default exit value to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_FPRINTF      fprintf /**< Default fprintf to use, can be undefined */
 
 /** \def MBEDTLS_PLATFORM_STD_FREE
  *
@@ -510,23 +514,26 @@
  * NULL is a valid parameter, and the function must do nothing.
  * A non-null parameter will always be a pointer previously returned by #MBEDTLS_PLATFORM_STD_CALLOC and not yet freed.
  * An uninitialized #MBEDTLS_PLATFORM_STD_FREE does not do anything.
- * See the description of #MBEDTLS_PLATFORM_MEMORY for more details (same principles as for MBEDTLS_PLATFORM_STD_CALLOC apply).
+ * See the description of #MBEDTLS_PLATFORM_MEMORY for more details (same principles as for MBEDTLS_PLATFORM_STD_CALLOC
+ * apply).
  */
-//#define MBEDTLS_PLATFORM_STD_FREE            free
+// #define MBEDTLS_PLATFORM_STD_FREE            free
 
-//#define MBEDTLS_PLATFORM_STD_MEM_HDR   <stdlib.h> /**< Header to include if MBEDTLS_PLATFORM_NO_STD_FUNCTIONS is defined. Don't define if no header is needed. */
-//#define MBEDTLS_PLATFORM_STD_NV_SEED_FILE  "seedfile" /**< Seed file to read/write with default implementation */
-//#define MBEDTLS_PLATFORM_STD_NV_SEED_READ   mbedtls_platform_std_nv_seed_read /**< Default nv_seed_read function to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_NV_SEED_WRITE  mbedtls_platform_std_nv_seed_write /**< Default nv_seed_write function to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_PRINTF        printf /**< Default printf to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_SETBUF      setbuf /**< Default setbuf to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_MEM_HDR   <stdlib.h> /**< Header to include if MBEDTLS_PLATFORM_NO_STD_FUNCTIONS is
+// defined. Don't define if no header is needed. */ #define MBEDTLS_PLATFORM_STD_NV_SEED_FILE  "seedfile" /**< Seed file
+// to read/write with default implementation */ #define MBEDTLS_PLATFORM_STD_NV_SEED_READ
+// mbedtls_platform_std_nv_seed_read /**< Default nv_seed_read function to use, can be undefined */ #define
+// MBEDTLS_PLATFORM_STD_NV_SEED_WRITE  mbedtls_platform_std_nv_seed_write /**< Default nv_seed_write function to use,
+// can be undefined */ #define MBEDTLS_PLATFORM_STD_PRINTF        printf /**< Default printf to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_SETBUF      setbuf /**< Default setbuf to use, can be undefined */
 /* Note: your snprintf must correctly zero-terminate the buffer! */
-//#define MBEDTLS_PLATFORM_STD_SNPRINTF    snprintf /**< Default snprintf to use, can be undefined */
-//#define MBEDTLS_PLATFORM_STD_TIME            time /**< Default time to use, can be undefined. MBEDTLS_HAVE_TIME must be enabled */
-//#define MBEDTLS_PLATFORM_TIME_MACRO            time /**< Default time macro to use, can be undefined. MBEDTLS_HAVE_TIME must be enabled */
-//#define MBEDTLS_PLATFORM_TIME_TYPE_MACRO       time_t /**< Default time macro to use, can be undefined. MBEDTLS_HAVE_TIME must be enabled */
-//#define MBEDTLS_PLATFORM_VSNPRINTF_MACRO    vsnprintf /**< Default vsnprintf macro to use, can be undefined */
-//#define MBEDTLS_PRINTF_MS_TIME    PRId64 /**< Default fmt for printf. That's avoid compiler warning if mbedtls_ms_time_t is redefined */
+// #define MBEDTLS_PLATFORM_STD_SNPRINTF    snprintf /**< Default snprintf to use, can be undefined */
+// #define MBEDTLS_PLATFORM_STD_TIME            time /**< Default time to use, can be undefined. MBEDTLS_HAVE_TIME must
+// be enabled */ #define MBEDTLS_PLATFORM_TIME_MACRO            time /**< Default time macro to use, can be undefined.
+// MBEDTLS_HAVE_TIME must be enabled */ #define MBEDTLS_PLATFORM_TIME_TYPE_MACRO       time_t /**< Default time macro to
+// use, can be undefined. MBEDTLS_HAVE_TIME must be enabled */ #define MBEDTLS_PLATFORM_VSNPRINTF_MACRO    vsnprintf
+// /**< Default vsnprintf macro to use, can be undefined */ #define MBEDTLS_PRINTF_MS_TIME    PRId64 /**< Default fmt
+// for printf. That's avoid compiler warning if mbedtls_ms_time_t is redefined */
 
 /** \} name SECTION: Platform abstraction layer */
 
@@ -573,7 +580,7 @@
  *
  * Uncomment to get warnings on using deprecated functions and features.
  */
-//#define MBEDTLS_DEPRECATED_WARNING
+// #define MBEDTLS_DEPRECATED_WARNING
 
 /**
  * \def MBEDTLS_DEPRECATED_REMOVED
@@ -585,7 +592,7 @@
  *
  * Uncomment to get errors on using deprecated functions and features.
  */
-//#define MBEDTLS_DEPRECATED_REMOVED
+// #define MBEDTLS_DEPRECATED_REMOVED
 
 /** \def MBEDTLS_CHECK_RETURN
  *
@@ -600,7 +607,7 @@
  * If the implementation here is empty, this will effectively disable the
  * checking of functions' return values.
  */
-//#define MBEDTLS_CHECK_RETURN __attribute__((__warn_unused_result__))
+// #define MBEDTLS_CHECK_RETURN __attribute__((__warn_unused_result__))
 
 /** \def MBEDTLS_IGNORE_RETURN
  *
@@ -608,7 +615,7 @@
  * If that function call would cause a #MBEDTLS_CHECK_RETURN warning, this
  * warning is suppressed.
  */
-//#define MBEDTLS_IGNORE_RETURN( result ) ((void) !(result))
+// #define MBEDTLS_IGNORE_RETURN( result ) ((void) !(result))
 
 /**
  * \def TF_PSA_CRYPTO_CONFIG_FILE
@@ -625,7 +632,7 @@
  * The value of this symbol is typically a path in double quotes, either
  * absolute or relative to a directory on the include search path.
  */
-//#define TF_PSA_CRYPTO_CONFIG_FILE "psa/crypto_config.h"
+// #define TF_PSA_CRYPTO_CONFIG_FILE "psa/crypto_config.h"
 
 /**
  * \def TF_PSA_CRYPTO_USER_CONFIG_FILE
@@ -642,7 +649,7 @@
  * The value of this symbol is typically a path in double quotes, either
  * absolute or relative to a directory on the include search path.
  */
-//#define TF_PSA_CRYPTO_USER_CONFIG_FILE "/dev/null"
+// #define TF_PSA_CRYPTO_USER_CONFIG_FILE "/dev/null"
 
 /**
  * \def MBEDTLS_SELF_TEST
@@ -666,7 +673,7 @@
  *
  * Uncomment to enable testing of the constant-flow nature of selected code.
  */
-//#define MBEDTLS_TEST_CONSTANT_FLOW_MEMSAN
+// #define MBEDTLS_TEST_CONSTANT_FLOW_MEMSAN
 
 /**
  * \def MBEDTLS_TEST_CONSTANT_FLOW_VALGRIND
@@ -685,7 +692,7 @@
  *
  * Uncomment to enable testing of the constant-flow nature of selected code.
  */
-//#define MBEDTLS_TEST_CONSTANT_FLOW_VALGRIND
+// #define MBEDTLS_TEST_CONSTANT_FLOW_VALGRIND
 
 /**
  * \def MBEDTLS_TEST_HOOKS
@@ -1009,7 +1016,7 @@
  * \note The entropy collector will write to the seed file before entropy is
  *       given to an external source, to update it.
  */
-//#define MBEDTLS_ENTROPY_NV_SEED
+// #define MBEDTLS_ENTROPY_NV_SEED
 
 /**
  * \def MBEDTLS_HMAC_DRBG_C
@@ -1070,7 +1077,7 @@
  * \note Enabling this option causes overlap of input and output buffers
  *       not to be supported by PSA functions.
  */
-//#define MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
+// #define MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
 
 /**
  * \def MBEDTLS_PSA_BUILTIN_GET_ENTROPY
@@ -1102,7 +1109,7 @@
  *   client-only builds (#MBEDTLS_PSA_CRYPTO_CLIENT enabled and
  *   #MBEDTLS_PSA_CRYPTO_C disabled).
  */
-//#define MBEDTLS_PSA_BUILTIN_GET_ENTROPY
+// #define MBEDTLS_PSA_BUILTIN_GET_ENTROPY
 
 /** \def MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
  *
@@ -1172,7 +1179,7 @@
  *
  * \note This option is experimental and may be removed without notice.
  */
-//#define MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
+// #define MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
 
 /* MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER
  *
@@ -1184,7 +1191,7 @@
  * Note that this option is meant for internal use only and may be removed
  * without notice.
  */
-//#define MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER
+// #define MBEDTLS_PSA_CRYPTO_KEY_ID_ENCODES_OWNER
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_SPM
@@ -1205,7 +1212,7 @@
  * Requires: MBEDTLS_PSA_CRYPTO_C
  *
  */
-//#define MBEDTLS_PSA_CRYPTO_SPM
+// #define MBEDTLS_PSA_CRYPTO_SPM
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_STORAGE_C
@@ -1218,7 +1225,7 @@
  *           either MBEDTLS_PSA_ITS_FILE_C or a native implementation of
  *           the PSA ITS interface
  */
-//#define MBEDTLS_PSA_CRYPTO_STORAGE_C
+// #define MBEDTLS_PSA_CRYPTO_STORAGE_C
 
 /**
  * \def MBEDTLS_PSA_DRIVER_GET_ENTROPY
@@ -1258,7 +1265,7 @@
  *
  * Requires: MBEDTLS_FS_IO
  */
-//#define MBEDTLS_PSA_ITS_FILE_C
+// #define MBEDTLS_PSA_ITS_FILE_C
 
 /**
  * \def MBEDTLS_PSA_KEY_STORE_DYNAMIC
@@ -1295,7 +1302,7 @@
  * Requires: MBEDTLS_PSA_CRYPTO_C
  *
  */
-//#define MBEDTLS_PSA_STATIC_KEY_SLOTS
+// #define MBEDTLS_PSA_STATIC_KEY_SLOTS
 
 /* Entropy options */
 
@@ -1319,7 +1326,7 @@
  * The value of this symbol is typically a path in double quotes, either
  * absolute or relative to a directory on the include search path.
  */
-//#define MBEDTLS_PSA_CRYPTO_PLATFORM_FILE "psa/crypto_platform_alt.h"
+// #define MBEDTLS_PSA_CRYPTO_PLATFORM_FILE "psa/crypto_platform_alt.h"
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_STRUCT_FILE
@@ -1344,7 +1351,7 @@
  * The value of this symbol is typically a path in double quotes, either
  * absolute or relative to a directory on the include search path.
  */
-//#define MBEDTLS_PSA_CRYPTO_STRUCT_FILE "psa/crypto_struct_alt.h"
+// #define MBEDTLS_PSA_CRYPTO_STRUCT_FILE "psa/crypto_struct_alt.h"
 
 /** \def MBEDTLS_PSA_KEY_SLOT_COUNT
  *
@@ -1364,7 +1371,7 @@
  *
  * This option has no effect when #MBEDTLS_PSA_CRYPTO_C is disabled.
  */
-//#define MBEDTLS_PSA_KEY_SLOT_COUNT 32
+// #define MBEDTLS_PSA_KEY_SLOT_COUNT 32
 
 /**
  * \def MBEDTLS_PSA_STATIC_KEY_SLOT_BUFFER_SIZE
@@ -1377,7 +1384,7 @@
  * in order to store larger objects (ex: raw keys), but please note that this
  * will increase RAM usage.
  */
-//#define MBEDTLS_PSA_STATIC_KEY_SLOT_BUFFER_SIZE       256
+// #define MBEDTLS_PSA_STATIC_KEY_SLOT_BUFFER_SIZE       256
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_RNG_STRENGTH
@@ -1386,7 +1393,7 @@
  *
  * \note Valid values: 128 or default of 256.
  */
-//#define MBEDTLS_PSA_CRYPTO_RNG_STRENGTH               256
+// #define MBEDTLS_PSA_CRYPTO_RNG_STRENGTH               256
 
 /**
  * \def MBEDTLS_PSA_CRYPTO_RNG_HASH
@@ -1405,7 +1412,7 @@
  * a default hash that satisfies the above constraints is selected automatically.
  * If no suitable default can be selected, this will result in a build error.
  */
-//#define MBEDTLS_PSA_CRYPTO_RNG_HASH PSA_ALG_SHA_256
+// #define MBEDTLS_PSA_CRYPTO_RNG_HASH PSA_ALG_SHA_256
 
 /**
  * \def MBEDTLS_PSA_RNG_RESEED_INTERVAL
@@ -1417,7 +1424,7 @@
  * and is currently unspecified), so the maximum number of bytes before a reseed
  * is the interval multiplied by the maximum request size.
  */
-//#define MBEDTLS_PSA_RNG_RESEED_INTERVAL 1000
+// #define MBEDTLS_PSA_RNG_RESEED_INTERVAL 1000
 
 /** \} name SECTION: PSA core */
 
@@ -1541,7 +1548,7 @@
  *
  * Requires: The AES built-in implementation
  */
-//#define MBEDTLS_AES_ONLY_128_BIT_KEY_LENGTH
+// #define MBEDTLS_AES_ONLY_128_BIT_KEY_LENGTH
 
 /*
  * Disable plain C implementation for AES.
@@ -1555,7 +1562,7 @@
  * necessary features. It will not build unless at least one of MBEDTLS_AESCE_C
  * and/or MBEDTLS_AESNI_C is enabled & present in the build.
  */
-//#define MBEDTLS_AES_USE_HARDWARE_ONLY
+// #define MBEDTLS_AES_USE_HARDWARE_ONLY
 
 /**
  * \def MBEDTLS_BLOCK_CIPHER_NO_DECRYPT
@@ -1573,7 +1580,7 @@
  *          drivers/builtin/src/camellia.c
  *          drivers/builtin/src/cipher.c
  */
-//#define MBEDTLS_BLOCK_CIPHER_NO_DECRYPT
+// #define MBEDTLS_BLOCK_CIPHER_NO_DECRYPT
 
 /**
  * \def MBEDTLS_CAMELLIA_SMALL_MEMORY
@@ -1594,7 +1601,7 @@
  * The Everest code is provided under the Apache 2.0 license only; therefore enabling this
  * option is not compatible with taking the library under the GPL v2.0-or-later license.
  */
-//#define MBEDTLS_ECDH_VARIANT_EVEREST_ENABLED
+// #define MBEDTLS_ECDH_VARIANT_EVEREST_ENABLED
 
 /**
  * \def MBEDTLS_ECP_NIST_OPTIM
@@ -1658,7 +1665,7 @@
  * \warning This is currently experimental, incomplete and therefore should not
  * be used in production.
  */
-//#define MBEDTLS_ECP_WITH_MPI_UINT
+// #define MBEDTLS_ECP_WITH_MPI_UINT
 
 /**
  * \def MBEDTLS_GCM_LARGE_TABLE
@@ -1704,7 +1711,7 @@
  *
  * Uncomment if the CPU supports SSE2 (IA-32 specific).
  */
-//#define MBEDTLS_HAVE_SSE2
+// #define MBEDTLS_HAVE_SSE2
 
 /**
  * \def MBEDTLS_NO_UDBL_DIVISION
@@ -1732,7 +1739,7 @@
  * example, if double-width division is implemented in software, disabling
  * it can reduce code size in some embedded targets.
  */
-//#define MBEDTLS_NO_UDBL_DIVISION
+// #define MBEDTLS_NO_UDBL_DIVISION
 
 /**
  * \def MBEDTLS_NO_64BIT_MULTIPLICATION
@@ -1754,7 +1761,7 @@
  * Note that depending on the compiler, this may decrease performance compared
  * to using the library function provided by the toolchain.
  */
-//#define MBEDTLS_NO_64BIT_MULTIPLICATION
+// #define MBEDTLS_NO_64BIT_MULTIPLICATION
 
 /**
  * Uncomment to enable p256-m. This is an alternative implementation of
@@ -1792,7 +1799,7 @@
  *       #MBEDTLS_PK_PARSE_EC_EXTENDED as those currently require a subset of
  *       the built-in ECC implementation, see docs/driver-only-builds.md.
  */
-//#define MBEDTLS_PSA_P256M_DRIVER_ENABLED
+// #define MBEDTLS_PSA_P256M_DRIVER_ENABLED
 
 /**
  * \def MBEDTLS_RSA_NO_CRT
@@ -1803,7 +1810,7 @@
  * Uncomment this macro to disable the use of CRT in RSA.
  *
  */
-//#define MBEDTLS_RSA_NO_CRT
+// #define MBEDTLS_RSA_NO_CRT
 
 /**
  * \def MBEDTLS_SHA256_SMALLER
@@ -1853,8 +1860,7 @@
  * Uncomment to have the library check for the Armv8-A SHA-256 crypto extensions
  * and use them if available.
  */
-//#define MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_IF_PRESENT
-
+// #define MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_IF_PRESENT
 
 /**
  * \def MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_ONLY
@@ -1888,7 +1894,7 @@
  * Uncomment to have the library use the Armv8-A SHA-256 crypto extensions
  * unconditionally.
  */
-//#define MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_ONLY
+// #define MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_ONLY
 
 /**
  * \def MBEDTLS_SHA512_SMALLER
@@ -1932,7 +1938,7 @@
  * Uncomment to have the library check for the A64 SHA-512 crypto extensions
  * and use them if available.
  */
-//#define MBEDTLS_SHA512_USE_A64_CRYPTO_IF_PRESENT
+// #define MBEDTLS_SHA512_USE_A64_CRYPTO_IF_PRESENT
 
 /**
  * \def MBEDTLS_SHA512_USE_A64_CRYPTO_ONLY
@@ -1966,18 +1972,19 @@
  * Uncomment to have the library use the A64 SHA-512 crypto extensions
  * unconditionally.
  */
-//#define MBEDTLS_SHA512_USE_A64_CRYPTO_ONLY
+// #define MBEDTLS_SHA512_USE_A64_CRYPTO_ONLY
 
 /* ECP options */
-//#define MBEDTLS_ECP_FIXED_POINT_OPTIM      1 /**< Enable fixed-point speed-up */
-//#define MBEDTLS_ECP_WINDOW_SIZE            4 /**< Maximum window size used */
+// #define MBEDTLS_ECP_FIXED_POINT_OPTIM      1 /**< Enable fixed-point speed-up */
+// #define MBEDTLS_ECP_WINDOW_SIZE            4 /**< Maximum window size used */
 
 /* MPI / BIGNUM options */
-//#define MBEDTLS_MPI_MAX_SIZE            1024 /**< Maximum number of bytes for usable MPIs. */
-//#define MBEDTLS_MPI_WINDOW_SIZE            2 /**< Maximum window size used. */
+// #define MBEDTLS_MPI_MAX_SIZE            1024 /**< Maximum number of bytes for usable MPIs. */
+// #define MBEDTLS_MPI_WINDOW_SIZE            2 /**< Maximum window size used. */
 
 /* RSA OPTIONS */
-//#define MBEDTLS_RSA_GEN_KEY_MIN_BITS            1024 /**<  Minimum RSA key size that can be generated in bits (Minimum possible value is 128 bits) */
+// #define MBEDTLS_RSA_GEN_KEY_MIN_BITS            1024 /**<  Minimum RSA key size that can be generated in bits
+// (Minimum possible value is 128 bits) */
 
 /** \} name SECTION: Builtin drivers */
 
