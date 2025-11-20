@@ -100,8 +100,8 @@
 #define PSA_WANT_ECC_SECP_R1_521                1
 /* These 2 curves are not part of the public API. They are kept temporarily for
  * internal testing only and will removed in a future minor version. */
-//#define PSA_WANT_ECC_SECP_K1_192                1
-//#define PSA_WANT_ECC_SECP_R1_192                1
+#define PSA_WANT_ECC_SECP_K1_192                1
+#define PSA_WANT_ECC_SECP_R1_192                1
 
 #define PSA_WANT_DH_RFC7919_2048                1
 #define PSA_WANT_DH_RFC7919_3072                1
@@ -176,7 +176,7 @@
  *
  * Enable functions that use the filesystem.
  */
-#define MBEDTLS_FS_IO
+//#define MBEDTLS_FS_IO
 
 /**
  * \def MBEDTLS_HAVE_TIME
@@ -212,7 +212,7 @@
  * mbedtls_platform_gmtime_r() at compile-time by using the macro
  * MBEDTLS_PLATFORM_GMTIME_R_ALT.
  */
-#define MBEDTLS_HAVE_TIME_DATE
+//#define MBEDTLS_HAVE_TIME_DATE
 
 /**
  * \def MBEDTLS_MEMORY_DEBUG
@@ -282,16 +282,16 @@
  * Uncomment a macro to enable alternate implementation of specific base
  * platform function
  */
-//#define MBEDTLS_PLATFORM_SETBUF_ALT
-//#define MBEDTLS_PLATFORM_EXIT_ALT
+#define MBEDTLS_PLATFORM_SETBUF_ALT
+#define MBEDTLS_PLATFORM_EXIT_ALT
 //#define MBEDTLS_PLATFORM_TIME_ALT
 //#define MBEDTLS_PLATFORM_FPRINTF_ALT
-//#define MBEDTLS_PLATFORM_PRINTF_ALT
-//#define MBEDTLS_PLATFORM_SNPRINTF_ALT
-//#define MBEDTLS_PLATFORM_VSNPRINTF_ALT
+#define MBEDTLS_PLATFORM_PRINTF_ALT
+#define MBEDTLS_PLATFORM_SNPRINTF_ALT
+#define MBEDTLS_PLATFORM_VSNPRINTF_ALT
 //#define MBEDTLS_PLATFORM_NV_SEED_ALT
 //#define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT
-//#define MBEDTLS_PLATFORM_MS_TIME_ALT
+#define MBEDTLS_PLATFORM_MS_TIME_ALT
 
 /**
  * Uncomment the macro to let Mbed TLS use your alternate implementation of
@@ -366,7 +366,7 @@
  *
  * Enable this layer to allow use of alternative memory allocators.
  */
-//#define MBEDTLS_PLATFORM_MEMORY
+#define MBEDTLS_PLATFORM_MEMORY
 
 /**
  * \def MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
@@ -558,7 +558,7 @@
  *        macro is not defined. To completely disable return value check
  *        warnings, define #MBEDTLS_CHECK_RETURN with an empty expansion.
  */
-//#define MBEDTLS_CHECK_RETURN_WARNING
+#define MBEDTLS_CHECK_RETURN_WARNING
 
 /**
  * \def MBEDTLS_DEPRECATED_WARNING
@@ -705,7 +705,7 @@
  *
  * Uncomment to enable invasive tests.
  */
-//#define MBEDTLS_TEST_HOOKS
+// #define MBEDTLS_TEST_HOOKS
 
 /**
  * \def TF_PSA_CRYPTO_VERSION
@@ -750,7 +750,7 @@
  *
  * Uncomment to enable the LMS signature algorithm and private key operations.
  */
-//#define MBEDTLS_LMS_PRIVATE
+#define MBEDTLS_LMS_PRIVATE
 
 /**
  * \def MBEDTLS_MD_C
@@ -979,7 +979,7 @@
  *
  * Enable this option if this loss of security is acceptable to you.
  */
-//#define MBEDTLS_ENTROPY_NO_SOURCES_OK
+#define MBEDTLS_ENTROPY_NO_SOURCES_OK
 
 /**
  * \def MBEDTLS_ENTROPY_NV_SEED
@@ -1102,7 +1102,7 @@
  *   client-only builds (#MBEDTLS_PSA_CRYPTO_CLIENT enabled and
  *   #MBEDTLS_PSA_CRYPTO_C disabled).
  */
-#define MBEDTLS_PSA_BUILTIN_GET_ENTROPY
+//#define MBEDTLS_PSA_BUILTIN_GET_ENTROPY
 
 /** \def MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
  *
@@ -1118,7 +1118,7 @@
  * \warning This interface is experimental and may change or be removed
  * without notice.
  */
-//#define MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
+// #define MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
 
 /** \def MBEDTLS_PSA_CRYPTO_CLIENT
  *
@@ -1134,7 +1134,7 @@
  * \warning This interface is experimental and may change or be removed
  * without notice.
  */
-//#define MBEDTLS_PSA_CRYPTO_CLIENT
+#define MBEDTLS_PSA_CRYPTO_CLIENT
 
 /** \def MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
  *
@@ -1218,7 +1218,7 @@
  *           either MBEDTLS_PSA_ITS_FILE_C or a native implementation of
  *           the PSA ITS interface
  */
-#define MBEDTLS_PSA_CRYPTO_STORAGE_C
+//#define MBEDTLS_PSA_CRYPTO_STORAGE_C
 
 /**
  * \def MBEDTLS_PSA_DRIVER_GET_ENTROPY
@@ -1246,7 +1246,7 @@
  *   client-only builds (#MBEDTLS_PSA_CRYPTO_CLIENT enabled and
  *   #MBEDTLS_PSA_CRYPTO_C disabled).
  */
-//#define MBEDTLS_PSA_DRIVER_GET_ENTROPY
+#define MBEDTLS_PSA_DRIVER_GET_ENTROPY
 
 /**
  * \def MBEDTLS_PSA_ITS_FILE_C
@@ -1258,7 +1258,7 @@
  *
  * Requires: MBEDTLS_FS_IO
  */
-#define MBEDTLS_PSA_ITS_FILE_C
+//#define MBEDTLS_PSA_ITS_FILE_C
 
 /**
  * \def MBEDTLS_PSA_KEY_STORE_DYNAMIC
@@ -1503,7 +1503,7 @@
  *
  * This option is independent of \c MBEDTLS_AES_FEWER_TABLES.
  */
-//#define MBEDTLS_AES_ROM_TABLES
+#define MBEDTLS_AES_ROM_TABLES
 
 /**
  * \def MBEDTLS_AES_FEWER_TABLES
@@ -1524,7 +1524,7 @@
  *
  * This option is independent of \c MBEDTLS_AES_ROM_TABLES.
  */
-//#define MBEDTLS_AES_FEWER_TABLES
+#define MBEDTLS_AES_FEWER_TABLES
 
 /**
  * \def MBEDTLS_AES_ONLY_128_BIT_KEY_LENGTH
@@ -1582,7 +1582,7 @@
  *
  * Uncomment this macro to use less memory for Camellia.
  */
-//#define MBEDTLS_CAMELLIA_SMALL_MEMORY
+#define MBEDTLS_CAMELLIA_SMALL_MEMORY
 
 /**
  * Enable the verified implementations of ECDH primitives from Project Everest
@@ -1650,7 +1650,7 @@
  *
  * Uncomment this macro to enable restartable ECC computations.
  */
-//#define MBEDTLS_ECP_RESTARTABLE
+#define MBEDTLS_ECP_RESTARTABLE
 
 /**
  * Uncomment to enable using new bignum code in the ECC modules.
@@ -1674,7 +1674,7 @@
  *
  * Requires: The GCM built-in implementation
  */
-//#define MBEDTLS_GCM_LARGE_TABLE
+#define MBEDTLS_GCM_LARGE_TABLE
 
 /**
  * \def MBEDTLS_HAVE_ASM
@@ -1819,7 +1819,7 @@
  *
  * Uncomment to enable the smaller implementation of SHA256.
  */
-//#define MBEDTLS_SHA256_SMALLER
+#define MBEDTLS_SHA256_SMALLER
 
 /**
  * \def MBEDTLS_SHA256_USE_ARMV8_A_CRYPTO_IF_PRESENT
@@ -1898,7 +1898,7 @@
  *
  * Uncomment to enable the smaller implementation of SHA512.
  */
-//#define MBEDTLS_SHA512_SMALLER
+#define MBEDTLS_SHA512_SMALLER
 
 /**
  * \def MBEDTLS_SHA512_USE_A64_CRYPTO_IF_PRESENT
@@ -1983,5 +1983,5 @@
 
 /* Do not enable except for testing. Will be removed in a future minor version.
  */
-//#define TF_PSA_CRYPTO_ALLOW_REMOVED_MECHANISMS
+#define TF_PSA_CRYPTO_ALLOW_REMOVED_MECHANISMS
 #endif /* PSA_CRYPTO_CONFIG_H */
