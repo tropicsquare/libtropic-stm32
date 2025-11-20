@@ -105,6 +105,11 @@ endif()
 set(LT_USE_TREZOR_CRYPTO 0 CACHE INTERNAL "")
 set(LT_USE_MBEDTLS_V4 0 CACHE INTERNAL "")
 
+# Additional implementation files required by some CFPs.
+# E.g., MbedTLS needs user-provided implementation of mbedtls_ms_time() and other
+# platform-dependent functions.
+set(CFP_PORT_SRCS "")
+
 # Handle LT_CAL
 if(LT_CAL STREQUAL "trezor_crypto")
     message(STATUS "Crypto provider set to trezor_crypto")
@@ -126,14 +131,35 @@ elseif(LT_CAL STREQUAL "mbedtls_v4")
     add_subdirectory("${PATH_TO_LIBTROPIC}cal/mbedtls_v4" "mbedtls_v4_cal")
 
     # Developers who integrate Libtropic do not have to use this variable
-    # It's used in main.c to switch crypto contexts without manual changes
+    # It's  used in main.c to switch crypto contexts without manual changes
     set(LT_USE_MBEDTLS_V4 1)
 
+    # We configure MbedTLS using config file with following configuration:
+    # - config.py preset "crypto_baremetal"
+    # - following options enabled:
+    #   MBEDTLS_PLATFORM_MS_TIME_ALT
+    #   MBEDTLS_HAVE_TIME
+    #   MBEDTLS_PSA_DRIVER_GET_ENTROPY
+    # - following options disabled:
+    #   MBEDTLS_PSA_BUILTIN_GET_ENTROPY
+    #   MBEDTLS_TEST_HOOKS
+    #   MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
+    set(MBEDTLS_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_config.h")
+    set(TF_PSA_CRYPTO_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/crypto_config.h")
+    add_compile_definitions(MBEDTLS_CONFIG_FILE="${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_config.h")
+    add_compile_definitions(TF_PSA_CRYPTO_CONFIG_FILE="${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/crypto_config.h")
     set(ENABLE_TESTING OFF CACHE BOOL "Disable mbedtls_v4 test building.")
     set(ENABLE_PROGRAMS OFF CACHE BOOL "Disable mbedtls_v4 examples building.")
     add_subdirectory("${PATH_VENDOR}mbedtls_v4/" "mbedtls_v4")
 
     target_link_libraries(tropic PUBLIC mbedtls)
+
+    # MbedTLS needs platform-specific implementations of some functions,
+    # as it does not provide them for STM32.
+    # Here we provide time function implementation for STM32 using standard STM32 HAL.
+    set(CFP_PORT_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_platform.c
+    )
 else()
     get_property(lt_cal_choices CACHE LT_CAL PROPERTY STRINGS)
     message(FATAL_ERROR "Incorrect CAL set to LT_CAL!\nSupported CALs: ${lt_cal_choices}")
@@ -175,6 +201,9 @@ set(SOURCES
 
     # Libtropic HAL sources
     ${LT_HAL_SRCS}
+
+    # CFP port sources
+    ${CFP_PORT_SRCS}
 )
 
 # Include path for directories containing header files
