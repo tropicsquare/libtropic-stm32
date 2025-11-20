@@ -24,6 +24,7 @@
 #include <stdio.h>
 
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_rng.h"
 #include "stm32f4xx_nucleo_144.h"
 
 /* Exported types ------------------------------------------------------------*/
@@ -105,5 +106,8 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+
+/* Exported variables ------------------------------------------------------- */
+extern RNG_HandleTypeDef RNGHandle;
 
 #endif /* __MAIN_H */

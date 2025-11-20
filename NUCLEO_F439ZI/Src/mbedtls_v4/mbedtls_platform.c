@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "common.h"
+#include "main.h"
 #include "stm32f4xx_hal.h"
 #include "mbedtls/platform.h"
 #include "mbedtls/platform_time.h"
