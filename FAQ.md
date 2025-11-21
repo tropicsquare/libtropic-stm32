@@ -1,15 +1,14 @@
 # FAQ
 
-This list might help you resolve some issues.
+This list might help you resolve some issues. We also have an [FAQ with common problems](https://tropicsquare.github.io/libtropic/latest/faq) in the Libtropic SDK documentation.
 
 - [FAQ](#faq)
-  - [I cannot establish a secure session](#i-cannot-establish-a-secure-session)
   - [How to debug in VS Code?](#how-to-debug-in-vs-code)
   - [How to open the project in STM32CubeIDE?](#how-to-open-the-project-in-stm32cubeide)
 
-## I cannot establish a secure session
-
-You might be using wrong default pairing keys. Refer to [Default Pairing Keys for a Secure Channel Handshake](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/) section in libtropic documentation for more information.
+None of the above helped?
+- If you are a customer, contact Tropic Square via the [Support Portal](http://support.tropicsquare.com) or contact your business partners.  
+- Otherwise, [open an issue](https://github.com/tropicsquare/libtropic-linux/issues/new/choose).
 
 ## How to debug in VS Code?
 
