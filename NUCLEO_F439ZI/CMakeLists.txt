@@ -131,7 +131,7 @@ elseif(LT_CAL STREQUAL "mbedtls_v4")
     add_subdirectory("${PATH_TO_LIBTROPIC}cal/mbedtls_v4" "mbedtls_v4_cal")
 
     # Developers who integrate Libtropic do not have to use this variable
-    # It's  used in main.c to switch crypto contexts without manual changes
+    # It's used in main.c to switch crypto contexts without manual changes
     set(LT_USE_MBEDTLS_V4 1)
 
     # We configure MbedTLS using config file with following configuration:
