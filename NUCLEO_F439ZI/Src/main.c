@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include <inttypes.h>
 #include <string.h>
 
 #include "libtropic_examples.h"
@@ -65,6 +66,9 @@ static void Error_Handler(void);
 
 /* UART handle declaration */
 static UART_HandleTypeDef UartHandle;
+
+/* RNG handle declaration */
+RNG_HandleTypeDef RNGHandle;
 
 /**
  * @brief   Configures the UART peripheral
@@ -140,6 +144,14 @@ int main(void)
         Error_Handler();
     }
 
+    // IMPORTANT: Initialize RNG peripheral.
+    // Do not forget to do this in your application, as the
+    // Libtropic HAL uses RNG for entropy source!
+    RNGHandle.Instance = RNG;
+    if (HAL_RNG_Init(&RNGHandle) != HAL_OK) {
+        Error_Handler();
+    }
+
     // libtropic related code BEGIN
     // libtropic related code BEGIN
     // libtropic related code BEGIN
@@ -157,7 +169,7 @@ int main(void)
 #if LT_USE_MBEDTLS_V4
     psa_status_t status = psa_crypto_init();
     if (status != PSA_SUCCESS) {
-        LT_LOG_ERROR("PSA Crypto initialization failed, status=%d (psa_status_t)", status);
+        LT_LOG_ERROR("PSA Crypto initialization failed, status=%" PRId32 " (psa_status_t)", status);
         Error_Handler();
     }
 #endif
@@ -193,7 +205,9 @@ int main(void)
     device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
     device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
 
-    device.rng_handle.Instance = RNG;
+    // IMPORTANT: Do not forget to initialize RNG peripheral
+    // at the beginning of your application using HAL_RNG_Init()!
+    device.rng_handle = &RNGHandle;
 
 #ifdef LT_USE_INT_PIN
     device.int_gpio_bank = LT_INT_BANK;
@@ -252,6 +266,12 @@ int main(void)
     // libtropic related code END
     // libtropic related code END
     // libtropic related code END
+
+    // Not strictly necessary, but we deinitialize RNG here to
+    // demonstrate proper usage.
+    if (HAL_RNG_DeInit(&RNGHandle) != HAL_OK) {
+        Error_Handler();
+    }
 
     while (1) {
         BSP_LED_On(LED2);
