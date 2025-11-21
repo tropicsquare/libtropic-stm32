@@ -206,7 +206,7 @@ int main(void)
     device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
 
     // IMPORTANT: Do not forget to initialize RNG peripheral
-    // at the beggining  of your application using HAL_RNG_Init()!
+    // at the beginning of your application using HAL_RNG_Init()!
     device.rng_handle = &RNGHandle;
 
 #ifdef LT_USE_INT_PIN
