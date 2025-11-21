@@ -144,10 +144,11 @@ elseif(LT_CAL STREQUAL "mbedtls_v4")
     #   MBEDTLS_PSA_BUILTIN_GET_ENTROPY
     #   MBEDTLS_TEST_HOOKS
     #   MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
+    # We need to set both CMake variables and compile definitions for MbedTLS to pick up our config file.
     set(MBEDTLS_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_config.h")
     set(TF_PSA_CRYPTO_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/crypto_config.h")
-    add_compile_definitions(MBEDTLS_CONFIG_FILE="${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_config.h")
-    add_compile_definitions(TF_PSA_CRYPTO_CONFIG_FILE="${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/crypto_config.h")
+    add_compile_definitions(MBEDTLS_CONFIG_FILE="${MBEDTLS_CONFIG_FILE}")
+    add_compile_definitions(TF_PSA_CRYPTO_CONFIG_FILE="${TF_PSA_CRYPTO_CONFIG_FILE}")
     set(ENABLE_TESTING OFF CACHE BOOL "Disable mbedtls_v4 test building.")
     set(ENABLE_PROGRAMS OFF CACHE BOOL "Disable mbedtls_v4 examples building.")
     add_subdirectory("${PATH_VENDOR}mbedtls_v4/" "mbedtls_v4")
