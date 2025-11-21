@@ -16,6 +16,22 @@ This folder contains examples demonstrating how to use Libtropic on the [Nucleo 
 |------------|------------------|
 ```
 
+Contents:
+
+- [Nucleo F439ZI with Arduino Shield Tutorial](#nucleo-f439zi-with-arduino-shield-tutorial)
+  - [First Steps](#first-steps)
+    - [Install Dependencies](#install-dependencies)
+    - [System Setup](#system-setup)
+      - [GNU/Linux](#gnulinux)
+    - [Clone the libtropic-stm32 Repository](#clone-the-libtropic-stm32-repository)
+    - [Build Examples](#build-examples)
+    - [Run a Basic Example: Read CHIP ID and firmware versions](#run-a-basic-example-read-chip-id-and-firmware-versions)
+    - [Update Internal Firmware](#update-internal-firmware)
+  - [Running Advanced Examples](#running-advanced-examples)
+  - [Building Functional Tests](#building-functional-tests)
+    - [Implementation Details and Troubleshooting](#implementation-details-and-troubleshooting)
+  - [FAQ](#faq)
+
 ## First Steps
 > [!IMPORTANT]
 > **Do not skip these steps**. You will gather basic information about the chip (which you will need for any eventual support) and update your chip's firmware, which will guarantee compatibility with the latest Libtropic API.
