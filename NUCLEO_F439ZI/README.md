@@ -60,6 +60,21 @@ Make sure to have these dependencies installed:
   * On GNU/Linux (Ubuntu/Debian/Fedora/...) you can use `minicom`, `screen` or GTKTerm (recommended).
   * Windows: [PuTTY](https://putty.org/index.html) or [RealTerm](https://sourceforge.net/projects/realterm/)
 
+MbedTLS 4.0.0 which we use in this repository requires:
+
+* Recent Python
+* Following Python packages:
+  * jinja2
+  * jsonschema
+
+The recommended method is to use Python virtual environment to install those packages:
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+pip3 install --upgrade pip
+pip3 install jinja2 jsonschema
+```
+
 ### System Setup
 
 #### GNU/Linux
