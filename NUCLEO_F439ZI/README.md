@@ -63,11 +63,11 @@ Make sure to have these dependencies installed:
 MbedTLS 4.0.0 which we use in this repository requires:
 
 * Recent Python
-* Following Python packages:
+* The following Python packages:
   * jinja2
   * jsonschema
 
-The recommended method is to use Python virtual environment to install those packages:
+The recommended method is to use Python virtual environment to install those packages. Instructions for Linux:
 ```shell
 python3 -m venv .venv
 source .venv/bin/activate
