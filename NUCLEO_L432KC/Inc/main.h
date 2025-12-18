@@ -65,6 +65,9 @@
 // #define RCC_USARTxCLKSOURCE_HSI                  RCC_USART1CLKSOURCE_HSI
 
 /* Definition for SPIx clock resources */
+#define LT_SPI_CS_BANK GPIOA
+#define LT_SPI_CS_PIN GPIO_PIN_4
+#define LT_SPI_INSTANCE SPI1
 #define SPIx SPI1
 #define SPIx_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
 #define SPIx_SCK_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()

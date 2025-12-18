@@ -17,14 +17,54 @@ set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/STM32L432KCUX_FLASH.ld)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../toolchain.cmake)
 # Paths to stm32 drivers (added as a submodule)
 set(PATH_TO_STM32CUBEL4 "Vendor/STM32CubeL4/Drivers" )
+# Path to common vendor libraries
+set(PATH_VENDOR "../vendor/")
 # Path to libtropic (added as a submodule)
 if(NOT DEFINED PATH_TO_LIBTROPIC)
-    set(PATH_TO_LIBTROPIC "../libtropic")
+    set(PATH_TO_LIBTROPIC "../vendor/libtropic/")
 endif()
 
 if (NOT DEFINED LT_BUILD_EXAMPLES AND NOT DEFINED LT_BUILD_TESTS)
     message(FATAL_ERROR "Please define -DLT_BUILD_EXAMPLES=1 to build examples (and also select required example) or -DLT_BUILD_TESTS=1 to build tests. See docs. Nothing to do now, bye!")
 endif()
+
+include(${PATH_TO_LIBTROPIC}cmake/strict_compile_flags.cmake)
+
+###########################################################################
+#                                                                         #
+#   Options and user config                                               #
+#                                                                         #
+###########################################################################
+
+option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
+
+# Path to STLink UART device which will be used for reading test output.
+# You need to define this only if you:
+#   1. Want to run tests using CTest AND
+#   2. You are using standalone STM32 connected using built-in STLink AND
+#   3. STLink UART cannot be discovered automatically using the CTest script.
+if (NOT DEFINED STLINK_UART)
+    set(STLINK_UART "")
+endif()
+
+# Optional prefix to tests registered to CTest. Useful when running same test against
+# different chips to differentiate them by their name in JUnit output.
+if (NOT DEFINED CTEST_PREFIX)
+    set(CTEST_PREFIX "")
+endif()
+
+option(LT_TEST_RUNNER_DEBUG "Run lt_test_runner with debug output enabled." OFF)
+if (LT_TEST_RUNNER_DEBUG)
+    set(LT_TEST_RUNNER_FLAGS "-v")
+else()
+    set(LT_TEST_RUNNER_FLAGS "")
+endif()
+
+option(LT_STRICT_COMPILATION "Enable strict compilation flags" ON)
+
+# Select CAL
+set(LT_CAL "" CACHE STRING "Set a CAL (Crypto Abstraction Layer)")
+set_property(CACHE LT_CAL PROPERTY STRINGS "trezor_crypto" "mbedtls_v4")
 
 ###########################################################################
 #                                                                         #
@@ -32,8 +72,103 @@ endif()
 #                                                                         #
 ###########################################################################
 
-project(stm32_example LANGUAGES C ASM)
+project(
+    stm32_l432kc
+    DESCRIPTION "Example of Libtropic usage on Nucleo L432KC board"
+    LANGUAGES C ASM)
 
+###########################################################################
+#                                                                         #
+#   Add Libtropic                                                         #
+#                                                                         #
+###########################################################################
+
+add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
+if(LT_STRICT_COMPILATION)
+    message(STATUS "Enabling strict compilation flags.")
+    # Enable strict compile flags for Libtropic library
+    target_link_libraries(tropic PRIVATE libtropic::strict_comp_flags)
+endif()
+
+###########################################################################
+#                                                                         #
+#   Crypto backend handling                                               #
+#                                                                         #
+#   Note: The Libtropic consumer does not have to do this in his          #
+#   application, we do this to quickly switch crypto backends.            #
+#   Refer to the Libtropic documentation for more info about what should  #
+#   be done by the consumer.                                              #
+#                                                                         #
+###########################################################################
+
+# Developers who integrate Libtropic do not have to use these variables
+# It's used in main.c to switch crypto contexts without manual changes
+set(LT_USE_TREZOR_CRYPTO 0 CACHE INTERNAL "")
+set(LT_USE_MBEDTLS_V4 0 CACHE INTERNAL "")
+
+# Additional implementation files required by some CFPs.
+# E.g., MbedTLS needs user-provided implementation of mbedtls_ms_time() and other
+# platform-dependent functions.
+set(CFP_PORT_SRCS "")
+
+# Handle LT_CAL
+if(LT_CAL STREQUAL "trezor_crypto")
+    message(STATUS "Crypto provider set to trezor_crypto")
+    add_subdirectory("${PATH_TO_LIBTROPIC}cal/trezor_crypto" "trezor_crypto_cal")
+    
+    # Developers who integrate Libtropic do not have to use this variable
+    # It's used in main.c to switch crypto contexts without manual changes
+    set(LT_USE_TREZOR_CRYPTO 1)
+
+    add_subdirectory("${PATH_TO_LIBTROPIC}/vendor/trezor_crypto/" "trezor_crypto")
+    target_compile_definitions(trezor_crypto PRIVATE
+            AES_VAR
+            USE_INSECURE_PRNG
+            ed25519_verify=trezor_crypto_ed25519_verify # Rename symbol to avoid conflicts with ed25519 library used in tests
+        )
+    target_link_libraries(tropic PUBLIC trezor_crypto)
+elseif(LT_CAL STREQUAL "mbedtls_v4")
+    message(STATUS "Crypto provider set to mbedtls_v4")
+    add_subdirectory("${PATH_TO_LIBTROPIC}cal/mbedtls_v4" "mbedtls_v4_cal")
+
+    # Developers who integrate Libtropic do not have to use this variable
+    # It's used in main.c to switch crypto contexts without manual changes
+    set(LT_USE_MBEDTLS_V4 1)
+
+    # We configure MbedTLS using config file with following configuration:
+    # - config.py preset "crypto_baremetal"
+    # - following options enabled:
+    #   MBEDTLS_PLATFORM_MS_TIME_ALT
+    #   MBEDTLS_HAVE_TIME
+    #   MBEDTLS_PSA_DRIVER_GET_ENTROPY
+    # - following options disabled:
+    #   MBEDTLS_PSA_BUILTIN_GET_ENTROPY
+    #   MBEDTLS_TEST_HOOKS
+    #   MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS
+    # We need to set both CMake variables and compile definitions for MbedTLS to pick up our config file.
+    set(MBEDTLS_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_config.h")
+    set(TF_PSA_CRYPTO_CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/crypto_config.h")
+    add_compile_definitions(MBEDTLS_CONFIG_FILE="${MBEDTLS_CONFIG_FILE}")
+    add_compile_definitions(TF_PSA_CRYPTO_CONFIG_FILE="${TF_PSA_CRYPTO_CONFIG_FILE}")
+    set(ENABLE_TESTING OFF CACHE BOOL "Disable mbedtls_v4 test building.")
+    set(ENABLE_PROGRAMS OFF CACHE BOOL "Disable mbedtls_v4 examples building.")
+    add_subdirectory("${PATH_VENDOR}mbedtls_v4/" "mbedtls_v4")
+
+    target_link_libraries(tropic PUBLIC mbedtls)
+
+    # MbedTLS needs platform-specific implementations of some functions,
+    # as it does not provide them for STM32.
+    # Here we provide time function implementation for STM32 using standard STM32 HAL.
+    set(CFP_PORT_SRCS
+        ${CMAKE_CURRENT_SOURCE_DIR}/Src/mbedtls_v4/mbedtls_platform.c
+    )
+else()
+    get_property(lt_cal_choices CACHE LT_CAL PROPERTY STRINGS)
+    message(FATAL_ERROR "Incorrect CAL set to LT_CAL!\nSupported CALs: ${lt_cal_choices}")
+endif()
+
+target_sources(tropic PRIVATE ${LT_CAL_SRCS})
+target_include_directories(tropic PUBLIC ${LT_CAL_INC_DIRS})
 
 ###########################################################################
 #                                                                         #
@@ -41,15 +176,12 @@ project(stm32_example LANGUAGES C ASM)
 #                                                                         #
 ###########################################################################
 
+# Add Libtropic STM32 HAL
+add_subdirectory("${PATH_TO_LIBTROPIC}hal/stm32/nucleo_l432kc" "nucleo_l432kc_hal")
+
 # Specify other source files
 set(SOURCES ${SOURCES}
-    Src/main.c
-    Src/stm32l4xx_it.c
-    Src/stm32l4xx_hal_msp.c
-    Src/system_stm32l4xx.c
-    Src/startup_stm32l432kcux.s
-    Src/syscalls.c
-    Src/sysmem.c
+    # STM32 vendor HAL, BSP
     ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_l432kc.c
     ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/stm32l4xx_nucleo_32.c
     ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
@@ -61,127 +193,138 @@ set(SOURCES ${SOURCES}
     ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
     ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c
     ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
-)
 
-set(HAL_HEADERS
-    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/stm32l4xx_nucleo_32.h
-    ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_cortex.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_exti.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h
-)
+    # Project sources
+    Src/main.c
+    Src/stm32l4xx_it.c
+    Src/stm32l4xx_hal_msp.c
+    Src/system_stm32l4xx.c
+    Src/startup_stm32l432kcux.s
+    Src/syscalls.c
+    Src/sysmem.c
 
-set(HEADERS
-    Inc/main.h
-    Inc/stm32l4xx_hal_conf.h
-    Inc/stm32l4xx_it.h
-    ${HAL_HEADERS}
+    # Libtropic HAL sources
+    ${LT_HAL_SRCS}
+
+    # CFP port sources
+    ${CFP_PORT_SRCS}
 )
 
 # Include path for directories containing header files
-include_directories(
-    Inc/
+set(PROJ_INCLUDE_DIRS
+    # STM32 vendor HAL, BSP
+    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32
+    ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include
+    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc
     ${PATH_TO_STM32CUBEL4}/CMSIS/Core/Include/
-    ${PATH_TO_STM32CUBEL4}/CMSIS/Device/ST/STM32L4xx/Include/
-    ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/
-    ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Inc/
+
+    # Project includes
+    Inc/
+
+    # Libtropic HAL includes
+    ${LT_HAL_INC_DIRS}
 )
 
 # Add this so HAL knows what target MCU we use
 add_definitions(-D${STM32_DEVICE})
 
-###########################################################################
-#                                                                         #
-#   Add libtropic                                                         #
-#                                                                         #
-###########################################################################
+# Enable strict compile flags for main.c and Libtropic HAL sources
+if(LT_STRICT_COMPILATION)
+    set_source_files_properties(Src/main.c ${LT_HAL_SRCS} PROPERTIES COMPILE_OPTIONS "${LT_STRICT_COMPILATION_FLAGS}")   
+endif()
 
-# Libtropic related setup, use trezor crypto library for host side cryptography
-set(LT_CRYPTO "trezor_crypto")
+# Special dependencies for tests, such as signature verification libraries
+if(LT_BUILD_TESTS)
+    # micro-ecc library is used for ECDSA signature verification
+    add_library(micro_ecc_lib STATIC
+        ${PATH_VENDOR}/micro-ecc/uECC.c
+    )
 
-# Provide path to a root of libtropic repository
-add_subdirectory(${PATH_TO_LIBTROPIC} "libtropic")
+    target_include_directories(micro_ecc_lib PUBLIC # PUBLIC as it is also used in tropic target
+        ${PATH_VENDOR}/micro-ecc
+    )
 
+    target_link_libraries(tropic PRIVATE micro_ecc_lib)
+
+    # ed25519 library is used for EdDSA signature verification
+    add_library(ed25519_lib STATIC
+        ${PATH_VENDOR}/ed25519/src/verify.c
+        ${PATH_VENDOR}/ed25519/src/add_scalar.c
+        ${PATH_VENDOR}/ed25519/src/fe.c
+        ${PATH_VENDOR}/ed25519/src/ge.c
+        ${PATH_VENDOR}/ed25519/src/key_exchange.c
+        ${PATH_VENDOR}/ed25519/src/keypair.c
+        ${PATH_VENDOR}/ed25519/src/sc.c
+        ${PATH_VENDOR}/ed25519/src/seed.c
+        ${PATH_VENDOR}/ed25519/src/sha512.c
+        ${PATH_VENDOR}/ed25519/src/sign.c
+    )
+
+    target_include_directories(ed25519_lib PUBLIC # PUBLIC as it is also used in tropic target
+        ${PATH_VENDOR}/ed25519/src/
+    )
+
+    target_link_libraries(tropic PRIVATE ed25519_lib)
+endif()
 
 ###########################################################################
 #                                                                         #
 #   EXAMPLES CONFIGURATION                                                #
 #                                                                         #
+#   To build examples, use -DLT_BUILD_EXAMPLES=1 in cmake invocation.     #
+#                                                                         #
 ###########################################################################
 
 if (LT_BUILD_EXAMPLES)
-    # -------------------------------------------------------------------------
-    # Add executable for examples
-    # -------------------------------------------------------------------------
-    add_executable(stm32_example.elf ${SOURCES} ${HEADERS})
 
-    # -------------------------------------------------------------------------
-    # Set on which USART pins will be output routed
-    # -------------------------------------------------------------------------
+    # DISABLE IRREVERSIBLE EXAMPLES FOR SAFETY
+    # These examples perform irreversible operations on the TROPIC01.
+    # They are disabled by default to prevent accidental usage and should
+    # be normally used only with the model.
+    list(REMOVE_ITEM LIBTROPIC_EXAMPLE_LIST "lt_ex_hardware_wallet")
 
-    # Used for testing. Do not use it on when running on standalone Nucleo board
-    if (LT_TESTING_RIG)
-        target_compile_definitions(stm32_example.elf PRIVATE LT_TESTING_RIG)
-    endif()
+    # So we can include preprocessed example registry (lt_ex_registry.c.inc).
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/libtropic)
 
-    #target_link_options(stm32_example.elf PRIVATE -Wl,--gc-sections -Wl,--strip-all)  # Use this to make compiled size smaller
-    target_link_libraries(stm32_example.elf PRIVATE tropic)
+    # Loop through examples defined in libtropic and prepare environment.
+    foreach(example_name IN LISTS LIBTROPIC_EXAMPLE_LIST)
 
-    # -------------------------------------------------------------------------
-    # Example selection
-    #                                                                    
-    # Define which examples will be compiled into main().              
-    # If any of examples or test routines is enabled, libtropic will be
-    # compiled with all examples exposed and a concrete example or test routine
-    # will be enabled in main() int this project.                              
-    #                                                                    
-    # -------------------------------------------------------------------------
+        # Create a correct macro from example name.
+        string(TOUPPER ${example_name} example_macro)
+        string(REPLACE " " "_" example_macro ${example_macro})
 
-    # Compile examples:
-    # -DLT_EX_FW_UPDATE=1
-    if(LT_EX_FW_UPDATE)
-        set(LT_ENABLE_FW_UPDATE ON)
-        # This line will enable lt_ex_fw_update() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_FW_UPDATE)
-    endif()
-    # -DLT_EX_HELLO_WORLD=1
-    if(LT_EX_HELLO_WORLD)
-        # This line will enable lt_ex_hello_world() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HELLO_WORLD)
-    endif()
-    # -DLT_EX_HW_WALLET=1
-    if(LT_EX_HW_WALLET)
-        # This line will enable lt_ex_hw_wallet() example in final executable
-        target_compile_definitions(stm32_example.elf PRIVATE LT_EX_HW_WALLET)
-    endif()
+        set(exe_name ${example_name}.elf)
 
-    # -------------------------------------------------------------------------
-    # Compilation outputs for examples
-    # -------------------------------------------------------------------------
+        # Define executable (separate for each example) and link dependencies.
+        add_executable(${exe_name} ${SOURCES})
+        target_include_directories(${exe_name} PRIVATE ${PROJ_INCLUDE_DIRS})
+        target_link_libraries(${exe_name} PRIVATE tropic)
 
-    # Create a binary from the elf
-    add_custom_command(TARGET stm32_example.elf POST_BUILD
-        COMMAND arm-none-eabi-objcopy -Oihex stm32_example.elf stm32_example.hex
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
+        # Enable example registry using LT_BUILD_EXAMPLES and choose correct example for the binary.
+        target_compile_definitions(${exe_name} PRIVATE LT_BUILD_EXAMPLES)
+        target_compile_definitions(${exe_name} PRIVATE ${example_macro})
 
-    add_custom_command(TARGET stm32_example.elf
-        POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} ARGS -O binary stm32_example.elf stm32_example.bin
-    )
+        # Developers who integrate Libtropic do not have to use these variables
+        # It's used in main.c to switch crypto contexts without manual changes
+        target_compile_definitions(${exe_name} PRIVATE
+            LT_USE_TREZOR_CRYPTO=${LT_USE_TREZOR_CRYPTO}
+            LT_USE_MBEDTLS_V4=${LT_USE_MBEDTLS_V4}
+        )
 
-    add_custom_target(flash
-        COMMAND openocd -f ${OPENOCD_CFG} -c 'program stm32_example.elf verify reset exit'
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS stm32_example.elf
-    )
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
+
+        # Use INT pin to check whether TROPIC01 has some response
+        # (If not set, by default host will poll every few ms)
+        if (LT_USE_INT_PIN)
+            set(LT_USE_INT_PIN ON)
+            target_compile_definitions(${exe_name} PRIVATE LT_USE_INT_PIN)
+        endif()
+
+    endforeach()
+
 endif()
 
 ###########################################################################
@@ -189,8 +332,8 @@ endif()
 # FUNCTIONAL TESTS CONFIGURATION                                          #
 #                                                                         #
 # This section will automatically configure CTest for launching tests     #
-# defined in libtropic. Do NOT hardcode any test definitions here.        #
-# Define them in libtropic.                                               #
+# defined in Libtropic. Do NOT hardcode any test definitions here.        #
+# Define them in Libtropic.                                               #
 #                                                                         #
 # To build functional tests, use -DLT_BUILD_TESTS=1 in cmake invocation.  #
 #                                                                         #
@@ -215,16 +358,55 @@ if(LT_BUILD_TESTS)
         # set(bin_name ${test_name}.bin)
 
         # Define executable (separate for each test) and link dependencies.
-        add_executable(${exe_name} ${SOURCES} ${HEADERS})
+        add_executable(${exe_name} ${SOURCES})
+        target_include_directories(${exe_name} PRIVATE ${PROJ_INCLUDE_DIRS})
         target_link_libraries(${exe_name} PRIVATE tropic)
 
         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
         target_compile_definitions(${exe_name} PRIVATE LT_BUILD_TESTS)
         target_compile_definitions(${exe_name} PRIVATE ${test_macro})
 
-        # This is needed for our target to define correct UART output -- the test rig is connected
-        # to an external UART.
-        target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        # Developers who integrate Libtropic do not have to use these variables
+        # It's used in main.c to switch crypto contexts without manual changes
+        target_compile_definitions(${exe_name} PRIVATE
+            LT_USE_TREZOR_CRYPTO=${LT_USE_TREZOR_CRYPTO}
+            LT_USE_MBEDTLS_V4=${LT_USE_MBEDTLS_V4}
+        )
+
+        if(CTEST_PREFIX STREQUAL "")
+            set(TEST_NAME_WITH_PREFIX ${test_name})
+        else()
+            set(TEST_NAME_WITH_PREFIX ${CTEST_PREFIX}_${test_name})
+        endif()
+
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            # Redirect serial output to external UART (instead of using built-in STLink)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+            
+            # Add CTest entry.
+            add_test(NAME ${TEST_NAME_WITH_PREFIX}
+                    COMMAND python3 -m lt_test_runner ${LT_TEST_RUNNER_FLAGS} stm32_f439zi ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
+            )
+            
+            # Correctly define Python module path, so we can call lt_test_runner.
+            get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
+            set_tests_properties(${TEST_NAME_WITH_PREFIX} PROPERTIES
+                ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
+            )
+        else()
+            # Add CTest entry.
+            add_test(NAME ${TEST_NAME_WITH_PREFIX}
+                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh ${CMAKE_CURRENT_BINARY_DIR}/${exe_name} ${STLINK_UART}
+            )
+        endif()
+
+        # Use INT pin to check whether TROPIC01 has some response
+        # (If not set, by default host will poll every few ms)
+        if (LT_USE_INT_PIN)
+            set(LT_USE_INT_PIN ON)
+            target_compile_definitions(${exe_name} PRIVATE LT_USE_INT_PIN)
+        endif()
 
         # We don't need binary format for now.
         # add_custom_command(TARGET ${exe_name}
@@ -234,14 +416,5 @@ if(LT_BUILD_TESTS)
         #     COMMENT "Converting ${exe_name} to ${bin_name}"
         # )
 
-        # Add CTest entry.
-        add_test(NAME ${test_name}
-                COMMAND python3 -m lt_test_runner stm32_l432kc ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
-        )
-        # Correctly define Python module path, so we can call lt_test_runner.
-        get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
-        set_tests_properties(${test_name} PROPERTIES
-            ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
-        )
     endforeach()
 endif()
