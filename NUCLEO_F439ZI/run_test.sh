@@ -69,6 +69,20 @@ serial_reader() {
 serial_reader &
 READER_PID=$!
 
+# Ensure the background serial reader is killed on script termination
+cleanup() {
+    if [ -n "${READER_PID:-}" ]; then
+        if kill -0 "$READER_PID" 2>/dev/null; then
+            kill "$READER_PID" 2>/dev/null || true
+            wait "$READER_PID" 2>/dev/null || true
+        fi
+    fi
+}
+
+# On Ctrl+C or TERM, kill the reader and exit with 130. Always run cleanup on EXIT.
+trap 'cleanup; exit 130' INT TERM
+trap 'cleanup' EXIT
+
 # ---- Flash the device ----
 if [ -z "$STLINK_SERIAL_NUMBER" ]; then
     echo "OpenOCD will autodiscover STLink programming interface."
