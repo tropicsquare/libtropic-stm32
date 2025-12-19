@@ -52,7 +52,7 @@ serial_reader() {
     GOT_ERROR=0
     exec 3<"$DEV"
     while IFS= read -t 60 -r -u 3 line; do
-        printf 'LINE: %s\n' "$line"
+        printf 'STM32: %s\n' "$line"
 
         if [[ "$line" == *"$SENTINEL_FAIL_1"* ]] \
         || [[ "$line" == *"$SENTINEL_FAIL_2"* ]] \
