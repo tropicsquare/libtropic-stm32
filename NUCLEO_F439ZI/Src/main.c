@@ -25,6 +25,7 @@
 
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
+#include "lt_test_common.h"
 #include "libtropic_logging.h"
 #include "libtropic_port_stm32_nucleo_f439zi.h"
 #include "syscalls.h"
