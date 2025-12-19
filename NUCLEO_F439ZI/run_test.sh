@@ -1,30 +1,36 @@
 #!/usr/bin/env bash
 
-if [ -z $1 ]; then
+BINARY_PATH="$1"
+STLINK_SERIAL_NUMBER="$2"
+
+if [ -z "$BINARY_PATH" ]; then
     echo "libtropic f439zi script for flashing and running tests"
-    echo "usage: ./run_test.sh PATH_TO_BINARY [PATH_TO_STLINK_UART]"
+    echo "usage: ./run_test.sh PATH_TO_BINARY [STLINK_SERIAL_NUMBER]"
     exit 1
 fi
 
-if [ -z $2 ]; then
-    echo "No UART selected, trying to autodiscover STLink UART..."
-    STLINKS=$(ls /dev/serial/by-id/usb-STMicroelectronics_STM32_STLink_*)
+if [ -z "$STLINK_SERIAL_NUMBER" ]; then
+    echo "No STLink serial number provided, trying to autodiscover STLink UART..."
+    DEV=$(find /dev/serial/by-id/ -type l -iname "usb-STMicroelectronics_STM32_STLink_*" | head -n1)
 
     if [ $? -ne 0 ]; then
         echo "No STLinks discovered. Please provide path manually."
         exit 1
     fi
 
-    DEV=$(echo $STLINKS | head -n 1)
     echo "Using autodiscovered STLink UART: $DEV"
 else
+    echo "Using STLink serial number: $STLINK_SERIAL_NUMBER"
+    echo "Looking for corresponding UART device..."
 
-    if ! ls "$2"; then
-        echo "Cannot open UART at $2, terminating."
+    DEV=$(find /dev/serial/by-id/ -type l -iname "*${STLINK_SERIAL_NUMBER}*" | head -n1)
+
+    if ! ls "$DEV"; then
+        echo "Cannot open UART of ST-Link with serial number $STLINK_SERIAL_NUMBER, terminating."
         exit 1
     fi
 
-    DEV="$2"
+    echo "Using UART device: $DEV"
 fi
 
 BAUD="115200"
@@ -43,21 +49,20 @@ stty -F "$DEV" "$BAUD" \
   -icrnl -inlcr -igncr -opost min 1 time 0
 
 serial_reader() {
-    FAILED=0
+    GOT_ERROR=0
     exec 3<"$DEV"
-    while IFS= read -r -u 3 line; do
-        line="${line%$'\r'}"  # strip trailing CR
-        printf '%s\n' "$line"
+    while IFS= read -t 60 -r -u 3 line; do
+        printf 'LINE: %s\n' "$line"
 
         if [[ "$line" == *"$SENTINEL_FAIL_1"* ]] \
         || [[ "$line" == *"$SENTINEL_FAIL_2"* ]] \
         || [[ "$line" == *"$SENTINEL_FAIL_3"* ]]; then
-            FAILED=1
+            GOT_ERROR=1
         elif [[ "$line" == *"$SENTINEL_OK"* ]]; then
-            return $FAILED
+            return $GOT_ERROR
         fi
     done
-    return $FAILED
+    return 2 # Timeout or serial read error
 }
 
 # Start serial reading in background
@@ -65,11 +70,27 @@ serial_reader &
 READER_PID=$!
 
 # ---- Flash the device ----
-openocd -f board/stm32f429discovery.cfg -c "program $1 verify reset exit"
+if [ -z "$STLINK_SERIAL_NUMBER" ]; then
+    echo "OpenOCD will autodiscover STLink programming interface."
+    openocd -f board/stm32f429discovery.cfg -c "program $BINARY_PATH verify reset exit"
+else
+    OPENOCD_SERIAL_NUMBER_ARG=
+    echo "OpenOCD will use STLink serial number $STLINK_SERIAL_NUMBER for programming."
+    openocd -f board/stm32f429discovery.cfg -c "adapter serial $STLINK_SERIAL_NUMBER" -c "program $BINARY_PATH verify reset exit"
+fi
 
 # ---- Wait for serial reader to finish ----
+set +e
 wait $READER_PID
 EXIT_CODE=$?
+set -e
 
-echo "Serial reader exited with code $EXIT_CODE."
+if [ $EXIT_CODE -eq 0 ]; then
+    echo "Test finished successfully."
+elif [ $EXIT_CODE -eq 1 ]; then
+    echo "Test failed."
+else
+    echo "Serial read error or timeout."
+fi
+
 exit $EXIT_CODE
