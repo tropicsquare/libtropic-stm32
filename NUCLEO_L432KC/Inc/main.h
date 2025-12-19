@@ -88,4 +88,7 @@
 #define SPIx_MOSI_GPIO_PORT GPIOA
 #define SPIx_MOSI_AF GPIO_AF5_SPI1
 
+/* Exported variables ------------------------------------------------------- */
+extern RNG_HandleTypeDef RNGHandle;
+
 #endif /* __MAIN_H */

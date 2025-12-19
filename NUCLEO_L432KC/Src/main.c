@@ -20,11 +20,21 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
+#include <inttypes.h>
 #include "main.h"
 
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
 #include "libtropic_logging.h"
+#include "libtropic_port_stm32_nucleo_l432kc.h"
+#include "lt_test_common.h"
+
+#if LT_USE_TREZOR_CRYPTO
+#include "libtropic_trezor_crypto.h"
+#elif LT_USE_MBEDTLS_V4
+#include "libtropic_mbedtls_v4.h"
+#include "psa/crypto.h"
+#endif
 
 /** @addtogroup STM32L4xx_HAL_Examples
  * @{
@@ -56,6 +66,9 @@ static void Error_Handler(void);
 
 /* DEBUG UART handle declaration */
 static UART_HandleTypeDef UartHandle;
+
+/* RNG handle declaration */
+RNG_HandleTypeDef RNGHandle;
 
 /**
  * @brief   Configures the DEBUG UART peripheral

@@ -38,13 +38,12 @@ include(${PATH_TO_LIBTROPIC}cmake/strict_compile_flags.cmake)
 
 option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
 
-# Path to STLink UART device which will be used for reading test output.
+# Serial number of the STLink device which will be used for flashing and reading test output.
 # You need to define this only if you:
 #   1. Want to run tests using CTest AND
-#   2. You are using standalone STM32 connected using built-in STLink AND
-#   3. STLink UART cannot be discovered automatically using the CTest script.
-if (NOT DEFINED STLINK_UART)
-    set(STLINK_UART "")
+#   2. You have multiple STM32s connected using built-in STLink.
+if (NOT DEFINED STLINK_SERIAL_NUMBER)
+    set(STLINK_SERIAL_NUMBER "")
 endif()
 
 # Optional prefix to tests registered to CTest. Useful when running same test against
@@ -182,7 +181,7 @@ add_subdirectory("${PATH_TO_LIBTROPIC}hal/stm32/nucleo_l432kc" "nucleo_l432kc_ha
 # Specify other source files
 set(SOURCES ${SOURCES}
     # STM32 vendor HAL, BSP
-    ${PATH_TO_LIBTROPIC}/hal/port/stm32/lt_port_stm32_nucleo_l432kc.c
+    ${PATH_TO_LIBTROPIC}/hal/stm32/nucleo_l432kc/libtropic_port_stm32_nucleo_l432kc.c
     ${PATH_TO_STM32CUBEL4}/BSP/STM32L4xx_Nucleo_32/stm32l4xx_nucleo_32.c
     ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
     ${PATH_TO_STM32CUBEL4}/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
@@ -230,7 +229,7 @@ add_definitions(-D${STM32_DEVICE})
 
 # Enable strict compile flags for main.c and Libtropic HAL sources
 if(LT_STRICT_COMPILATION)
-    set_source_files_properties(Src/main.c ${LT_HAL_SRCS} PROPERTIES COMPILE_OPTIONS "${LT_STRICT_COMPILATION_FLAGS}")   
+    set_source_files_properties(${LT_HAL_SRCS} PROPERTIES COMPILE_OPTIONS "${LT_STRICT_COMPILATION_FLAGS}")   
 endif()
 
 # Special dependencies for tests, such as signature verification libraries
@@ -397,7 +396,7 @@ if(LT_BUILD_TESTS)
         else()
             # Add CTest entry.
             add_test(NAME ${TEST_NAME_WITH_PREFIX}
-                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh ${CMAKE_CURRENT_BINARY_DIR}/${exe_name} ${STLINK_UART}
+                    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/run_test.sh ${CMAKE_CURRENT_BINARY_DIR}/${exe_name} ${STLINK_SERIAL_NUMBER}
             )
         endif()
 
