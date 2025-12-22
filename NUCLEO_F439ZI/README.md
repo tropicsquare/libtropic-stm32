@@ -136,6 +136,9 @@ On Windows and other platforms you have to invoke OpenOCD manually.
 
 Save the output of this example for future reference.
 
+> [!IMPORTANT]
+> The flash script will try to autodiscover STLink interface. However, if you have multiple STLinks connected to your computer, it can fail. In that case, provide a serial number of the STLink you want to use as a second argument to the flash script: `./flash.sh build/lt_ex_show_chip_id_and_fwver.elf <serial_number>`.
+
 ### Update Internal Firmware
 After trying out communication and noting CHIP ID and firmware versions using the first example, upgrade TROPIC01's internal firmware, as newer versions fix bugs and ensure compatibility with the latest Libtropic SDK.
 
@@ -204,11 +207,13 @@ ctest -R _rev_
 > To see all output, use `--verbose` or `-V`.
 
 ### Implementation Details and Troubleshooting
-CTest uses the `run_test.sh` script, which flashes a binary containing the test and immediately reads the serial port output to evaluate the test results. This script attempts to automatically detect your NUCLEO board's serial port. However, if you are using a non-standard setup (e.g., a different ST-Link, special OS configuration) or have multiple NUCLEOs connected to your computer, you must manually specify the path to the serial port during CTest configuration:
+CTest uses the `run_test.sh` script, which flashes a binary containing the test and immediately reads the serial port output to evaluate the test results. This script attempts to automatically detect your NUCLEO board's ST-Link. However, if you have multiple NUCLEOs connected to your computer, you must specify your ST-Link's serial number as a CMake parameter:
 
 ```bash
-cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto -DSTLINK_UART=<path> ..
+cmake -DLT_BUILD_TESTS=1 -DLT_CAL=trezor_crypto -DSTLINK_SERIAL_NUMBER=<serial_number> ..
 ```
+
+If you do not use the onboard ST-Link or you have any special setup (e.g., you flash via JTAG), you cannot use provided scripting and you have to create your own.
 
 ## FAQ
 
