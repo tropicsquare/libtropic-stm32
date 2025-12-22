@@ -49,7 +49,7 @@ Make sure to have these dependencies installed:
   * Fedora: `sudo dnf install cmake`
   * Windows: [official web](https://cmake.org/download/)
 * arm-none-eabi-gcc
-  * Ubuntu/Debian: `sudo apt install arm-none-eabi-gcc`
+  * Ubuntu/Debian: `sudo apt install gcc-arm-none-eabi`
   * Fedora: `sudo dnf install arm-none-eabi-gcc`
   * Windows: [official web](https://developer.arm.com/downloads/-/gnu-rm)
 * OpenOCD (https://openocd.org/pages/getting-openocd.html)
