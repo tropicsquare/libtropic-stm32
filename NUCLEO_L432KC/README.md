@@ -1,13 +1,8 @@
-# Nucleo L432KC + TROPIC01 Arduino shield
+# Nucleo L432KC Tutorial
+This folder contains examples demonstrating how to use Libtropic on the [Nucleo L432KC](https://os.mbed.com/platforms/ST-Nucleo-L432KC/) STMicroelectronics development board. The examples assume the TROPIC01 Arduino shield or an equivalent wiring to the pins listed below.
 
- > [!WARNING]
- > L432KC example is no longer updated and it stays here only for historical reasons.
+**Note:** We do not ship an Arduino shield for this board; if you're using a custom PCB or MikroE's Secure Tropic Click, wire TROPIC01 accordingly (table below).
 
-This folder contains examples of libtropic's usage on [Nucleo L432KC](https://os.mbed.com/platforms/ST-Nucleo-L432KC/) ST Microelectronic's development board.
-
-Contributors, please follow [guidelines](https://github.com/tropicsquare/libtropic-stm32/blob/master/CONTRIBUTING.md).
-
-We don't provide shield for this board, example expects TROPIC01 to be wired to the following pins:
 ```
 |------------|-----------------|-----------------|
 |  TROPIC01  |  STM32L432KCU6  |  NUCLEO L432KC  |
@@ -20,11 +15,81 @@ We don't provide shield for this board, example expects TROPIC01 to be wired to 
 |  CS        |  GPIOA_PIN_4    |  A3             |
 |------------|-----------------|-----------------|
 ```
+
 ![NUCLEO L432KC wiring](img/nucleo_L432KC_connection_to_tropic.jpg)
 
-## Clone
+Contents:
 
-This repository must be cloned recursively, because it contains submodules with libtropic SDK and STM32's drivers.
+- [First Steps](#first-steps)
+	- [Install Dependencies](#install-dependencies)
+	- [System Setup](#system-setup)
+		- [GNU/Linux](#gnulinux)
+	- [Clone the libtropic-stm32 Repository](#clone-the-libtropic-stm32-repository)
+	- [Build Examples](#build-examples)
+	- [Run a Basic Example: Read CHIP ID and firmware versions](#run-a-basic-example-read-chip-id-and-firmware-versions)
+	- [Update Internal Firmware](#update-internal-firmware)
+- [Running Advanced Examples](#running-advanced-examples)
+- [Building Functional Tests](#building-functional-tests)
+	- [Implementation Details and Troubleshooting](#implementation-details-and-troubleshooting)
+- [FAQ](#faq)
+
+## First Steps
+> [!IMPORTANT]
+> **Do not skip these steps**. You will gather basic information about the chip (which you will need for any eventual support) and update your chip's firmware, which will guarantee compatibility with the latest Libtropic API.
+
+Before proceeding, familiarize yourself with the [Libtropic SDK documentation](https://tropicsquare.github.io/libtropic/latest/).
+
+> [!TIP]
+> For this tutorial, we recommend using a Linux machine if available.
+
+### Install Dependencies
+Make sure to have these dependencies installed:
+
+* CMake
+	* Ubuntu/Debian: `sudo apt install cmake`
+	* Fedora: `sudo dnf install cmake`
+	* Windows: [official web](https://cmake.org/download/)
+* arm-none-eabi-gcc
+	* Ubuntu/Debian: `sudo apt install gcc-arm-none-eabi`
+	* Fedora: `sudo dnf install arm-none-eabi-gcc`
+	* Windows: [official web](https://developer.arm.com/downloads/-/gnu-rm)
+* OpenOCD (https://openocd.org/pages/getting-openocd.html)
+	* Ubuntu/Debian: `sudo apt install openocd`
+	* Fedora: `sudo dnf install openocd`
+	* Windows: build from source or find pre-built binaries
+* Serial monitor of your choice (`minicom`, `screen`, `GTKTerm`, `PuTTY`, or `RealTerm`)
+
+MbedTLS 4.0.0 used in this repository requires:
+
+* Recent Python
+* The following Python packages:
+	* jinja2
+	* jsonschema
+
+Recommended (Linux) setup with a Python virtual environment:
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+pip3 install --upgrade pip
+pip3 install jinja2 jsonschema
+```
+
+### System Setup
+
+#### GNU/Linux
+To upload example programs, ensure you have access to USB devices (usually by being a member of the `plugdev` group) and to serial ports (usually the `dialout` group). Configure udev rules if required by OpenOCD.
+
+```bash
+# Check current groups
+groups
+# Add yourself to required groups if needed
+sudo usermod -aG plugdev "$USER"
+sudo usermod -aG dialout "$USER"
+```
+
+### Clone the libtropic-stm32 Repository
+
+This repository must be cloned recursively because it contains submodules with dependencies (such as Libtropic and STM32 libraries).
 
 ```bash
 git clone https://github.com/tropicsquare/libtropic-stm32.git
@@ -33,131 +98,115 @@ git submodule update --init --recursive
 cd NUCLEO_L432KC/
 ```
 
-## Dependencies and Requirements
+### Build Examples
 
-You need to have:
-* cmake (Could be installed with `sudo apt install cmake`)
-* arm-none-eabi-gcc (Could be installed with `sudo apt install gcc-arm-none-eabi`)
-* openocd (https://openocd.org/pages/getting-openocd.html)
+All examples are implemented in the [Libtropic](https://github.com/tropicsquare/libtropic) repository. For more information, see the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the Libtropic SDK documentation.
 
-# Build All Examples
-
-All examples are implemented in the [libtropic](https://github.com/tropicsquare/libtropic) repository. For more information about them, refer to the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the libtropic documentation.
-
-Build all examples in one place with following commands:
+Build examples with the recommended configuration:
 
 ```bash
 mkdir build
 cd build
-cmake -DLT_BUILD_EXAMPLES=1 ..
+cmake -DLT_BUILD_EXAMPLES=1 -DLT_CAL=mbedtls_v4 ..
 make
 ```
-For each example, an ELF binary will be created in the build directory. Once all examples are built, continue with following chapter.
 
-# Recommended First Steps
+> [!NOTE]
+> `-DLT_CAL` selects the Cryptographic Function Provider. We provide multiple providers — refer to the [Supported Cryptographic Functionality Providers](https://tropicsquare.github.io/libtropic/latest/other/supported_cfps/) section in the Libtropic SDK documentation.
 
-The Nucleo board provides a virtual serial port over USB. To view the output from the examples, connect to this serial port using a terminal emulator (e.g., `minicom`, `screen`, or PuTTY).
+For each example, an ELF binary will be created in the `build` directory. Once built, continue with the following section.
 
- > [!IMPORTANT]
- > Before you start with various examples, we strongly recommend to do two things first:
- > * Read CHIP ID and TROPIC01's firmware versions and **save printed output for future reference**
- > * Update TROPIC01's both internal firmware to latest version.
+### Run a Basic Example: Read CHIP ID and firmware versions
+The Nucleo board provides a virtual serial port over USB. To view example output, connect to this serial port using your preferred serial monitor.
 
- > [!TIP]
- > If you want to do a quick connectivity check for example with 'Hello World' example, all elf binaries are available [here](https://github.com/tropicsquare/libtropic-stm32/actions/workflows/build_and_upload_examples.yml) (click on latest workflow run, scroll down to `Artifacts` and download an artifact for your board).
+First run the `lt_ex_show_chip_id_and_fwver` example — it prints the CHIP ID and TROPIC01 firmware versions. Flash it using the provided script on Linux:
 
-## Display And Save Chip ID And Fw Versions
-To display actual versions of internal firmwares and details from CHIP ID data field, program and execute following example:
-```bash
+```sh
 ./flash.sh build/lt_ex_show_chip_id_and_fwver.elf
 ```
 
-We recommend to save printed output for future reference.
+On other platforms, invoke OpenOCD manually.
 
-## Update Internal Firmwares
+Save the output of this example for future reference.
 
-To update both internal firmwares to latest versions program and execute following example:
+> [!IMPORTANT]
+> The `flash.sh` script attempts to autodiscover the ST-Link interface. If multiple ST-Links are connected, provide the ST-Link serial number as a second argument: `./flash.sh build/lt_ex_show_chip_id_and_fwver.elf <serial_number>`.
+
+### Update Internal Firmware
+After reading CHIP ID and firmware versions, update TROPIC01's internal firmware to ensure compatibility with the latest Libtropic SDK.
+
+> [!IMPORTANT]
+> - Using outdated firmware is not recommended.
+> - Save output from `lt_ex_show_chip_id_and_fwver` before updating.
+> - Use a stable power source and avoid disconnecting the board during an update.
+
+To update both internal firmware components to the latest versions:
 ```bash
 ./flash.sh build/lt_ex_fw_update.elf
 ```
 
-After successfull execution your chip will contain latest firmwares and will be compatible with libtropic API.
+After successful execution your chip will contain the latest firmware and be compatible with the current Libtropic API.
 
-## Building and Running Other Examples
+## Running Advanced Examples
 
-> [!WARNING]
-> Some examples cause irreversible changes to the chip. For more details, refer to the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the libtropic documentation.
+> [!IMPORTANT]
+> Make sure you already ran the basic examples described above.
 
+> [!CAUTION]
+> Some examples cause **irreversible changes** to the chip. Read the [Examples](https://tropicsquare.github.io/libtropic/latest/get_started/examples/) section in the Libtropic documentation to learn which examples are irreversible and what they do.
 
-For each built example, a binary was created in the build directory. For example, flash and execute the `lt_ex_hello_world` example as:
+Run other examples the same way:
+
 ```bash
-./flash.sh build/lt_ex_hello_world.elf
-```
-In your serial port you should see some output similar to this:
-```bash
-INFO    [  21] ======================================
-INFO    [  22] ==== TROPIC01 Hello World Example ====
-INFO    [  23] ======================================
-INFO    [  27] Initializing handle
-INFO    [  35] Starting Secure Session with key 0
-INFO    [  43] 	-------------------------------------------------
-INFO    [  46] Sending Ping command with message:
-INFO    [  47] 	"This is Hello World message from TROPIC01!!"
-INFO    [  55] 	-------------------------------------------------
-INFO    [  57] Message received from TROPIC01:
-INFO    [  58] 	"This is Hello World message from TROPIC01!!"
-INFO    [  59] 	-------------------------------------------------
-INFO    [  61] Aborting Secure Session
-INFO    [  69] Deinitializing handle
+./flash.sh <path_to_ELF>
 ```
 
 > [!IMPORTANT]
-> You may encounter issues with examples that establish a Secure Session - refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) section in libtropic documentation for more information.
-
+> You may encounter issues with examples that establish a Secure Session — refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) in the Libtropic documentation.
 
 ## Building Functional Tests
 
-All functional tests are implemented in the [libtropic](https://github.com/tropicsquare/libtropic) repository. For more information about them, refer to the [Functional Tests](https://tropicsquare.github.io/libtropic/latest/for_contributors/functional_tests/) section in the libtropic documentation.
+> [!CAUTION]
+> **DANGER!** Functional tests are for internal use only and are provided only for reference. Some tests can **destroy** your chip. **Do not run the tests** unless you are absolutely sure what you are doing.
 
-> [!WARNING]
-> Some tests make irreversible changes to the chip, such as writing pairing keys. Those irreversible tests contain `_ire_` in their name. On the other hand, reversible tests are marked `_rev_` and are generally safe to run, as they only make temporary changes and always perform cleanup.
+All functional tests are implemented in the [Libtropic](https://github.com/tropicsquare/libtropic) repository. For more information, see the [Functional Tests](https://tropicsquare.github.io/libtropic/latest/for_contributors/functional_tests/) section.
 
-Build all functional tests in one place with the following commands:
+Build functional tests with:
 ```bash
 mkdir build
 cd build
-cmake -DLT_BUILD_TESTS=1 ..
+cmake -DLT_BUILD_TESTS=1 -DLT_CAL=mbedtls_v4 ..
 make
 ```
 
-For each test, a binary will be created in the build directory (similarly as when building the examples).
+For each test a binary will be created in the build directory.
 
-> [!IMPORTANT]
-> You may encounter issues with tests that establish a Secure Session - refer to [Establishing Your First Secure Channel Session](https://tropicsquare.github.io/libtropic/latest/get_started/default_pairing_keys/#establishing-your-first-secure-channel-session) section in libtropic documentation for more information.
+We use CTest to run functional tests.
 
-
-We recommend to use CTest for handling of functional tests.
-
-To show available tests:
+To list available tests:
 ```bash
 ctest -N
 ```
 
-To launch all tests (some of them are irreversible):
+To run reversible tests only:
 ```bash
-ctest
-```
-
-To launch a selected test:
-```bash
-ctest -R test_name
+ctest -R _rev_
 ```
 
 > [!TIP]
-> To see all output use `--verbose`.
+> To see full output, use `--verbose` or `-V`.
 
+### Implementation Details and Troubleshooting
+`run_test.sh` flashes a binary and reads serial output to evaluate results. The script attempts to auto-detect your Nucleo's ST-Link. If multiple ST-Links are connected, specify the ST-Link serial number as a CMake parameter:
 
-# FAQ
+```bash
+cmake -DLT_BUILD_TESTS=1 -DLT_CAL=mbedtls_v4 -DSTLINK_SERIAL_NUMBER=<serial_number> ..
+```
 
-If you encounter any issue, please have a look [here](./../FAQ.md) before filling an issue here or before reaching out to our [support](https://support.desk.tropicsquare.com/).
+If you use an external debugger or a special flashing setup (JTAG, external ST-Link), create your own flashing steps and do not rely on the provided scripts.
 
+## FAQ
+If you encounter any issues, please check the [FAQ](./../FAQ.md) before filing an issue or contacting our [support](https://support.desk.tropicsquare.com/).
+
+> [!IMPORTANT]
+> We do not provide support for running the tests.
