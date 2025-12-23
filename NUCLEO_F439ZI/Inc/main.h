@@ -66,11 +66,15 @@
 #define USART_DBG_RX_GPIO_PORT GPIOD
 #endif
 
-/* Definition for SPIx */
+/* Definition for GPIO chip select clock resources */
+#define LT_SPI_CS_CLK_ENABLE() __HAL_RCC_GPIOD_CLK_ENABLE()
+
+/* Definition for GPIO chip select pins */
 #define LT_SPI_CS_BANK GPIOD
 #define LT_SPI_CS_PIN GPIO_PIN_14
 #define LT_SPI_INSTANCE SPI1
-#define LT_SPI_CS_CLK_ENABLE() __HAL_RCC_GPIOD_CLK_ENABLE()
+
+/* Definition for SPIx */
 #define SPIx SPI1
 #define SPIx_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
 #define SPIx_SCK_GPIO_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
@@ -97,11 +101,14 @@
 /* Exported functions ------------------------------------------------------- */
 
 #if LT_USE_INT_PIN
-/* Following GPIO is used to check on INT pin for READY signal during communication */
+/* Definition for GPIO interrupt pin clock resources
+ * Following GPIO is used to check on INT pin for READY signal during communication.
+ */
 #define LT_INT_BANK GPIOF
 #define LT_INT_PIN GPIO_PIN_15
-#define LT_INT_CLK_ENABLE() __HAL_RCC_GPIOF_CLK_ENABLE()
 #define LT_INT_GPIO_PORT GPIOF
+/* Definition for GPIO interrupt pin clock resources */
+#define LT_INT_CLK_ENABLE() __HAL_RCC_GPIOF_CLK_ENABLE()
 #endif
 
 /* Exported macro ------------------------------------------------------------*/

@@ -203,6 +203,9 @@ int main(void)
 
     device.spi_instance = LT_SPI_INSTANCE;
     device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_16;
+
+    // Enable clock of the GPIO bank where our custom chip select output is present.
+    LT_SPI_CS_CLK_ENABLE(); // Defined in main.h.
     device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
     device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
 
@@ -211,6 +214,8 @@ int main(void)
     device.rng_handle = &RNGHandle;
 
 #ifdef LT_USE_INT_PIN
+    // Enable clock of the GPIO bank where interrupt input is present.
+    LT_INT_CLK_ENABLE(); // Defined in main.h.
     device.int_gpio_bank = LT_INT_BANK;
     device.int_gpio_pin = LT_INT_PIN;
 #endif
