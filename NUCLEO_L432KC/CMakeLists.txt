@@ -36,7 +36,9 @@ include(${PATH_TO_LIBTROPIC}cmake/strict_compile_flags.cmake)
 #                                                                         #
 ###########################################################################
 
-option(LT_USE_INT_PIN "Use INT pin instead of polling for TROPIC01's response" OFF)
+if (LT_USE_INT_PIN)
+    message (FATAL_ERROR "Interrupt pin is not supported for this platform.")
+endif()
 
 # Serial number of the STLink device which will be used for flashing and reading test output.
 # You need to define this only if you:

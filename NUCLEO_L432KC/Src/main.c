@@ -250,13 +250,6 @@ int main(void)
     // at the beginning of your application using HAL_RNG_Init()!
     device.rng_handle = &RNGHandle;
 
-#ifdef LT_USE_INT_PIN
-    // Enable clock of the GPIO bank where interrupt input is present.
-    LT_INT_CLK_ENABLE();  // Defined in main.h.
-    device.int_gpio_bank = LT_INT_BANK;
-    device.int_gpio_pin = LT_INT_PIN;
-#endif
-
     __lt_handle__.l2.device = &device;
 
     ////////////////////////////////////////////////////////////////
