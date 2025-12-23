@@ -64,9 +64,14 @@
 // #define USARTx_RCC_CONFIG(__USARTxCLKSource__)   __HAL_RCC_USART1_CONFIG(__USARTxCLKSource__)
 // #define RCC_USARTxCLKSOURCE_HSI                  RCC_USART1CLKSOURCE_HSI
 
-/* Definition for SPIx clock resources */
+/* Definition for GPIO chip select clock resources */
+#define LT_SPI_CS_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
+
+/* Definition for GPIO chip select pins */
 #define LT_SPI_CS_BANK GPIOA
 #define LT_SPI_CS_PIN GPIO_PIN_4
+
+/* Definition for SPIx clock resources */
 #define LT_SPI_INSTANCE SPI1
 #define SPIx SPI1
 #define SPIx_CLK_ENABLE() __HAL_RCC_SPI1_CLK_ENABLE()
@@ -87,6 +92,17 @@
 #define SPIx_MOSI_PIN GPIO_PIN_7
 #define SPIx_MOSI_GPIO_PORT GPIOA
 #define SPIx_MOSI_AF GPIO_AF5_SPI1
+
+#if LT_USE_INT_PIN
+/* Definition for GPIO interrupt pin clock resources
+ * Following GPIO is used to check on INT pin for READY signal during communication.
+ */
+#define LT_INT_BANK GPIOF
+#define LT_INT_PIN GPIO_PIN_15
+#define LT_INT_GPIO_PORT GPIOF
+/* Definition for GPIO interrupt pin clock resources */
+#define LT_INT_CLK_ENABLE() __HAL_RCC_GPIOF_CLK_ENABLE()
+#endif
 
 /* Exported variables ------------------------------------------------------- */
 extern RNG_HandleTypeDef RNGHandle;

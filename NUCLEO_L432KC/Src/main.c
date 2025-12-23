@@ -20,8 +20,9 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include <inttypes.h>
 #include "main.h"
+
+#include <inttypes.h>
 
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
@@ -57,7 +58,7 @@
    set to 'Yes') calls __io_putchar() */
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE* f)
 #endif /* __GNUC__ */
 static void SystemClock_Config(void);
 static void Error_Handler(void);
@@ -143,7 +144,7 @@ PUTCHAR_PROTOTYPE
 {
     /* Place your implementation of fputc here */
     /* e.g. write a character to the USART3 and Loop until the end of transmission */
-    HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
+    HAL_UART_Transmit(&UartHandle, (uint8_t*)&ch, 1, 0xFFFF);
 
     return ch;
 }
@@ -233,13 +234,15 @@ int main(void)
     // devices).                                                  //
     ////////////////////////////////////////////////////////////////
 
-
     // The device structure has to be zero initialized!
     // STM32 HAL depends on zero init values.
     lt_dev_stm32_nucleo_l432kc_t device = {0};
 
     device.spi_instance = LT_SPI_INSTANCE;
     device.baudrate_prescaler = SPI_BAUDRATEPRESCALER_16;
+
+    // Enable clock of the GPIO bank where our custom chip select output is present.
+    LT_SPI_CS_CLK_ENABLE();  // Defined in main.h.
     device.spi_cs_gpio_bank = LT_SPI_CS_BANK;
     device.spi_cs_gpio_pin = LT_SPI_CS_PIN;
 
@@ -248,6 +251,8 @@ int main(void)
     device.rng_handle = &RNGHandle;
 
 #ifdef LT_USE_INT_PIN
+    // Enable clock of the GPIO bank where interrupt input is present.
+    LT_INT_CLK_ENABLE();  // Defined in main.h.
     device.int_gpio_bank = LT_INT_BANK;
     device.int_gpio_pin = LT_INT_PIN;
 #endif
@@ -310,7 +315,6 @@ int main(void)
     if (HAL_RNG_DeInit(&RNGHandle) != HAL_OK) {
         Error_Handler();
     }
-
 
     /* Infinite loop */
     while (1) {
@@ -397,7 +401,7 @@ void SystemClock_Config(void)
  * @param  line: assert_param error line source number
  * @retval None
  */
-void assert_failed(uint8_t *file, uint32_t line)
+void assert_failed(uint8_t* file, uint32_t line)
 {
     /* User can add his own implementation to report the file name and line number,
        ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
