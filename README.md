@@ -2,7 +2,7 @@
 >
 > This repository has been merged into the main Libtropic repository. All C SDK examples, tutorials, and documentation were moved to the main repo. From Libtropic v3.1.0 onwards, refer to the [Libtropic repository](https://github.com/tropicsquare/libtropic).
 >
-> Repository archived — no further updates here.
+> **Repository archived — no further updates here.**
 
 # libtropic-stm32
 
